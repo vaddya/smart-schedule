@@ -12,20 +12,8 @@ public class Schedule {
 
     private Date today;
 
-    public String test;
-
     public Schedule() {
         this.today = new Date();
-
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            Scanner scan = new Scanner(
-                    new File(classLoader.getResource("schedule.json").getFile()));
-            scan.useDelimiter("\\Z");
-            test = scan.next();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public Date getToday() {

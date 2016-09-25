@@ -11,8 +11,7 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args) {
         Schedule schedule = new Schedule();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d.M.Y", new Locale("ru"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd.MM.Y", new Locale("ru"));
         System.out.println("Сегодня " + dateFormat.format(schedule.getToday()));
-        System.out.println(schedule.test);
     }
 }
