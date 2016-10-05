@@ -9,6 +9,10 @@ public class Timer {
     private int minutes;
     public static final char DELIMITER = ':';
 
+    public static Timer of(String time) {
+        return new Timer(time);
+    }
+
     public Timer(String time) {
         int indexOfDel = time.indexOf(DELIMITER);
         if (indexOfDel == -1) {

@@ -1,8 +1,12 @@
 package ru.vaddya.schedule.cli;
 
+import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Schedule;
+import ru.vaddya.schedule.core.Task;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -11,7 +15,13 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args) {
         Schedule schedule = new Schedule();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd.MM.Y", new Locale("ru"));
-        System.out.println("Сегодня " + dateFormat.format(schedule.getToday()));
+        System.out.println("Активные задачи:");
+        schedule.getTasks().forEach(System.out::println);
+
+        System.out.println("\nВыполненные задачи:");
+        schedule.getCompletedTasks().forEach(System.out::println);
+
+        System.out.println("Расписание");
+        // TODO: 10/5/2016   
     }
 }
