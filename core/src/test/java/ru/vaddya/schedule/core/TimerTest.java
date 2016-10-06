@@ -15,13 +15,13 @@ public class TimerTest {
         Timer timer = new Timer(time);
         assertEquals(8, timer.getHours());
         assertEquals(0, timer.getMinutes());
-        assertEquals(time, timer.getTime());
+        assertEquals(time, timer.toString());
 
         time = "16:30";
         timer = new Timer(time);
         assertEquals(16, timer.getHours());
         assertEquals(30, timer.getMinutes());
-        assertEquals(time, timer.getTime());
+        assertEquals(time, timer.toString());
     }
 
     @Test(expected=IllegalArgumentException.class)

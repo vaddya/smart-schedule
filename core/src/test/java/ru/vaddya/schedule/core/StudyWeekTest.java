@@ -17,8 +17,8 @@ public class StudyWeekTest {
 
     @Before
     public void init() {
-        Lesson lesson1 = new Lesson(null, null, "Программирование", null, null, null);
-        Lesson lesson2 = new Lesson(null, null, "Высшая математика", null, null, null);
+        Lesson lesson1 = new Lesson("12:00", "13:30", "Программирование", "Лабораторные", null, null);
+        Lesson lesson2 = new Lesson("12:00", "13:30", "Высшая математика", "Лекции", null, null);
         week.setDay(DaysOfWeek.MONDAY, new StudyDay(Arrays.asList(lesson1)));
         week.setDay(DaysOfWeek.FRIDAY, new StudyDay(Arrays.asList(lesson1, lesson2)));
     }

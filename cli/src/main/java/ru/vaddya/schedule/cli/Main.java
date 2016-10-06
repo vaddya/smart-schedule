@@ -21,7 +21,7 @@ public class Main {
         System.out.println("\nВыполненные задачи:");
         schedule.getCompletedTasks().forEach(System.out::println);
 
-        System.out.println("Расписание");
-        // TODO: 10/5/2016   
+        System.out.println("\nРасписание");
+        System.out.println(schedule.getWeek());
     }
 }

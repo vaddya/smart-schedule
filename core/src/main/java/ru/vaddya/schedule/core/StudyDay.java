@@ -26,4 +26,13 @@ public class StudyDay {
     public void addLesson(Lesson lesson) {
         this.lessons.add(lesson);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Lesson lesson : lessons) {
+            sb.append(lesson.toString() + "\n");
+        }
+        return sb.toString();
+    }
 }

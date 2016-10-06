@@ -1,6 +1,7 @@
 package ru.vaddya.schedule.core;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Created by Vadim on 10/5/2016.
@@ -16,5 +17,19 @@ public class StudyWeek {
 
     public StudyDay getDay(DaysOfWeek day) {
         return days.get(day);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<DaysOfWeek, StudyDay> entry : days.entrySet()) {
+            if (!entry.getValue().getLessons().isEmpty()) {
+                builder
+                    .append(entry.getKey().getRu())
+                    .append(":\n")
+                    .append(entry.getValue());
+            }
+        }
+        return builder.toString();
     }
 }

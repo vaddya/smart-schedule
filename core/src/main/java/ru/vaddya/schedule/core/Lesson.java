@@ -21,6 +21,15 @@ public class Lesson {
         this.teacher = teacher;
     }
 
+    public Lesson(String startTime, String endTime, String subject, String type, String place, String teacher) {
+        this.startTime = new Timer(startTime);
+        this.endTime = new Timer(endTime);
+        this.subject = subject;
+        this.type = LessonType.valueOfRu(type);
+        this.place = place;
+        this.teacher = teacher;
+    }
+
     public Timer getStartTime() {
         return startTime;
     }
@@ -67,5 +76,24 @@ public class Lesson {
 
     public void setTeacher(String teacher) {
         this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder
+            .append(startTime)
+            .append(" - ")
+            .append(endTime)
+            .append(" | ")
+            .append(subject)
+            .append(" [")
+            .append(type.getRu())
+            .append(" | ")
+            .append(place)
+            .append(" | ")
+            .append(teacher)
+            .append("]");
+        return builder.toString();
     }
 }
