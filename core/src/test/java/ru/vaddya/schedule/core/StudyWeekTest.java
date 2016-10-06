@@ -16,7 +16,7 @@ public class StudyWeekTest {
     StudyWeek week = new StudyWeek();
 
     @Before
-    public void init() {
+    public void setUp() {
         Lesson lesson1 = new Lesson("12:00", "13:30", "Программирование", "Лабораторные", null, null);
         Lesson lesson2 = new Lesson("12:00", "13:30", "Высшая математика", "Лекции", null, null);
         week.setDay(DaysOfWeek.MONDAY, new StudyDay(Arrays.asList(lesson1)));
@@ -25,8 +25,7 @@ public class StudyWeekTest {
 
     @Test
     public void enumMapTest() {
-        assertEquals(week.getDay(DaysOfWeek.MONDAY).getLessons().get(0).getSubject(), "Программирование");
-        assertEquals(week.getDay(DaysOfWeek.FRIDAY).getLessons().get(1).getSubject(), "Высшая математика");
-        assertNull(week.getDay(DaysOfWeek.SUNDAY));
+        assertEquals("Программирование", week.getDay(DaysOfWeek.MONDAY).getLessons().get(0).getSubject());
+        assertEquals("Высшая математика", week.getDay(DaysOfWeek.FRIDAY).getLessons().get(1).getSubject());
     }
 }

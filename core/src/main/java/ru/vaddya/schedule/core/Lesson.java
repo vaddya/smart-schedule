@@ -96,4 +96,30 @@ public class Lesson {
             .append("]");
         return builder.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lesson)) return false;
+
+        Lesson lesson = (Lesson) o;
+
+        return startTime.equals(lesson.startTime)
+                && endTime.equals(lesson.endTime)
+                && subject.equals(lesson.subject)
+                && type == lesson.type
+                && place.equals(lesson.place)
+                && teacher.equals(lesson.teacher);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = startTime.hashCode();
+        result = 31 * result + endTime.hashCode();
+        result = 31 * result + subject.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + place.hashCode();
+        result = 31 * result + teacher.hashCode();
+        return result;
+    }
 }

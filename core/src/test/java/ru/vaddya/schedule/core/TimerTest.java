@@ -29,4 +29,13 @@ public class TimerTest {
         String time = "ItIsCertainlyNotTheTime";
         Timer timer = new Timer(time);
     }
+
+    @Test
+    public void equalsTest() throws Exception {
+        String time = "10:00";
+        Timer timer1 = new Timer(time);
+        Timer timer2 = new Timer(10, 0);
+        assertEquals(timer1, timer2);
+        assertEquals(timer1.hashCode(), timer2.hashCode());
+    }
 }

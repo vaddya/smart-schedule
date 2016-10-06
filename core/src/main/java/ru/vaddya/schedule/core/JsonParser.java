@@ -64,7 +64,6 @@ public class JsonParser {
     }
 
     private static StudyDay parseDay(JSONArray array) {
-
         List<Lesson> lessons = new ArrayList<>();
         try {
             for (int i = 0; i < array.length(); i++) {

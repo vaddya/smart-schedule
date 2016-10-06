@@ -39,4 +39,21 @@ public class Timer {
     public String toString() {
         return String.format("%d:%02d", hours, minutes);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Timer)) return false;
+
+        Timer timer = (Timer) o;
+
+        return hours == timer.hours && minutes == timer.minutes;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hours;
+        result = 31 * result + minutes;
+        return result;
+    }
 }

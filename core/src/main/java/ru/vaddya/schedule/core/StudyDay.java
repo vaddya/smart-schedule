@@ -1,6 +1,5 @@
 package ru.vaddya.schedule.core;
 
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -9,7 +8,11 @@ import java.util.ArrayList;
  */
 public class StudyDay {
 
-    private List<Lesson> lessons = new ArrayList<>();
+    private List<Lesson> lessons;
+
+    public StudyDay() {
+        lessons = new ArrayList<>();
+    }
 
     public StudyDay(List<Lesson> lessons) {
         this.lessons = lessons;
@@ -17,10 +20,6 @@ public class StudyDay {
 
     public List<Lesson> getLessons() {
         return lessons;
-    }
-
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
     }
 
     public void addLesson(Lesson lesson) {
@@ -34,5 +33,9 @@ public class StudyDay {
             sb.append(lesson.toString() + "\n");
         }
         return sb.toString();
+    }
+
+    public void removeLesson(Lesson lesson) {
+        lessons.remove(lesson);
     }
 }

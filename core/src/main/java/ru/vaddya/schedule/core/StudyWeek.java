@@ -10,6 +10,12 @@ public class StudyWeek {
 
     private EnumMap<DaysOfWeek, StudyDay> days = new EnumMap<>(DaysOfWeek.class);
 
+    public StudyWeek() {
+        for (DaysOfWeek day : DaysOfWeek.values()) {
+            days.put(day, new StudyDay());
+        }
+    }
+
     public void setDay(DaysOfWeek day, StudyDay studyDay) {
         days.remove(day);
         days.put(day, studyDay);
@@ -17,6 +23,14 @@ public class StudyWeek {
 
     public StudyDay getDay(DaysOfWeek day) {
         return days.get(day);
+    }
+
+    public void addLesson(DaysOfWeek day, Lesson lesson) {
+        days.get(day).addLesson(lesson);
+    }
+
+    public void removeLesson(DaysOfWeek day, Lesson lesson) {
+        days.get(day).removeLesson(lesson);
     }
 
     @Override

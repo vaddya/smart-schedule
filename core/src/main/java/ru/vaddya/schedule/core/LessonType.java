@@ -4,10 +4,10 @@ package ru.vaddya.schedule.core;
  * Created by Vadim on 9/25/2016.
  */
 public enum LessonType {
-    LECTURE("Лекции"),
+    LECTURE("Лекция"),
     PRACTICE("Практика"),
     SEMINAR("Семинар"),
-    LAB("Лабораторные"),
+    LAB("Лабораторная"),
     CONSULTATION("Консультация"),
     EXAM("Экзамен"),
     TEST("Контрольная работа");
