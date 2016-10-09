@@ -1,4 +1,4 @@
-# Smart Schedule [![Build Status](https://travis-ci.org/vaddya/smart-schedule.svg?branch=develop)](https://travis-ci.org/vaddya/smart-schedule) [![Build Status](https://travis-ci.org/vaddya/smart-schedule.svg?branch=develop)](https://travis-ci.org/vaddya/smart-schedule)
+# Smart Schedule [![Build Status](https://travis-ci.org/vaddya/smart-schedule.svg?branch=develop)](https://travis-ci.org/vaddya/smart-schedule) [![codecov](https://codecov.io/gh/vaddya/smart-schedule/branch/develop/graph/badge.svg)](https://codecov.io/gh/vaddya/smart-schedule)
 ![Logo](/img/logo.png)
 
 ## Задание
