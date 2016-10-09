@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.utils;
 
 /**
  * Created by Vadim on 10/5/2016.

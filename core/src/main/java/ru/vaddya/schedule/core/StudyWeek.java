@@ -1,5 +1,7 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.utils.DaysOfWeek;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public class StudyWeek {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<DaysOfWeek, StudyDay> entry : days.entrySet()) {
-            if (entry.getValue().getNumberOfLessons() != 0) {
+            if (entry.getValue().isEmpty()) {
                 builder
                     .append(entry.getKey().getRu())
                     .append(":\n")

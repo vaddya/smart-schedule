@@ -1,5 +1,8 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.utils.Timer;
+
 /**
  * Created by Vadim on 9/25/2016.
  */
@@ -12,22 +15,13 @@ public class Lesson {
     private String place;
     private String teacher;
 
-    public Lesson(Timer startTime, Timer endTime, String subject, LessonType type, String place, String teacher) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.subject = subject;
-        this.type = type;
-        this.place = place;
-        this.teacher = teacher;
-    }
-
-    public Lesson(String startTime, String endTime, String subject, String type, String place, String teacher) {
-        this.startTime = new Timer(startTime);
-        this.endTime = new Timer(endTime);
-        this.subject = subject;
-        this.type = LessonType.valueOfRu(type);
-        this.place = place;
-        this.teacher = teacher;
+    private Lesson(Builder builder) {
+        setStartTime(builder.startTime);
+        setEndTime(builder.endTime);
+        setSubject(builder.subject);
+        setType(builder.type);
+        setPlace(builder.place);
+        setTeacher(builder.teacher);
     }
 
     public Timer getStartTime() {
@@ -80,8 +74,7 @@ public class Lesson {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder
+        return new StringBuilder()
             .append(startTime)
             .append(" - ")
             .append(endTime)
@@ -93,8 +86,8 @@ public class Lesson {
             .append(place)
             .append(" | ")
             .append(teacher)
-            .append("]");
-        return builder.toString();
+            .append("]")
+            .toString();
     }
 
     @Override
@@ -121,5 +114,56 @@ public class Lesson {
         result = 31 * result + place.hashCode();
         result = 31 * result + teacher.hashCode();
         return result;
+    }
+
+    public static final class Builder {
+        private Timer startTime;
+        private Timer endTime;
+        private String subject;
+        private LessonType type;
+        private String place;
+        private String teacher;
+
+        public Builder() {
+        }
+
+        public Builder startTime(String val) {
+            startTime = Timer.of(val);
+            return this;
+        }
+
+        public Builder endTime(String val) {
+            endTime = Timer.of(val);
+            return this;
+        }
+
+        public Builder subject(String val) {
+            subject = val;
+            return this;
+        }
+
+        public Builder type(LessonType val) {
+            type = val;
+            return this;
+        }
+
+        public Builder type(String val) {
+            type = LessonType.valueOf(val);
+            return this;
+        }
+
+        public Builder place(String val) {
+            place = val;
+            return this;
+        }
+
+        public Builder teacher(String val) {
+            teacher = val;
+            return this;
+        }
+
+        public Lesson build() {
+            return new Lesson(this);
+        }
     }
 }

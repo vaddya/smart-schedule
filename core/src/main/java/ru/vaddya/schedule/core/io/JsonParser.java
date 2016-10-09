@@ -1,8 +1,13 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.io;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import ru.vaddya.schedule.core.Lesson;
+import ru.vaddya.schedule.core.StudyDay;
+import ru.vaddya.schedule.core.StudyWeek;
+import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,10 +34,14 @@ public class JsonParser {
             JSONArray array = new JSONArray(data);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
-                String subject = object.getString("subject");
-                String deadline = object.getString("deadline");
-                String textTask = object.getString("textTask");
-                tasks.add(new Task(subject, deadline, textTask));
+                tasks.add(new Task.Builder()
+                        .subject(object.getString("subject"))
+                        .lessonType(object.getString("lessonType"))
+                        .deadline(object.getString("deadline"))
+                        .textTask(object.getString("textTask"))
+                        .isComplete(object.getBoolean("isComplete"))
+                        .build()
+                );
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -68,13 +77,15 @@ public class JsonParser {
         try {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
-                String startTime = object.getString("startTime");
-                String endTime = object.getString("endTime");
-                String subject = object.getString("subject");
-                String type = object.getString("type");
-                String place = object.getString("place");
-                String teacher = object.getString("teacher");
-                lessons.add(new Lesson(startTime, endTime, subject, type, place, teacher));
+                lessons.add(new Lesson.Builder()
+                        .startTime(object.getString("startTime"))
+                        .endTime(object.getString("endTime"))
+                        .subject(object.getString("subject"))
+                        .type(object.getString("type"))
+                        .place(object.getString("place"))
+                        .teacher(object.getString("teacher"))
+                        .build()
+                );
             }
         } catch (JSONException e) {
             e.printStackTrace();

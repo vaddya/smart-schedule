@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.utils;
 
 /**
  * Created by Vadim on 9/25/2016.
@@ -13,18 +13,22 @@ public class Timer {
         return new Timer(time);
     }
 
-    public Timer(String time) {
+    public static Timer of(int hours, int minutes) {
+        return new Timer(hours, minutes);
+    }
+
+    private Timer(int hours, int minutes) {
+        this.hours = hours;
+        this.minutes = minutes;
+    }
+
+    private Timer(String time) {
         int indexOfDel = time.indexOf(DELIMITER);
         if (indexOfDel == -1) {
             throw new IllegalArgumentException("Illegal time format");
         }
         hours = Integer.parseInt(time.substring(0, indexOfDel));
         minutes = Integer.parseInt(time.substring(indexOfDel + 1));
-    }
-
-    public Timer(int hours, int minutes) {
-        this.hours = hours;
-        this.minutes = minutes;
     }
 
     public int getHours() {

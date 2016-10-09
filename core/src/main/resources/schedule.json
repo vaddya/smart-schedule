@@ -3,14 +3,14 @@
 			"startTime": "14:00",
 			"endTime": "15:30",
 			"subject": "Программирование",
-			"type": "Лабораторная",
+			"type": "LAB",
 			"place": "9 корпус, 309",
 			"teacher": "Вылегжанина К.Д."
 		}, {
 			"startTime": "16:00",
 			"endTime": "17:30",
 			"subject": "Высшая математика",
-			"type": "Лекция",
+			"type": "LECTURE",
 			"place": "ГЗ, 237",
 			"teacher": "Панкрашова А.Г."		
 		}],
@@ -18,14 +18,14 @@
 			"startTime": "12:00",
 			"endTime": "13:30",
 			"subject": "Высшая математика",
-			"type": "Практика",
+			"type": "PRACTICE",
 			"place": "ГЗ, 237",
 			"teacher": "Солева Н.Ю."
 		}, {
 			"startTime": "14:00",
 			"endTime": "15:30",
 			"subject": "Программирование",
-			"type": "Лабораторная",
+			"type": "LAB",
 			"place": "9 корпус, 309",
 			"teacher": "Вылегжанина К.Д."		
 		}],
@@ -33,14 +33,14 @@
 		"startTime": "14:00",
 		"endTime": "15:30",
 		"subject": "Программирование",
-		"type": "Лабораторная",
+		"type": "LAB",
 		"place": "9 корпус, 309",
 		"teacher": "Вылегжанина К.Д."
 	}, {
 		"startTime": "16:00",
 		"endTime": "17:30",
 		"subject": "Высшая математика",
-		"type": "Лекция",
+		"type": "LECTURE",
 		"place": "ГЗ, 237",
 		"teacher": "Панкрашова А.Г."
 	}],
@@ -48,14 +48,14 @@
 		"startTime": "12:00",
 		"endTime": "13:30",
 		"subject": "Высшая математика",
-		"type": "Практика",
+		"type": "PRACTICE",
 		"place": "ГЗ, 237",
 		"teacher": "Солева Н.Ю."
 	}, {
 		"startTime": "14:00",
 		"endTime": "15:30",
 		"subject": "Программирование",
-		"type": "Лабораторная",
+		"type": "LAB",
 		"place": "9 корпус, 309",
 		"teacher": "Вылегжанина К.Д."
 	}],
@@ -63,14 +63,14 @@
 		"startTime": "14:00",
 		"endTime": "15:30",
 		"subject": "Программирование",
-		"type": "Лабораторная",
+		"type": "LAB",
 		"place": "9 корпус, 309",
 		"teacher": "Вылегжанина К.Д."
 	}, {
 		"startTime": "16:00",
 		"endTime": "17:30",
 		"subject": "Высшая математика",
-		"type": "Лекция",
+		"type": "LECTURE",
 		"place": "ГЗ, 237",
 		"teacher": "Панкрашова А.Г."
 	}],
@@ -78,14 +78,14 @@
 		"startTime": "12:00",
 		"endTime": "13:30",
 		"subject": "Высшая математика",
-		"type": "Практика",
+		"type": "PRACTICE",
 		"place": "ГЗ, 237",
 		"teacher": "Солева Н.Ю."
 	}, {
 		"startTime": "14:00",
 		"endTime": "15:30",
 		"subject": "Программирование",
-		"type": "Лабораторная",
+		"type": "LAB",
 		"place": "9 корпус, 309",
 		"teacher": "Вылегжанина К.Д."
 	}],

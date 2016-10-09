@@ -2,9 +2,10 @@ package ru.vaddya.schedule.core;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.vaddya.schedule.core.utils.DaysOfWeek;
+import ru.vaddya.schedule.core.utils.LessonType;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 /**
  * Created by Vadim on 10/6/2016.
@@ -12,23 +13,38 @@ import static org.junit.Assert.assertSame;
 public class ScheduleTest {
 
     private ScheduleAPI schedule;
+    private Lesson lesson;
+    private Task task;
 
     @Before
     public void setUp() {
         schedule = new Schedule("test");
+        lesson = new Lesson.Builder()
+                .startTime("10:00")
+                .endTime("11:30")
+                .subject("Программирование")
+                .type(LessonType.LECTURE)
+                .build();
+        task = new Task.Builder()
+                .subject("Программирование")
+                .lessonType(LessonType.LAB)
+                .deadline("31.12.2016")
+                .textTask("Выполнить курсовую работу")
+                .isComplete(false)
+                .build();
     }
 
     @Test
     public void addLessonTest() throws Exception {
         assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
-        schedule.addLesson(DaysOfWeek.MONDAY, new Lesson("10:00", "11:30", "Программирование", "Лекции", null, null));
+        schedule.addLesson(DaysOfWeek.MONDAY, lesson);
         assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
         assertEquals("Программирование", schedule.getDay(DaysOfWeek.MONDAY).getLesson(1).getSubject());
+        assertEquals("Программирование", schedule.getLessonByDay(DaysOfWeek.MONDAY, 1).getSubject());
     }
 
     @Test
     public void removeLessonTest() throws Exception {
-        Lesson lesson = new Lesson("10:00", "11:30", "Программирование", "Лекции", null, null);
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
         assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
         schedule.removeLesson(DaysOfWeek.MONDAY, lesson);
@@ -38,7 +54,7 @@ public class ScheduleTest {
     @Test
     public void addTaskTest() throws Exception {
         assertEquals(0, schedule.getActiveTasks().size());
-        schedule.addTask(new Task("Программирование", "31.12.2016", "Выполнить курсовую работу"));
+        schedule.addTask(task);
         assertEquals(1, schedule.getActiveTasks().size());
         assertEquals("Выполнить курсовую работу", schedule.getActiveTasks().get(0).getTextTask());
         assertEquals("Программирование", schedule.getTaskByText("Выполнить курсовую работу").getSubject());
@@ -46,7 +62,6 @@ public class ScheduleTest {
 
     @Test
     public void completeTaskTest() throws Exception {
-        Task task = new Task("Программирование", "31.12.2016", "Выполнить курсовую работу");
         schedule.addTask(task);
         assertEquals(1, schedule.getActiveTasks().size());
         assertEquals(0, schedule.getCompletedTasks().size());
@@ -58,7 +73,6 @@ public class ScheduleTest {
 
     @Test
     public void removeTaskTest() throws Exception {
-        Task task = new Task("Программирование", "31.12.2016", "Выполнить курсовую работу");
         schedule.addTask(task);
         assertEquals(1, schedule.getActiveTasks().size());
         schedule.removeTask(task);

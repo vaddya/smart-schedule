@@ -1,33 +1,38 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.io.JsonParser;
+import ru.vaddya.schedule.core.utils.DaysOfWeek;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vadim on 9/18/2016.
  */
 public class Schedule implements ScheduleAPI {
 
-    private List<Task> activeTasks;
-    private List<Task> completedTasks;
+    private List<Task> tasks;
     private StudyWeek week;
 
     public Schedule() {
         ClassLoader classLoader = getClass().getClassLoader();
         try {
-            this.activeTasks = JsonParser.parseTasks(classLoader.getResource("tasks.json").getPath());
-            this.completedTasks = JsonParser.parseTasks(classLoader.getResource("completed.json").getPath());
+            this.tasks = JsonParser.parseTasks(classLoader.getResource("tasks.json").getPath())
+                    .stream()
+                    .sorted(Task.DATE_ORDER)
+                    .collect(Collectors.toList());
             this.week = JsonParser.parseWeek(classLoader.getResource("schedule.json").getPath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public Schedule(String test) {
-        this.activeTasks = new ArrayList<>();
-        this.completedTasks = new ArrayList<>();
+    protected Schedule(String test) {
+        this.tasks = new ArrayList<>();
         this.week = new StudyWeek();
     }
 
@@ -40,53 +45,60 @@ public class Schedule implements ScheduleAPI {
     }
 
     public void addTask(Task task) {
-        activeTasks.add(task);
+        tasks.add(task);
     }
 
     public void completeTask(Task task) {
-        activeTasks.remove(task);
-        completedTasks.add(task);
+        task.setComplete(true);
     }
 
     public void removeTask(Task task) {
-        activeTasks.remove(task);
-        completedTasks.remove(task);
+        tasks.remove(task);
     }
 
-    public Task getTaskByText(String taskText) {
-        for (Task task : activeTasks) {
-            if (task.getTextTask().equals(taskText)) {
-                return task;
-            }
-        }
-        for (Task task : completedTasks) {
-            if (task.getTextTask().equals(taskText)) {
-                return task;
-            }
-        }
-        return null;
+    @Override
+    public Lesson getLessonByDay(DaysOfWeek day, int i) {
+        return week.getDay(day).getLesson(i);
+    }
+
+    public Task getTaskByText(String taskText) throws NoSuchElementException {
+        return tasks
+                .stream()
+                .filter(task -> task.getTextTask().equals(taskText))
+                .findFirst()
+                .get();
     }
 
     public StudyDay getDay(DaysOfWeek day) {
         return week.getDay(day);
     }
 
+    public List<Task> getTasks() {
+        return tasks
+                .stream()
+                .collect(Collectors.toList());
+    }
+
     public List<Task> getActiveTasks() {
-        return new ArrayList<>(activeTasks);
+        return tasks
+                .stream()
+                .filter((task) -> !task.isComplete())
+                .collect(Collectors.toList());
     }
 
     public List<Task> getCompletedTasks() {
-        return new ArrayList<>(completedTasks);
+        return tasks
+                .stream()
+                .filter(Task::isComplete)
+                .collect(Collectors.toList());
     }
 
     public List<Task> getOverdueTasks() {
-        List<Task> tasks = new ArrayList<>();
-        for (Task task : activeTasks) {
-            if (task.getDeadline().before(new Date())) {
-                tasks.add(task);
-            }
-        }
-        return tasks;
+        return tasks
+                .stream()
+                .filter(task -> !task.isComplete())
+                .filter(task -> new Date().after(task.getDeadline()))
+                .collect(Collectors.toList());
     }
 
     public StudyWeek getWeek() {

@@ -18,16 +18,20 @@ public class StudyDay {
         this.lessons = lessons;
     }
 
+    public boolean isEmpty() {
+        return lessons.isEmpty();
+    }
+
     public int getNumberOfLessons() {
         return lessons.size();
     }
 
-    public Lesson getLesson(int i) {
-        return lessons.get(i-1);
-    }
-
     public void addLesson(Lesson lesson) {
         this.lessons.add(lesson);
+    }
+
+    public Lesson getLesson(int i) {
+        return lessons.get(i-1);
     }
 
     public void removeLesson(Lesson lesson) {
@@ -36,10 +40,10 @@ public class StudyDay {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         for (Lesson lesson : lessons) {
-            sb.append(lesson.toString() + "\n");
+            builder.append(lesson.toString() + "\n");
         }
-        return sb.toString();
+        return builder.toString();
     }
 }
