@@ -7,12 +7,14 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Created by Vadim on 10/5/2016.
  */
 public class Task {
 
+    private UUID id;
     private String subject;
     private LessonType lessonType;
     private Date deadline;
@@ -22,14 +24,21 @@ public class Task {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("E dd.MM.Y", new Locale("ru"));
 
     private Task(Builder builder) {
-        setSubject(builder.subject);
-        setLessonType(builder.lessonType);
-        setDeadline(builder.deadline);
-        setTextTask(builder.textTask);
-        setComplete(builder.isComplete);
+        id = builder.id != null
+                ? builder.id
+                : UUID.randomUUID();
+        subject = builder.subject;
+        lessonType = builder.lessonType;
+        deadline = builder.deadline;
+        textTask = builder.textTask;
+        isComplete = builder.isComplete;
     }
 
     public static final Comparator<Task> DATE_ORDER = (t1, t2) -> t1.getDeadline().compareTo(t2.getDeadline());
+
+    public UUID getId() {
+        return id;
+    }
 
     public String getSubject() {
         return subject;
@@ -86,6 +95,7 @@ public class Task {
     }
 
     public static final class Builder {
+        private UUID id;
         private String subject;
         private LessonType lessonType;
         private Date deadline;
@@ -93,6 +103,11 @@ public class Task {
         private boolean isComplete;
 
         public Builder() {
+        }
+
+        public Builder id(String val) {
+            id = UUID.fromString(val);
+            return this;
         }
 
         public Builder subject(String val) {

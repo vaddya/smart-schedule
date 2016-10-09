@@ -56,7 +56,6 @@ public class Schedule implements ScheduleAPI {
         tasks.remove(task);
     }
 
-    @Override
     public Lesson getLessonByDay(DaysOfWeek day, int i) {
         return week.getDay(day).getLesson(i);
     }
