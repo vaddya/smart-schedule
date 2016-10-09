@@ -2,4 +2,16 @@ allprojects {
     repositories {
         mavenCentral()
     }
+    
+    apply plugin: 'findbugs'
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled true
+        }
+    }
+    findbugs {
+        effort = "max"
+        reportLevel = "high"
+        ignoreFailures = true
+    }
 }
