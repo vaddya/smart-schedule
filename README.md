@@ -1,4 +1,4 @@
-# Smart Schedule
+# Smart Schedule [![Build Status](https://travis-ci.org/vaddya/smart-schedule.svg?branch=develop)](https://travis-ci.org/vaddya/smart-schedule) [![Build Status](https://travis-ci.org/vaddya/smart-schedule.svg?branch=develop)](https://travis-ci.org/vaddya/smart-schedule)
 ![Logo](/img/logo.png)
 
 ## Задание
