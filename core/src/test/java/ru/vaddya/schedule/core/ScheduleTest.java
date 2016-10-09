@@ -20,19 +20,19 @@ public class ScheduleTest {
 
     @Test
     public void addLessonTest() throws Exception {
-        assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getLessons().size());
+        assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
         schedule.addLesson(DaysOfWeek.MONDAY, new Lesson("10:00", "11:30", "Программирование", "Лекции", null, null));
-        assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getLessons().size());
-        assertEquals("Программирование", schedule.getDay(DaysOfWeek.MONDAY).getLessons().get(0).getSubject());
+        assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
+        assertEquals("Программирование", schedule.getDay(DaysOfWeek.MONDAY).getLesson(1).getSubject());
     }
 
     @Test
     public void removeLessonTest() throws Exception {
         Lesson lesson = new Lesson("10:00", "11:30", "Программирование", "Лекции", null, null);
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
-        assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getLessons().size());
+        assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
         schedule.removeLesson(DaysOfWeek.MONDAY, lesson);
-        assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getLessons().size());
+        assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getNumberOfLessons());
     }
 
     @Test

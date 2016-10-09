@@ -18,12 +18,20 @@ public class StudyDay {
         this.lessons = lessons;
     }
 
-    public List<Lesson> getLessons() {
-        return lessons;
+    public int getNumberOfLessons() {
+        return lessons.size();
+    }
+
+    public Lesson getLesson(int i) {
+        return lessons.get(i-1);
     }
 
     public void addLesson(Lesson lesson) {
         this.lessons.add(lesson);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        lessons.remove(lesson);
     }
 
     @Override
@@ -33,9 +41,5 @@ public class StudyDay {
             sb.append(lesson.toString() + "\n");
         }
         return sb.toString();
-    }
-
-    public void removeLesson(Lesson lesson) {
-        lessons.remove(lesson);
     }
 }

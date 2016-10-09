@@ -8,6 +8,7 @@ import ru.vaddya.schedule.core.ScheduleAPI;
  */
 public class Main {
     public static void main(String[] args) {
+
         ScheduleAPI schedule = new Schedule();
         System.out.println("Активные задания:");
         schedule.getActiveTasks().forEach(System.out::println);

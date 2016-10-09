@@ -37,7 +37,7 @@ public class StudyWeek {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<DaysOfWeek, StudyDay> entry : days.entrySet()) {
-            if (!entry.getValue().getLessons().isEmpty()) {
+            if (entry.getValue().getNumberOfLessons() != 0) {
                 builder
                     .append(entry.getKey().getRu())
                     .append(":\n")

@@ -72,11 +72,11 @@ public class Schedule implements ScheduleAPI {
     }
 
     public List<Task> getActiveTasks() {
-        return activeTasks;
+        return new ArrayList<>(activeTasks);
     }
 
     public List<Task> getCompletedTasks() {
-        return completedTasks;
+        return new ArrayList<>(completedTasks);
     }
 
     public List<Task> getOverdueTasks() {
