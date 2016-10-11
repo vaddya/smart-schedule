@@ -20,13 +20,13 @@ public class StudyWeekTest {
                 .startTime("12:00")
                 .endTime("13:30")
                 .subject("Программирование")
-                .type(LessonType.LAB)
+                .lessonType(LessonType.LAB)
                 .build();
         Lesson lesson2 = new Lesson.Builder()
                 .startTime("14:00")
                 .endTime("15:30")
                 .subject("Высшая математика")
-                .type(LessonType.LECTURE)
+                .lessonType(LessonType.LECTURE)
                 .build();
         week.addLesson(DaysOfWeek.MONDAY, lesson1);
         week.addLesson(DaysOfWeek.FRIDAY, lesson2);

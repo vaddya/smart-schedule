@@ -81,7 +81,7 @@ public class JsonParser {
                         .startTime(object.getString("startTime"))
                         .endTime(object.getString("endTime"))
                         .subject(object.getString("subject"))
-                        .type(object.getString("type"))
+                        .lessonType(object.getString("lessonType"))
                         .place(object.getString("place"))
                         .teacher(object.getString("teacher"))
                         .build()

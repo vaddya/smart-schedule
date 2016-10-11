@@ -23,7 +23,7 @@ public class ScheduleTest {
                 .startTime("10:00")
                 .endTime("11:30")
                 .subject("Программирование")
-                .type(LessonType.LECTURE)
+                .lessonType(LessonType.LECTURE)
                 .build();
         task = new Task.Builder()
                 .subject("Программирование")

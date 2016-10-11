@@ -11,7 +11,7 @@ public class Lesson {
     private Timer startTime;
     private Timer endTime;
     private String subject;
-    private LessonType type;
+    private LessonType lessonType;
     private String place;
     private String teacher;
 
@@ -19,7 +19,7 @@ public class Lesson {
         setStartTime(builder.startTime);
         setEndTime(builder.endTime);
         setSubject(builder.subject);
-        setType(builder.type);
+        setLessonType(builder.lessonType);
         setPlace(builder.place);
         setTeacher(builder.teacher);
     }
@@ -48,12 +48,12 @@ public class Lesson {
         this.subject = subject;
     }
 
-    public LessonType getType() {
-        return type;
+    public LessonType getLessonType() {
+        return lessonType;
     }
 
-    public void setType(LessonType type) {
-        this.type = type;
+    public void setLessonType(LessonType lessonType) {
+        this.lessonType = lessonType;
     }
 
     public String getPlace() {
@@ -81,7 +81,7 @@ public class Lesson {
             .append(" | ")
             .append(subject)
             .append(" [")
-            .append(type.getRu())
+            .append(lessonType.getRu())
             .append(" | ")
             .append(place)
             .append(" | ")
@@ -100,7 +100,7 @@ public class Lesson {
         return startTime.equals(lesson.startTime)
                 && endTime.equals(lesson.endTime)
                 && subject.equals(lesson.subject)
-                && type == lesson.type
+                && lessonType == lesson.lessonType
                 && place.equals(lesson.place)
                 && teacher.equals(lesson.teacher);
     }
@@ -110,7 +110,7 @@ public class Lesson {
         int result = startTime.hashCode();
         result = 31 * result + endTime.hashCode();
         result = 31 * result + subject.hashCode();
-        result = 31 * result + type.hashCode();
+        result = 31 * result + lessonType.hashCode();
         result = 31 * result + place.hashCode();
         result = 31 * result + teacher.hashCode();
         return result;
@@ -120,7 +120,7 @@ public class Lesson {
         private Timer startTime;
         private Timer endTime;
         private String subject;
-        private LessonType type;
+        private LessonType lessonType;
         private String place;
         private String teacher;
 
@@ -142,13 +142,13 @@ public class Lesson {
             return this;
         }
 
-        public Builder type(LessonType val) {
-            type = val;
+        public Builder lessonType(LessonType val) {
+            lessonType = val;
             return this;
         }
 
-        public Builder type(String val) {
-            type = LessonType.valueOf(val);
+        public Builder lessonType(String val) {
+            lessonType = LessonType.valueOf(val);
             return this;
         }
 
