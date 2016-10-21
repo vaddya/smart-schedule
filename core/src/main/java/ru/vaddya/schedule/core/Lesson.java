@@ -24,6 +24,15 @@ public class Lesson {
         setTeacher(builder.teacher);
     }
 
+    public Lesson(Timer startTime, Timer endTime, String subject, LessonType lessonType, String place, String teacher) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.subject = subject;
+        this.lessonType = lessonType;
+        this.place = place;
+        this.teacher = teacher;
+    }
+
     public Timer getStartTime() {
         return startTime;
     }
