@@ -5,6 +5,7 @@ import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +45,10 @@ public class Schedule implements ScheduleAPI {
 
     public void addTask(Task task) {
         tasks.add(task);
+    }
+
+    public Task getTask(UUID uuid) {
+        return tasks.get(uuid);
     }
 
     public void completeTask(Task task) {

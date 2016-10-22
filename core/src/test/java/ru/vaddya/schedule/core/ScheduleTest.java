@@ -57,7 +57,7 @@ public class ScheduleTest {
         schedule.addTask(task);
         assertEquals(1, schedule.getActiveTasks().size());
         assertEquals("Выполнить курсовую работу", schedule.getActiveTasks().get(0).getTextTask());
-        assertEquals("Программирование", schedule.getTaskByText("Выполнить курсовую работу").getSubject());
+        assertEquals("Программирование", schedule.getTask(task.getId()).getSubject());
     }
 
     @Test

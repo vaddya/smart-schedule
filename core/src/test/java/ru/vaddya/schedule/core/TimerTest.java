@@ -28,7 +28,7 @@ public class TimerTest {
     @Test(expected=IllegalArgumentException.class)
     public void illegalArgumentsTest() {
         String time = "ItIsCertainlyNotTheTime";
-        Timer timer = Timer.of(time);
+        Timer.of(time);
     }
 
     @Test

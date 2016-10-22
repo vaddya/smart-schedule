@@ -4,11 +4,12 @@ import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 /**
  * Created by Vadim on 10/6/2016.
  */
-interface ScheduleAPI {
+public interface ScheduleAPI {
 
     /**
      * Добавить урок в расписание
@@ -29,6 +30,13 @@ interface ScheduleAPI {
      * @param task добавляемая задача
      */
     void addTask(Task task);
+
+    /**
+     * Получить задания по ID
+     * @param uuid UUID
+     * @return запрашиваемая задача
+     */
+    Task getTask(UUID uuid);
 
     /**
      * Отметить задачу как выполненную
@@ -52,7 +60,7 @@ interface ScheduleAPI {
      * Получить урок по дню недели и номеру урока
      * @param day день недели
      * @param index порядковый номер урока
-     * @return
+     * @return запрашиваемый урок
      */
     Lesson getLessonByDay(DaysOfWeek day, int index);
 

@@ -28,8 +28,8 @@ public class StudyWeekTest {
                 .subject("Высшая математика")
                 .lessonType(LessonType.LECTURE)
                 .build();
-        week.addLesson(DaysOfWeek.MONDAY, lesson1);
-        week.addLesson(DaysOfWeek.FRIDAY, lesson2);
+        week.get(DaysOfWeek.MONDAY).add(lesson1);
+        week.get(DaysOfWeek.FRIDAY).add(lesson2);
     }
 
     @Test
