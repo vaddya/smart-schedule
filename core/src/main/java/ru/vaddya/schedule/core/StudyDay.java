@@ -32,7 +32,7 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     public Lesson get(int index) {
-        return lessons.get(index);
+        return lessons.get(index-1);
     }
 
     public void remove(Lesson lesson) {
@@ -52,11 +52,11 @@ public class StudyDay implements Iterable<Lesson> {
     public Iterator<Lesson> iterator() {
         return new Iterator<Lesson>() {
 
-            private int index = 0;
+            private int index = 1;
 
             @Override
             public boolean hasNext() {
-                return index < lessons.size();
+                return index <= lessons.size();
             }
 
             @Override
