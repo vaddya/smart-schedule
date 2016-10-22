@@ -13,18 +13,22 @@ public enum DaysOfWeek {
     SUNDAY("Воскрсенье");
 
     private String ru;
+    private String en;
 
     DaysOfWeek(String ru) {
         this.ru = ru;
+        this.en = name().substring(1).toLowerCase();
     }
 
-    public String getRu() {
+    public String ru() {
         return ru;
     }
 
+    public String en() { return en; }
+
     public static DaysOfWeek valueOfRu(String ru) {
         for (DaysOfWeek day : DaysOfWeek.values()) {
-            if (ru.equals(day.getRu())) {
+            if (ru.equals(day.ru())) {
                 return day;
             }
         }

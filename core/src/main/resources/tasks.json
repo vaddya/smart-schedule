@@ -1,28 +1,28 @@
 [
   {
     "subject": "Программирование",
-    "lessonType": "LAB",
+    "type": "LAB",
     "deadline": "22.09.2016",
     "textTask": "Придумать тему курсовой работы",
     "isComplete": false
   },
   {
     "subject": "Программирование",
-    "lessonType": "LAB",
+    "type": "LAB",
     "deadline": "12.09.2016",
     "textTask": "Установить JDK и Gradle",
     "isComplete": true
   },
   {
     "subject": "Высшая математика",
-    "lessonType": "PRACTICE",
+    "type": "PRACTICE",
     "deadline": "15.09.2016",
     "textTask": "№1, №2",
     "isComplete": true
   },
   {
     "subject": "Высшая математика",
-    "lessonType": "PRACTICE",
+    "type": "PRACTICE",
     "deadline": "25.10.2016",
     "textTask": "№3, №4",
     "isComplete": false

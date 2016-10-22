@@ -1,10 +1,14 @@
 package ru.vaddya.schedule.core.io.orchestrate;
 
+import ru.vaddya.schedule.core.Lesson;
+import ru.vaddya.schedule.core.utils.DaysOfWeek;
+
 /**
  * Created by Vadim on 10/21/2016.
  */
 public class LessonPOJO {
 
+    private String day;
     private String startTime;
     private String endTime;
     private String subject;
@@ -15,13 +19,22 @@ public class LessonPOJO {
     public LessonPOJO() {
     }
 
-    public LessonPOJO(String startTime, String endTime, String subject, String type, String place, String teacher) {
+    public LessonPOJO(String day, String startTime, String endTime, String subject, String type, String place, String teacher) {
+        this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;
         this.type = type;
         this.place = place;
         this.teacher = teacher;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getStartTime() {
@@ -72,15 +85,15 @@ public class LessonPOJO {
         this.teacher = teacher;
     }
 
-    @Override
-    public String toString() {
-        return "LessonPOJO{" +
-                "startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
-                ", subject='" + subject + '\'' +
-                ", type='" + type + '\'' +
-                ", place='" + place + '\'' +
-                ", teacher='" + teacher + '\'' +
-                '}';
+    public static LessonPOJO of(DaysOfWeek day, Lesson lesson) {
+        return new LessonPOJO(
+                day.toString(),
+                lesson.getStartTime().toString(),
+                lesson.getEndTime().toString(),
+                lesson.getSubject(),
+                lesson.getType().toString(),
+                lesson.getPlace(),
+                lesson.getTeacher()
+        );
     }
 }

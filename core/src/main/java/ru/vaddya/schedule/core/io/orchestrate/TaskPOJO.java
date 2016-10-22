@@ -1,5 +1,7 @@
 package ru.vaddya.schedule.core.io.orchestrate;
 
+import ru.vaddya.schedule.core.Task;
+
 /**
  * Created by Vadim on 10/21/2016.
  */
@@ -71,5 +73,15 @@ public class TaskPOJO {
                 ", textTask='" + textTask + '\'' +
                 ", isComplete='" + isComplete + '\'' +
                 '}';
+    }
+
+    public static TaskPOJO of(Task task) {
+        return new TaskPOJO(
+                task.getSubject(),
+                task.getType().toString(),
+                task.getDeadline().toString(),
+                task.getTextTask(),
+                task.isComplete()
+        );
     }
 }

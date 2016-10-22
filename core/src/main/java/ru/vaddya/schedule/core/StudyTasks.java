@@ -30,37 +30,32 @@ public class StudyTasks {
         tasks.add(task);
     }
 
-    public Task get(UUID id) {
-        return tasks
-                .stream()
+    public Task get(String id) {
+        return tasks.stream()
                 .filter((task -> id.equals(task.getId())))
                 .findFirst()
                 .get();
     }
 
     public List<Task> getAll() {
-        return tasks
-                .stream()
+        return tasks.stream()
                 .collect(Collectors.toList());
     }
 
     public List<Task> getActive() {
-        return tasks
-                .stream()
+        return tasks.stream()
                 .filter((task) -> !task.isComplete())
                 .collect(Collectors.toList());
     }
 
     public List<Task> getCompleted() {
-        return tasks
-                .stream()
+        return tasks.stream()
                 .filter(Task::isComplete)
                 .collect(Collectors.toList());
     }
 
     public List<Task> getOverdue() {
-        return tasks
-                .stream()
+        return tasks.stream()
                 .filter(task -> !task.isComplete())
                 .filter(task -> new Date().after(task.getDeadline()))
                 .collect(Collectors.toList());

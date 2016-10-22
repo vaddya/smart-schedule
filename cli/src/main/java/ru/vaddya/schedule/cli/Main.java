@@ -21,11 +21,6 @@ public class Main {
         schedule.getCompletedTasks().forEach(System.out::println);
 
         System.out.println("\nРасписание");
-        for (DaysOfWeek day : DaysOfWeek.values()) {
-            System.out.println(day.getRu());
-            for (Lesson lesson : schedule.getDay(day)) {
-                System.out.println(lesson);
-            }
-        }
+        System.out.println(schedule);
     }
 }

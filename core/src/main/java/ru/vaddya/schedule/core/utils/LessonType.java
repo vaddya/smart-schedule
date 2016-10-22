@@ -13,12 +13,18 @@ public enum LessonType {
     TEST("Контрольная работа");
 
     private String ru;
+    private String en;
 
     LessonType(String ru) {
         this.ru = ru;
+        this.en = name().substring(1).toLowerCase();
     }
 
-    public String getRu() {
+    public String en() {
+        return en;
+    }
+
+    public String ru() {
         return ru;
     }
 }

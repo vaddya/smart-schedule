@@ -36,7 +36,7 @@ public class JsonParser {
                 JSONObject object = array.getJSONObject(i);
                 tasks.add(new Task.Builder()
                         .subject(object.getString("subject"))
-                        .lessonType(object.getString("lessonType"))
+                        .type(object.getString("type"))
                         .deadline(object.getString("deadline"))
                         .textTask(object.getString("textTask"))
                         .isComplete(object.getBoolean("isComplete"))
@@ -81,7 +81,7 @@ public class JsonParser {
                         .startTime(object.getString("startTime"))
                         .endTime(object.getString("endTime"))
                         .subject(object.getString("subject"))
-                        .lessonType(object.getString("type"))
+                        .type(object.getString("type"))
                         .place(object.getString("place"))
                         .teacher(object.getString("teacher"))
                         .build()

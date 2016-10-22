@@ -32,7 +32,21 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     public Lesson get(int index) {
-        return lessons.get(index-1);
+        return lessons.get(index - 1);
+    }
+
+    public Lesson getById(String id) {
+        return lessons.stream()
+                .filter((lesson -> id.equals(lesson.getId())))
+                .findFirst()
+                .get();
+    }
+
+    public void update(Lesson lesson) {
+        Lesson prev = getById(lesson.getId());
+        if (prev != null) {
+            lessons.set(lessons.indexOf(prev), lesson);
+        }
     }
 
     public void remove(Lesson lesson) {
@@ -43,7 +57,7 @@ public class StudyDay implements Iterable<Lesson> {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (Lesson lesson : lessons) {
-            builder.append(lesson.toString() + "\n");
+            builder.append(lesson.toString()).append("\n");
         }
         return builder.toString();
     }
@@ -56,19 +70,20 @@ public class StudyDay implements Iterable<Lesson> {
 
             @Override
             public boolean hasNext() {
-                return index <= lessons.size();
+                return index <= getSize();
             }
 
             @Override
             public Lesson next() {
-                return lessons.get(index++);
+                return get(index++);
             }
 
             @Override
             public void remove() {
                 StudyDay.this.remove(lessons.get(index));
-
             }
         };
     }
+
+
 }

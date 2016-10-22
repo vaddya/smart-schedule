@@ -16,28 +16,28 @@ public class Task {
 
     private UUID id;
     private String subject;
-    private LessonType lessonType;
+    private LessonType type;
     private Date deadline;
     private String textTask;
     private boolean isComplete;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("E dd.MM.Y", new Locale("ru"));
-
-    private Task(Builder builder) {
-        id = builder.id != null
-                ? builder.id
-                : UUID.randomUUID();
-        subject = builder.subject;
-        lessonType = builder.lessonType;
-        deadline = builder.deadline;
-        textTask = builder.textTask;
-        isComplete = builder.isComplete;
-    }
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("E dd.MM.Y", new Locale("ru"));
 
     public static final Comparator<Task> DATE_ORDER = (t1, t2) -> t1.getDeadline().compareTo(t2.getDeadline());
 
-    public UUID getId() {
-        return id;
+    private Task(Builder builder) {
+        this.id = builder.id != null
+                ? builder.id
+                : UUID.randomUUID();
+        this.subject = builder.subject;
+        this.type = builder.type;
+        this.deadline = builder.deadline;
+        this.textTask = builder.textTask;
+        this.isComplete = builder.isComplete;
+    }
+
+    public String getId() {
+        return id.toString();
     }
 
     public String getSubject() {
@@ -48,12 +48,12 @@ public class Task {
         this.subject = subject;
     }
 
-    public LessonType getLessonType() {
-        return lessonType;
+    public LessonType getType() {
+        return type;
     }
 
-    public void setLessonType(LessonType lessonType) {
-        this.lessonType = lessonType;
+    public void setType(LessonType type) {
+        this.type = type;
     }
 
     public Date getDeadline() {
@@ -82,22 +82,16 @@ public class Task {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(dateFormat.format(deadline))
-                .append(" | ")
-                .append(subject)
-                .append(" [")
-                .append(lessonType.getRu())
-                .append("]")
-                .append(": ")
-                .append(textTask)
-                .toString();
+        return dateFormat.format(deadline) +
+                " | " + subject +
+                " [" + type.ru() +
+                "]" + ": " + textTask;
     }
 
     public static final class Builder {
         private UUID id;
         private String subject;
-        private LessonType lessonType;
+        private LessonType type;
         private Date deadline;
         private String textTask;
         private boolean isComplete;
@@ -115,13 +109,18 @@ public class Task {
             return this;
         }
 
-        public Builder lessonType(LessonType val) {
-            lessonType = val;
+        public Builder type(LessonType val) {
+            type = val;
             return this;
         }
 
-        public Builder lessonType(String val) {
-            lessonType = LessonType.valueOf(val);
+        public Builder type(String val) {
+            type = LessonType.valueOf(val);
+            return this;
+        }
+
+        public Builder deadline(Date val) {
+            deadline = val;
             return this;
         }
 

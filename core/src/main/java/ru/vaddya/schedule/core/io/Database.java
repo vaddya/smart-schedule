@@ -1,8 +1,8 @@
 package ru.vaddya.schedule.core.io;
 
 import ru.vaddya.schedule.core.Lesson;
-import ru.vaddya.schedule.core.StudyWeek;
 import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
 
@@ -11,15 +11,21 @@ import java.util.List;
  */
 public interface Database {
 
+    List<Lesson> getLessons(DaysOfWeek day);
+
+    boolean addLesson(DaysOfWeek day, Lesson lesson);
+
+    boolean updateLesson(DaysOfWeek day, Lesson lesson);
+
+    boolean changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson);
+
+    boolean removeLesson(DaysOfWeek day, Lesson lesson);
+
     List<Task> getTasks();
-
-    StudyWeek getStudyWeek();
-
-    boolean addLesson(Lesson lesson);
 
     boolean addTask(Task task);
 
-    boolean completeTask(Task task);
+    boolean updateTask(Task task);
 
     boolean removeTask(Task task);
 }

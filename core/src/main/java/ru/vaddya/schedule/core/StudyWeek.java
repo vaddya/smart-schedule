@@ -42,7 +42,7 @@ public class StudyWeek {
         for (Map.Entry<DaysOfWeek, StudyDay> entry : days.entrySet()) {
             if (entry.getValue().isEmpty()) {
                 builder
-                        .append(entry.getKey().getRu())
+                        .append(entry.getKey().ru())
                         .append(":\n")
                         .append(entry.getValue());
             }

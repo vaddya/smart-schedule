@@ -10,7 +10,6 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Task;
-import ru.vaddya.schedule.core.io.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
@@ -34,7 +33,7 @@ public class MongoDB {
 
 //        Task task = new Task.Builder()
 //                .subject("Высшая математика")
-//                .lessonType(LessonType.PRACTICE)
+//                .type(LessonType.PRACTICE)
 //                .deadline("25.10.2016")
 //                .textTask("№3, №4")
 //                .isComplete(false)
@@ -47,28 +46,11 @@ public class MongoDB {
 //            System.out.println(iterator1.next().toJson(new JsonWriterSettings(JsonMode.SHELL, true)));
 //        }
 
-
-        /*
-        	"monday": [{
-			"startTime": "14:00",
-			"endTime": "15:30",
-			"subject": "Программирование",
-			"lessonType": "LAB",
-			"place": "9 корпус, 309",
-			"teacher": "Вылегжанина К.Д."
-		}, {
-			"startTime": "16:00",
-			"endTime": "17:30",
-			"subject": "Высшая математика",
-			"lessonType": "LECTURE",
-			"place": "ГЗ, 237",
-			"teacher": "Панкрашова А.Г."
-         */
         Lesson lesson1 = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")
                 .subject("Программирование")
-                .lessonType(LessonType.LECTURE)
+                .type(LessonType.LECTURE)
                 .teacher("Глухих М.И.")
                 .build();
 
@@ -76,7 +58,7 @@ public class MongoDB {
                 .startTime("16:00")
                 .endTime("17:30")
                 .subject("Высшая математика")
-                .lessonType(LessonType.LECTURE)
+                .type(LessonType.LECTURE)
                 .teacher("Панкрашова А.Г.")
                 .build();
 
@@ -84,7 +66,7 @@ public class MongoDB {
                 .startTime("12:00")
                 .endTime("13:30")
                 .subject("Вычислительная математика")
-                .lessonType(LessonType.PRACTICE)
+                .type(LessonType.PRACTICE)
                 .teacher("Цыган В.Н.")
                 .build();
 
@@ -92,7 +74,7 @@ public class MongoDB {
                 .startTime("14:00")
                 .endTime("15:30")
                 .subject("Вычислительная математика")
-                .lessonType(LessonType.PRACTICE)
+                .type(LessonType.PRACTICE)
                 .teacher("Вылегжанина К.Д.")
                 .build();
 
@@ -118,7 +100,7 @@ public class MongoDB {
         Document doc = new Document();
         doc.append("_id", task.getId().toString());
         doc.append("subject", task.getSubject());
-        doc.append("lessonType", task.getLessonType().toString());
+        doc.append("type", task.getType().toString());
         doc.append("deadline", task.getDeadline());
         doc.append("textTask", task.getTextTask());
         doc.append("isComplete", task.isComplete());
@@ -158,7 +140,7 @@ public class MongoDB {
         object.append("startTime", lesson.getStartTime().toString());
         object.append("endTime", lesson.getEndTime().toString());
         object.append("subject", lesson.getSubject());
-        object.append("lessonType", lesson.getLessonType().toString());
+        object.append("type", lesson.getType().toString());
         object.append("place", lesson.getPlace());
         object.append("teacher", lesson.getTeacher());
         return object;

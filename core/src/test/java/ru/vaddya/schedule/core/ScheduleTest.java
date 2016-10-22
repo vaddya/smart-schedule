@@ -23,11 +23,11 @@ public class ScheduleTest {
                 .startTime("10:00")
                 .endTime("11:30")
                 .subject("Программирование")
-                .lessonType(LessonType.LECTURE)
+                .type(LessonType.LECTURE)
                 .build();
         task = new Task.Builder()
                 .subject("Программирование")
-                .lessonType(LessonType.LAB)
+                .type(LessonType.LAB)
                 .deadline("31.12.2016")
                 .textTask("Выполнить курсовую работу")
                 .isComplete(false)
@@ -40,7 +40,7 @@ public class ScheduleTest {
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
         assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getSize());
         assertEquals("Программирование", schedule.getDay(DaysOfWeek.MONDAY).get(1).getSubject());
-        assertEquals("Программирование", schedule.getLessonByDay(DaysOfWeek.MONDAY, 1).getSubject());
+        assertEquals("Программирование", schedule.getLesson(DaysOfWeek.MONDAY, lesson.getId()).getSubject());
     }
 
     @Test

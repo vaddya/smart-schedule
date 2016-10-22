@@ -3,34 +3,35 @@ package ru.vaddya.schedule.core;
 import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.Timer;
 
+import java.util.UUID;
+
 /**
  * Created by Vadim on 9/25/2016.
  */
 public class Lesson {
 
+    private UUID id;
     private Timer startTime;
     private Timer endTime;
     private String subject;
-    private LessonType lessonType;
+    private LessonType type;
     private String place;
     private String teacher;
 
     private Lesson(Builder builder) {
-        setStartTime(builder.startTime);
-        setEndTime(builder.endTime);
-        setSubject(builder.subject);
-        setLessonType(builder.lessonType);
-        setPlace(builder.place);
-        setTeacher(builder.teacher);
+        this.id = builder.id != null
+                ? builder.id
+                : UUID.randomUUID();
+        this.startTime = builder.startTime;
+        this.endTime = builder.endTime;
+        this.subject = builder.subject;
+        this.type = builder.type;
+        this.place = builder.place;
+        this.teacher = builder.teacher;
     }
 
-    public Lesson(Timer startTime, Timer endTime, String subject, LessonType lessonType, String place, String teacher) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.subject = subject;
-        this.lessonType = lessonType;
-        this.place = place;
-        this.teacher = teacher;
+    public String getId() {
+        return id.toString();
     }
 
     public Timer getStartTime() {
@@ -57,12 +58,12 @@ public class Lesson {
         this.subject = subject;
     }
 
-    public LessonType getLessonType() {
-        return lessonType;
+    public LessonType getType() {
+        return type;
     }
 
-    public void setLessonType(LessonType lessonType) {
-        this.lessonType = lessonType;
+    public void setType(LessonType type) {
+        this.type = type;
     }
 
     public String getPlace() {
@@ -83,20 +84,13 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(startTime)
-            .append(" - ")
-            .append(endTime)
-            .append(" | ")
-            .append(subject)
-            .append(" [")
-            .append(lessonType.getRu())
-            .append(" | ")
-            .append(place)
-            .append(" | ")
-            .append(teacher)
-            .append("]")
-            .toString();
+        return String.valueOf(startTime) +
+                " - " + endTime +
+                " | " + subject +
+                " [" + type.ru() +
+                " | " + place +
+                " | " + teacher +
+                "]";
     }
 
     @Override
@@ -106,34 +100,43 @@ public class Lesson {
 
         Lesson lesson = (Lesson) o;
 
-        return startTime.equals(lesson.startTime)
-                && endTime.equals(lesson.endTime)
-                && subject.equals(lesson.subject)
-                && lessonType == lesson.lessonType
-                && place.equals(lesson.place)
-                && teacher.equals(lesson.teacher);
+        if (id != null ? !id.equals(lesson.id) : lesson.id != null) return false;
+        if (startTime != null ? !startTime.equals(lesson.startTime) : lesson.startTime != null) return false;
+        if (endTime != null ? !endTime.equals(lesson.endTime) : lesson.endTime != null) return false;
+        if (subject != null ? !subject.equals(lesson.subject) : lesson.subject != null) return false;
+        if (type != lesson.type) return false;
+        if (place != null ? !place.equals(lesson.place) : lesson.place != null) return false;
+        return teacher != null ? teacher.equals(lesson.teacher) : lesson.teacher == null;
+
     }
 
     @Override
     public int hashCode() {
-        int result = startTime.hashCode();
-        result = 31 * result + endTime.hashCode();
-        result = 31 * result + subject.hashCode();
-        result = 31 * result + lessonType.hashCode();
-        result = 31 * result + place.hashCode();
-        result = 31 * result + teacher.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+        result = 31 * result + (subject != null ? subject.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (place != null ? place.hashCode() : 0);
+        result = 31 * result + (teacher != null ? teacher.hashCode() : 0);
         return result;
     }
 
     public static final class Builder {
+        private UUID id;
         private Timer startTime;
         private Timer endTime;
         private String subject;
-        private LessonType lessonType;
+        private LessonType type;
         private String place;
         private String teacher;
 
         public Builder() {
+        }
+
+        public Builder id(String val) {
+            id = UUID.fromString(val);
+            return this;
         }
 
         public Builder startTime(String val) {
@@ -151,13 +154,13 @@ public class Lesson {
             return this;
         }
 
-        public Builder lessonType(LessonType val) {
-            lessonType = val;
+        public Builder type(LessonType val) {
+            type = val;
             return this;
         }
 
-        public Builder lessonType(String val) {
-            lessonType = LessonType.valueOf(val);
+        public Builder type(String val) {
+            type = LessonType.valueOf(val);
             return this;
         }
 

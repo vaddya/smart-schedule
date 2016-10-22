@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 /**
- * Created by Vadim on 10/6/2016.
+ * API интерфейс приложения Smart Schedule
+ * @author vaddya
  */
 public interface ScheduleAPI {
 
@@ -19,11 +20,47 @@ public interface ScheduleAPI {
     void addLesson(DaysOfWeek day, Lesson lesson);
 
     /**
+     * Обновить информацию об уроке
+     * @param day день недели
+     * @param lesson обновляемый урок
+     */
+    void updateLesson(DaysOfWeek day, Lesson lesson);
+
+    /**
+     * Изменить день урока
+     * @param from исходный день недели
+     * @param to новый день недели
+     * @param lesson обновляемый урок
+     */
+    void changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson);
+
+    /**
      * Удалить урок из расписания
      * @param day день недели
      * @param lesson удаляемый урок
      */
     void removeLesson(DaysOfWeek day, Lesson lesson);
+
+    /**
+     * Получить урок по дню недели и номеру урока
+     * @param day день недели
+     * @param id UUID урока
+     * @return запрашиваемый урок
+     */
+    Lesson getLesson(DaysOfWeek day, String id);
+
+    /**
+     * Получить все учебные дни
+     * @return запрашиваемые учебные дни
+     */
+    List<StudyDay> getAllDays();
+
+    /**
+     * Получить учебный день
+     * @param day день недели
+     * @return запрашиваемый учебный день
+     */
+    StudyDay getDay(DaysOfWeek day);
 
     /**
      * Добавить задачу в список задач
@@ -33,10 +70,10 @@ public interface ScheduleAPI {
 
     /**
      * Получить задания по ID
-     * @param uuid UUID
+     * @param id UUID задачи
      * @return запрашиваемая задача
      */
-    Task getTask(UUID uuid);
+    Task getTask(String id);
 
     /**
      * Отметить задачу как выполненную
@@ -55,27 +92,6 @@ public interface ScheduleAPI {
      * @param task удаляемая задача
      */
     void removeTask(Task task);
-
-    /**
-     * Получить урок по дню недели и номеру урока
-     * @param day день недели
-     * @param index порядковый номер урока
-     * @return запрашиваемый урок
-     */
-    Lesson getLessonByDay(DaysOfWeek day, int index);
-
-    /**
-     * Получить все учебные дни
-     * @return запрашиваемые учебные дни
-     */
-    List<StudyDay> getAllDays();
-
-    /**
-     * Получить учебный день
-     * @param day день недели
-     * @return запрашиваемый учебный день
-     */
-    StudyDay getDay(DaysOfWeek day);
 
     /**
      * Получить все задачи
