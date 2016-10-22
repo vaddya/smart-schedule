@@ -84,6 +84,4 @@ public class StudyDay implements Iterable<Lesson> {
             }
         };
     }
-
-
 }

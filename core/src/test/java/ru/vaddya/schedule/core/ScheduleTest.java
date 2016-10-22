@@ -18,7 +18,8 @@ public class ScheduleTest {
 
     @Before
     public void setUp() {
-        schedule = new Schedule("test");
+        // TODO: 10/23/2016 нужны моки, а то в ДБ лезет
+        //schedule = new Schedule();
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")

@@ -1,9 +1,7 @@
 package ru.vaddya.schedule.cli;
 
-import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Schedule;
 import ru.vaddya.schedule.core.ScheduleAPI;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 /**
  * Created by Vadim on 9/22/2016.

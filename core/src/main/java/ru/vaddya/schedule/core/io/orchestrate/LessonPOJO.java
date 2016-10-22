@@ -96,4 +96,17 @@ public class LessonPOJO {
                 lesson.getTeacher()
         );
     }
+
+    @Override
+    public String toString() {
+        return "LessonPOJO{" +
+                "day='" + day + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", subject='" + subject + '\'' +
+                ", type='" + type + '\'' +
+                ", place='" + place + '\'' +
+                ", teacher='" + teacher + '\'' +
+                '}';
+    }
 }

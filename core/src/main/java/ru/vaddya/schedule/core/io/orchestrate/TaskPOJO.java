@@ -79,7 +79,7 @@ public class TaskPOJO {
         return new TaskPOJO(
                 task.getSubject(),
                 task.getType().toString(),
-                task.getDeadline().toString(),
+                task.getDeadlineStr(),
                 task.getTextTask(),
                 task.isComplete()
         );

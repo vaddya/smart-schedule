@@ -12,7 +12,7 @@
 			"subject": "Высшая математика",
 			"type": "LECTURE",
 			"place": "ГЗ, 237",
-			"teacher": "Панкрашова А.Г."		
+			"teacher": "Панкрашова А.Г."
 		}],
 	"tuesday": [{
 			"startTime": "12:00",
@@ -27,7 +27,7 @@
 			"subject": "Программирование",
 			"type": "LAB",
 			"place": "9 корпус, 309",
-			"teacher": "Вылегжанина К.Д."		
+			"teacher": "Вылегжанина К.Д."
 		}],
 	"wednesday": [{
 		"startTime": "14:00",

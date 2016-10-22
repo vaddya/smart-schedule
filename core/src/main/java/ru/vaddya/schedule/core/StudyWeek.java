@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.io.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.EnumMap;
@@ -12,11 +13,14 @@ import java.util.stream.Collectors;
  */
 public class StudyWeek {
 
+    // TODO: 10/23/2016 подумать над архитектурой
+    private Database db = Database.get();
+
     private EnumMap<DaysOfWeek, StudyDay> days = new EnumMap<>(DaysOfWeek.class);
 
     public StudyWeek() {
         for (DaysOfWeek day : DaysOfWeek.values()) {
-            days.put(day, new StudyDay());
+            days.put(day, new StudyDay(db.getLessons(day)));
         }
     }
 

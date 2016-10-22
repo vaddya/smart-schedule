@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 /**
- * API интерфейс приложения Smart Schedule
+ * Интерфейс приложения Smart Schedule
  * @author vaddya
  */
 public interface ScheduleAPI {

@@ -21,8 +21,8 @@ public class Task {
     private String textTask;
     private boolean isComplete;
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("E dd.MM.Y", new Locale("ru"));
-
+    private static final SimpleDateFormat EXTEND_DATE_FORMAT = new SimpleDateFormat("E dd.MM.Y", new Locale("ru"));
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     public static final Comparator<Task> DATE_ORDER = (t1, t2) -> t1.getDeadline().compareTo(t2.getDeadline());
 
     private Task(Builder builder) {
@@ -60,6 +60,10 @@ public class Task {
         return deadline;
     }
 
+    public String getDeadlineStr() {
+        return DATE_FORMAT.format(deadline);
+    }
+
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
     }
@@ -82,7 +86,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return dateFormat.format(deadline) +
+        return EXTEND_DATE_FORMAT.format(deadline) +
                 " | " + subject +
                 " [" + type.ru() +
                 "]" + ": " + textTask;
@@ -125,9 +129,8 @@ public class Task {
         }
 
         public Builder deadline(String val) {
-            SimpleDateFormat parser = new SimpleDateFormat("dd.MM.yyyy");
             try {
-                deadline = parser.parse(val);
+                deadline = DATE_FORMAT.parse(val);
             } catch (ParseException e) {
                 deadline = new Date();
             }

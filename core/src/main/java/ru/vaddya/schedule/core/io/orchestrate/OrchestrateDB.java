@@ -1,116 +1,101 @@
 package ru.vaddya.schedule.core.io.orchestrate;
 
 import io.orchestrate.client.*;
-import io.orchestrate.client.jsonpatch.JsonPatch;
 import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Task;
 import ru.vaddya.schedule.core.io.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
-import ru.vaddya.schedule.core.utils.LessonType;
 
-import java.util.logging.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 /**
  * Created by Vadim on 10/21/2016.
  */
 public class OrchestrateDB implements Database {
 
-    private static void lessons() {
-        Client client = new OrchestrateClient("key");
-        client.kv("lessons", "wednesday")
-                .put(new LessonPOJO(DaysOfWeek.WEDNESDAY.toString(), "10:00", "11:30", "Программирование", "LAB", "9-309", "Вылегжанина К.Д."))
-                .get();
-
-        KvList<LessonPOJO> results =
-                client.listCollection("lessons")
-                        .get(LessonPOJO.class)
-                        .get();
-
-        for (KvObject<LessonPOJO> obj : results) {
-            System.out.println(obj.getKey());
-        }
-    }
-
-    private static void tasks() {
-        Client client = new OrchestrateClient("key");
-        client.kv("tasks", "1")
-                .put(new TaskPOJO("Высшая математика", "PRACTICE", "25.10.2016", "№3, №4", false))
-                .get();
-
-        KvList<TaskPOJO> results =
-                client.listCollection("tasks")
-                        .get(TaskPOJO.class)
-                        .get();
-
-        for (KvObject<TaskPOJO> obj : results) {
-            System.out.println(obj.getKey());
-        }
-    }
-
-    public static void main(String[] args) {
-        OrchestrateDB db = new OrchestrateDB();
-        //lessons();
-//        Task task = new Task.Builder()
-//                .subject("Программирование")
-//                .type(LessonType.LAB)
-//                .deadline("31.12.2016")
-//                .textTask("Выполнить курсовую работу")
-//                .isComplete(false)
-//                .build();
-//        db.addTask(task);
-
-        for (Task t : db.getTasks()) {
-            System.out.println(t);
-        }
-    }
-
-    private Client client = new OrchestrateClient("e34b621e-515c-4588-86ac-ae306894bdee");
-    private Logger log = Logger.getLogger(getClass().toString());
+    private static Client client = new OrchestrateClient("e34b621e-515c-4588-86ac-ae306894bdee");
+    private static Logger log = Logger.getLogger("OrchestrateDB");
 
     private static final String TASKS = "tasks";
     private static final String LESSONS = "lessons";
+    private static final int LIMIT = 100;
 
     @Override
     public List<Lesson> getLessons(DaysOfWeek day) {
-        return null;
+        List<Lesson> list = new ArrayList<>();
+        KvList<LessonPOJO> response = client.listCollection(LESSONS)
+                .limit(LIMIT)
+                .get(LessonPOJO.class)
+                .get();
+        for (KvObject<LessonPOJO> obj : response) {
+            LessonPOJO pojo = obj.getValue();
+            if (pojo.getDay().equals(day.toString())) {
+                log.fine("Lesson was read: " + pojo);
+                Lesson lesson = new Lesson.Builder()
+                        .id(obj.getKey())
+                        .startTime(pojo.getStartTime())
+                        .endTime(pojo.getEndTime())
+                        .subject(pojo.getSubject())
+                        .type(pojo.getType())
+                        .place(pojo.getPlace())
+                        .teacher(pojo.getTeacher())
+                        .build();
+                list.add(lesson);
+            }
+        }
+        return list;
     }
 
     @Override
     public boolean addLesson(DaysOfWeek day, Lesson lesson) {
-        return false;
+        KvMetadata metadata = client
+                .kv(LESSONS, lesson.getId())
+                .put(LessonPOJO.of(day, lesson))
+                .get();
+        log.fine("Lesson was added: " + metadata.toString());
+        return true;
     }
 
     @Override
     public boolean updateLesson(DaysOfWeek day, Lesson lesson) {
-        return false;
+        return addLesson(day, lesson);
     }
 
     @Override
     public boolean changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson) {
+        removeLesson(from, lesson);
+        addLesson(to, lesson);
         return false;
     }
 
     @Override
     public boolean removeLesson(DaysOfWeek day, Lesson lesson) {
-        return client
+        boolean res = client
                 .kv(LESSONS, lesson.getId())
                 .delete()
                 .get();
+        if (res) {
+            log.fine("Lesson " + lesson.getSubject() + " was removed");
+        } else {
+            log.warning("Lesson " + lesson.getSubject() + " wasn't removed");
+        }
+        return res;
     }
 
     @Override
     public List<Task> getTasks() {
         List<Task> list = new ArrayList<>();
         KvList<TaskPOJO> response = client.listCollection(TASKS)
-                .limit(100)
+                .limit(LIMIT)
                 .get(TaskPOJO.class)
                 .get();
         for (KvObject<TaskPOJO> obj : response) {
             TaskPOJO pojo = obj.getValue();
+            log.fine("Task was read: " + pojo);
             Task task = new Task.Builder()
+                    .id(obj.getKey())
                     .subject(pojo.getSubject())
                     .type(pojo.getType())
                     .deadline(pojo.getDeadline())
@@ -127,10 +112,8 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(TASKS, task.getId())
                 .put(TaskPOJO.of(task))
-                .get(10, TimeUnit.SECONDS);
-        log.info(metadata.toString());
-        log.info(metadata.getKey());
-        log.info(metadata.getRef());
+                .get();
+        log.fine("Task was added: " + metadata.toString());
         return true;
     }
 
@@ -141,9 +124,15 @@ public class OrchestrateDB implements Database {
 
     @Override
     public boolean removeTask(Task task) {
-        return client
+        boolean res = client
                 .kv(TASKS, task.getId())
                 .delete()
                 .get();
+        if (res) {
+            log.fine("Task " + task.getTextTask() + " was removed");
+        } else {
+            log.warning("Task " + task.getTextTask() + " wasn't removed");
+        }
+        return res;
     }
 }

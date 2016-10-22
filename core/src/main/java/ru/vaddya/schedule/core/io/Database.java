@@ -2,6 +2,7 @@ package ru.vaddya.schedule.core.io;
 
 import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.io.orchestrate.OrchestrateDB;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
@@ -10,6 +11,11 @@ import java.util.List;
  * Created by Vadim on 10/22/2016.
  */
 public interface Database {
+
+    // TODO: 10/23/2016 хорошо ли это?
+    static Database get() {
+        return new OrchestrateDB();
+    }
 
     List<Lesson> getLessons(DaysOfWeek day);
 

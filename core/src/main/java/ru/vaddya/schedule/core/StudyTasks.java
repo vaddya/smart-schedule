@@ -1,5 +1,7 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.io.Database;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,14 +10,17 @@ import java.util.stream.Collectors;
  */
 public class StudyTasks {
 
+    // TODO: 10/23/2016 подумать над архитектурой
+    private Database db = Database.get();
+
     private List<Task> tasks;
 
     public StudyTasks() {
-        tasks = new ArrayList<>();
+        tasks = db.getTasks();
     }
 
-    public StudyTasks(List<Task> lessons) {
-        this.tasks = lessons;
+    public StudyTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public boolean isEmpty() {

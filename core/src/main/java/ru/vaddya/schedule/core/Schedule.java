@@ -1,16 +1,13 @@
 package ru.vaddya.schedule.core;
 
-import ru.vaddya.schedule.core.io.json.JsonParser;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Реализация API интерфейса
- * @see ru.vaddya.schedule.core.ScheduleAPI
+ * Реализация интерфейса ScheduleAPI
  * @author vaddya
+ * @see ru.vaddya.schedule.core.ScheduleAPI
  */
 public class Schedule implements ScheduleAPI {
 
@@ -18,21 +15,6 @@ public class Schedule implements ScheduleAPI {
     private StudyWeek week;
 
     public Schedule() {
-        // TODO: 10/22/2016 must die
-        ClassLoader classLoader = getClass().getClassLoader();
-        try {
-            this.tasks = new StudyTasks(
-                    JsonParser.parseTasks(classLoader.getResource("tasks.json").getPath())
-                            .stream()
-                            .sorted(Task.DATE_ORDER)
-                            .collect(Collectors.toList()));
-            this.week = JsonParser.parseWeek(classLoader.getResource("schedule.json").getPath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected Schedule(String test) {
         this.tasks = new StudyTasks();
         this.week = new StudyWeek();
     }
