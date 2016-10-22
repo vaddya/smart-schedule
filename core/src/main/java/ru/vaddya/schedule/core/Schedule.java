@@ -1,13 +1,10 @@
 package ru.vaddya.schedule.core;
 
-import ru.vaddya.schedule.core.io.JsonParser;
+import ru.vaddya.schedule.core.io.json.JsonParser;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
@@ -15,16 +12,17 @@ import java.util.stream.Collectors;
  */
 public class Schedule implements ScheduleAPI {
 
-    private List<Task> tasks;
+    private StudyTasks tasks;
     private StudyWeek week;
 
     public Schedule() {
         ClassLoader classLoader = getClass().getClassLoader();
         try {
-            this.tasks = JsonParser.parseTasks(classLoader.getResource("tasks.json").getPath())
-                    .stream()
-                    .sorted(Task.DATE_ORDER)
-                    .collect(Collectors.toList());
+            this.tasks = new StudyTasks(
+                    JsonParser.parseTasks(classLoader.getResource("tasks.json").getPath())
+                            .stream()
+                            .sorted(Task.DATE_ORDER)
+                            .collect(Collectors.toList()));
             this.week = JsonParser.parseWeek(classLoader.getResource("schedule.json").getPath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -32,16 +30,16 @@ public class Schedule implements ScheduleAPI {
     }
 
     protected Schedule(String test) {
-        this.tasks = new ArrayList<>();
+        this.tasks = new StudyTasks();
         this.week = new StudyWeek();
     }
 
     public void addLesson(DaysOfWeek day, Lesson lesson) {
-        week.addLesson(day, lesson);
+        week.get(day).add(lesson);
     }
 
     public void removeLesson(DaysOfWeek day, Lesson lesson) {
-        week.removeLesson(day, lesson);
+        week.get(day).remove(lesson);
     }
 
     public void addTask(Task task) {
@@ -52,55 +50,39 @@ public class Schedule implements ScheduleAPI {
         task.setComplete(true);
     }
 
+    public void updateTask(Task task) {
+        tasks.update(task);
+    }
+
     public void removeTask(Task task) {
         tasks.remove(task);
     }
 
-    public Lesson getLessonByDay(DaysOfWeek day, int i) {
-        return week.getDay(day).getLesson(i);
+    public Lesson getLessonByDay(DaysOfWeek day, int index) {
+        return week.get(day).get(index);
     }
 
-    public Task getTaskByText(String taskText) throws NoSuchElementException {
-        return tasks
-                .stream()
-                .filter(task -> task.getTextTask().equals(taskText))
-                .findFirst()
-                .get();
+    public List<StudyDay> getAllDays() {
+        return week.getAll();
     }
 
     public StudyDay getDay(DaysOfWeek day) {
-        return week.getDay(day);
+        return week.get(day);
     }
 
     public List<Task> getTasks() {
-        return tasks
-                .stream()
-                .collect(Collectors.toList());
+        return tasks.getAll();
     }
 
     public List<Task> getActiveTasks() {
-        return tasks
-                .stream()
-                .filter((task) -> !task.isComplete())
-                .collect(Collectors.toList());
+        return tasks.getActive();
     }
 
     public List<Task> getCompletedTasks() {
-        return tasks
-                .stream()
-                .filter(Task::isComplete)
-                .collect(Collectors.toList());
+        return tasks.getCompleted();
     }
 
     public List<Task> getOverdueTasks() {
-        return tasks
-                .stream()
-                .filter(task -> !task.isComplete())
-                .filter(task -> new Date().after(task.getDeadline()))
-                .collect(Collectors.toList());
-    }
-
-    public StudyWeek getWeek() {
-        return week;
+        return tasks.getOverdue();
     }
 }

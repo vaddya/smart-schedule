@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core.io;
+package ru.vaddya.schedule.core.io.json;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +63,7 @@ public class JsonParser {
             JSONObject object = new JSONObject(data);
             for (DaysOfWeek value : DaysOfWeek.values()) {
                 JSONArray day = object.getJSONArray(value.toString().toLowerCase());
-                week.setDay(value, parseDay(day));
+                week.set(value, parseDay(day));
             }
 
         } catch (JSONException e) {
@@ -81,7 +81,7 @@ public class JsonParser {
                         .startTime(object.getString("startTime"))
                         .endTime(object.getString("endTime"))
                         .subject(object.getString("subject"))
-                        .lessonType(object.getString("lessonType"))
+                        .lessonType(object.getString("type"))
                         .place(object.getString("place"))
                         .teacher(object.getString("teacher"))
                         .build()

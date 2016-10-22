@@ -34,7 +34,7 @@ public class StudyWeekTest {
 
     @Test
     public void enumMapTest() {
-        assertEquals("Программирование", week.getDay(DaysOfWeek.MONDAY).getLesson(1).getSubject());
-        assertEquals("Высшая математика", week.getDay(DaysOfWeek.FRIDAY).getLesson(1).getSubject());
+        assertEquals("Программирование", week.get(DaysOfWeek.MONDAY).get(1).getSubject());
+        assertEquals("Высшая математика", week.get(DaysOfWeek.FRIDAY).get(1).getSubject());
     }
 }

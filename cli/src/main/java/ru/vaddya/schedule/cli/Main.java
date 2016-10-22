@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.cli;
 
+import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Schedule;
 import ru.vaddya.schedule.core.ScheduleAPI;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
@@ -20,6 +21,11 @@ public class Main {
         schedule.getCompletedTasks().forEach(System.out::println);
 
         System.out.println("\nРасписание");
-        System.out.println(schedule.getWeek());
+        for (DaysOfWeek day : DaysOfWeek.values()) {
+            System.out.println(day.getRu());
+            for (Lesson lesson : schedule.getDay(day)) {
+                System.out.println(lesson);
+            }
+        }
     }
 }

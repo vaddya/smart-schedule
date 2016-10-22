@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core.io;
+package ru.vaddya.schedule.core.io.mongo;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -7,12 +7,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import org.bson.BsonArray;
 import org.bson.Document;
-import org.bson.json.JsonMode;
-import org.bson.json.JsonWriterSettings;
 import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.io.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
@@ -23,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Vadim on 10/9/2016.
  */
-public class MongoBridge {
+public class MongoDB {
     public static void main(String[] args) {
         MongoClient mongo = new MongoClient("localhost", 27017);
         System.out.println(mongo.getAddress());
@@ -141,7 +139,7 @@ public class MongoBridge {
         BasicDBObject object = new BasicDBObject();
         BasicDBList list = lessons
                 .stream()
-                .map(MongoBridge::createObject)
+                .map(MongoDB::createObject)
                 .collect(Collectors.toCollection(BasicDBList::new));
         object.append(day.toString(), list);
         return object;
@@ -150,7 +148,7 @@ public class MongoBridge {
     private static BasicDBList createObject(List<Lesson> lessons) {
         BasicDBList list = lessons
                 .stream()
-                .map(MongoBridge::createObject)
+                .map(MongoDB::createObject)
                 .collect(Collectors.toCollection(BasicDBList::new));
         return list;
     }
