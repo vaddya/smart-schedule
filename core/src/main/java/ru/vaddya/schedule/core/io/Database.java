@@ -8,13 +8,15 @@ import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import java.util.List;
 
 /**
- * Created by Vadim on 10/22/2016.
+ * Интерфейс взаимодействия с базой данных
+ *
+ * @author vaddya
  */
 public interface Database {
 
-    // TODO: 10/23/2016 хорошо ли это?
-    static Database get() {
-        return new OrchestrateDB();
+    // TODO: 10/23/2016 Хорошо ли это
+    static Database getConnection() {
+        return OrchestrateDB.getConnection();
     }
 
     List<Lesson> getLessons(DaysOfWeek day);

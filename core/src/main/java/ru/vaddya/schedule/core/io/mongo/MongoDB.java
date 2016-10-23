@@ -5,7 +5,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import ru.vaddya.schedule.core.Lesson;
@@ -13,12 +12,17 @@ import ru.vaddya.schedule.core.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
-import java.util.*;
-
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by Vadim on 10/9/2016.
+ * Реализация взаимодействия с MongoDB
+ * Не ревьюить
+ *
+ * @author vaddya
  */
 public class MongoDB {
     public static void main(String[] args) {
@@ -62,21 +66,21 @@ public class MongoDB {
                 .teacher("Панкрашова А.Г.")
                 .build();
 
-        Lesson lesson3 = new Lesson.Builder()
-                .startTime("12:00")
-                .endTime("13:30")
-                .subject("Вычислительная математика")
-                .type(LessonType.PRACTICE)
-                .teacher("Цыган В.Н.")
-                .build();
-
-        Lesson lesson4 = new Lesson.Builder()
-                .startTime("14:00")
-                .endTime("15:30")
-                .subject("Вычислительная математика")
-                .type(LessonType.PRACTICE)
-                .teacher("Вылегжанина К.Д.")
-                .build();
+//        Lesson lesson3 = new Lesson.Builder()
+//                .startTime("12:00")
+//                .endTime("13:30")
+//                .subject("Вычислительная математика")
+//                .type(LessonType.PRACTICE)
+//                .teacher("Цыган В.Н.")
+//                .build();
+//
+//        Lesson lesson4 = new Lesson.Builder()
+//                .startTime("14:00")
+//                .endTime("15:30")
+//                .subject("Вычислительная математика")
+//                .type(LessonType.PRACTICE)
+//                .teacher("Вылегжанина К.Д.")
+//                .build();
 
         schedule.drop();
 //        schedule.insertOne(createDocument(DaysOfWeek.TUESDAY, Arrays.asList(lesson2, lesson3)));
@@ -87,7 +91,7 @@ public class MongoDB {
         }
         schedule.insertOne(new Document(map));
 
-        MongoCursor<Document> iterator2 = schedule.find().iterator();
+//        MongoCursor<Document> iterator2 = schedule.find().iterator();
 //        while (iterator2.hasNext()) {
 //            System.out.println(iterator2.next().toJson(new JsonWriterSettings(JsonMode.SHELL, true)));
 //        }
@@ -98,10 +102,10 @@ public class MongoDB {
 
     private static Document createDocument(Task task) {
         Document doc = new Document();
-        doc.append("_id", task.getId().toString());
+        doc.append("_id", task.getId());
         doc.append("subject", task.getSubject());
         doc.append("type", task.getType().toString());
-        doc.append("deadline", task.getDeadline());
+        doc.append("deadline", task.getDeadlineDate());
         doc.append("textTask", task.getTextTask());
         doc.append("isComplete", task.isComplete());
         return doc;
@@ -117,22 +121,21 @@ public class MongoDB {
         return document;
     }
 
-    private static BasicDBObject createObject(DaysOfWeek day, List<Lesson> lessons) {
-        BasicDBObject object = new BasicDBObject();
-        BasicDBList list = lessons
-                .stream()
-                .map(MongoDB::createObject)
-                .collect(Collectors.toCollection(BasicDBList::new));
-        object.append(day.toString(), list);
-        return object;
-    }
+//    private static BasicDBObject createObject(DaysOfWeek day, List<Lesson> lessons) {
+//        BasicDBObject object = new BasicDBObject();
+//        BasicDBList list = lessons
+//                .stream()
+//                .map(MongoDB::createObject)
+//                .collect(Collectors.toCollection(BasicDBList::new));
+//        object.append(day.toString(), list);
+//        return object;
+//    }
 
     private static BasicDBList createObject(List<Lesson> lessons) {
-        BasicDBList list = lessons
+        return lessons
                 .stream()
                 .map(MongoDB::createObject)
                 .collect(Collectors.toCollection(BasicDBList::new));
-        return list;
     }
 
     private static DBObject createObject(Lesson lesson) {

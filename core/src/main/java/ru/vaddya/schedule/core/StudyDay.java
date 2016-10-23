@@ -1,19 +1,18 @@
 package ru.vaddya.schedule.core;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * Created by Vadim on 10/5/2016.
+ * Класс для представления учебного дня (списка занятий)
+ *
+ * @author vaddya
+ * @see Lesson
  */
 public class StudyDay implements Iterable<Lesson> {
 
     private List<Lesson> lessons;
-
-    public StudyDay() {
-        lessons = new ArrayList<>();
-    }
 
     public StudyDay(List<Lesson> lessons) {
         this.lessons = lessons;
@@ -36,10 +35,10 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     public Lesson getById(String id) {
-        return lessons.stream()
+        Optional<Lesson> res = lessons.stream()
                 .filter((lesson -> id.equals(lesson.getId())))
-                .findFirst()
-                .get();
+                .findFirst();
+        return res.isPresent() ? res.get() : null;
     }
 
     public void update(Lesson lesson) {

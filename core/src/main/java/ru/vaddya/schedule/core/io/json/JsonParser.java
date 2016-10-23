@@ -12,26 +12,29 @@ import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 /**
- * Created by Vadim on 10/6/2016.
+ * Реализация взаимодействия с Json файлами
+ * Не ревьюить
+ *
+ * @author vaddya
  */
 public class JsonParser {
 
     public static List<Task> parseTasks(String path) throws FileNotFoundException {
         Scanner in = new Scanner(new File(path), "UTF-8");
-        String data = "";
+        StringBuilder builder = new StringBuilder();
 
         while (in.hasNextLine()) {
-            data += in.nextLine();
+            builder.append(in.nextLine());
         }
         in.close();
 
         List<Task> tasks = new ArrayList<>();
         try {
-            JSONArray array = new JSONArray(data);
+            JSONArray array = new JSONArray(builder.toString());
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
                 tasks.add(new Task.Builder()
@@ -51,16 +54,16 @@ public class JsonParser {
 
     public static StudyWeek parseWeek(String path) throws FileNotFoundException {
         Scanner in = new Scanner(new File(path), "UTF-8");
-        String data = "";
+        StringBuilder builder = new StringBuilder();
 
         while (in.hasNextLine()) {
-            data += in.nextLine();
+            builder.append(in.nextLine());
         }
         in.close();
 
         StudyWeek week = new StudyWeek();
         try {
-            JSONObject object = new JSONObject(data);
+            JSONObject object = new JSONObject(builder.toString());
             for (DaysOfWeek value : DaysOfWeek.values()) {
                 JSONArray day = object.getJSONArray(value.toString().toLowerCase());
                 week.set(value, parseDay(day));

@@ -2,38 +2,59 @@ package ru.vaddya.schedule.core;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import ru.vaddya.schedule.core.io.Database;
+import ru.vaddya.schedule.core.io.FakeDB;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Vadim on 10/5/2016.
+ * Модульное тестирование учебной недели
+ *
+ * @author vaddya
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Database.class)
 public class StudyWeekTest {
 
-    StudyWeek week = new StudyWeek();
+    private StudyWeek week;
+    private Lesson lesson1;
+    private Lesson lesson2;
 
     @Before
     public void setUp() {
-        Lesson lesson1 = new Lesson.Builder()
+        PowerMockito.mockStatic(Database.class);
+        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
+
+        week = new StudyWeek();
+
+        lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")
                 .subject("Программирование")
                 .type(LessonType.LAB)
                 .build();
-        Lesson lesson2 = new Lesson.Builder()
+        lesson2 = new Lesson.Builder()
                 .startTime("14:00")
                 .endTime("15:30")
                 .subject("Высшая математика")
                 .type(LessonType.LECTURE)
                 .build();
-        week.get(DaysOfWeek.MONDAY).add(lesson1);
-        week.get(DaysOfWeek.FRIDAY).add(lesson2);
     }
 
     @Test
-    public void enumMapTest() {
+    public void testSetAndGet() {
+        week.get(DaysOfWeek.MONDAY).add(lesson1);
+        week.get(DaysOfWeek.FRIDAY).add(lesson2);
+
+        assertEquals(week.get(DaysOfWeek.MONDAY).getSize(), 1);
+        assertEquals(week.get(DaysOfWeek.TUESDAY).getSize(), 0);
+        assertEquals(week.get(DaysOfWeek.FRIDAY).getSize(), 1);
         assertEquals("Программирование", week.get(DaysOfWeek.MONDAY).get(1).getSubject());
         assertEquals("Высшая математика", week.get(DaysOfWeek.FRIDAY).get(1).getSubject());
     }

@@ -9,12 +9,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by Vadim on 10/5/2016.
+ * Класс для представления учебной недели (списка учебных дней)
+ *
+ * @author vaddya
+ * @see StudyDay
  */
 public class StudyWeek {
 
     // TODO: 10/23/2016 подумать над архитектурой
-    private Database db = Database.get();
+    private Database db = Schedule.db();
 
     private EnumMap<DaysOfWeek, StudyDay> days = new EnumMap<>(DaysOfWeek.class);
 

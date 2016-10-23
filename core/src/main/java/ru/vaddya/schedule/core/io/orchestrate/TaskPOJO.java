@@ -3,7 +3,9 @@ package ru.vaddya.schedule.core.io.orchestrate;
 import ru.vaddya.schedule.core.Task;
 
 /**
- * Created by Vadim on 10/21/2016.
+ * Plain Old Java Object для класса Task
+ *
+ * @author vaddya
  */
 public class TaskPOJO {
 
@@ -79,7 +81,7 @@ public class TaskPOJO {
         return new TaskPOJO(
                 task.getSubject(),
                 task.getType().toString(),
-                task.getDeadlineStr(),
+                task.getDeadline(),
                 task.getTextTask(),
                 task.isComplete()
         );

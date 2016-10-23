@@ -1,22 +1,31 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.io.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
 
 /**
- * Реализация интерфейса ScheduleAPI
+ * Реализация интерфейса приложения Smart Schedule
+ *
  * @author vaddya
- * @see ru.vaddya.schedule.core.ScheduleAPI
+ * @see ScheduleAPI
  */
 public class Schedule implements ScheduleAPI {
 
     private StudyTasks tasks;
     private StudyWeek week;
 
+    // TODO: 10/23/2016 куда ее?
+    private static Database db = Database.getConnection();
+
     public Schedule() {
         this.tasks = new StudyTasks();
         this.week = new StudyWeek();
+    }
+
+    public static Database db() {
+        return db;
     }
 
     @Override

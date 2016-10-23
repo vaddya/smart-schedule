@@ -1,18 +1,20 @@
 package ru.vaddya.schedule.core;
 
 import ru.vaddya.schedule.core.utils.LessonType;
-import ru.vaddya.schedule.core.utils.Timer;
+import ru.vaddya.schedule.core.utils.Time;
 
 import java.util.UUID;
 
 /**
- * Created by Vadim on 9/25/2016.
+ * Класс для представления занятия
+ *
+ * @author vaddya
  */
 public class Lesson {
 
     private UUID id;
-    private Timer startTime;
-    private Timer endTime;
+    private Time startTime;
+    private Time endTime;
     private String subject;
     private LessonType type;
     private String place;
@@ -34,19 +36,19 @@ public class Lesson {
         return id.toString();
     }
 
-    public Timer getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timer startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public Timer getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timer endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 
@@ -124,8 +126,8 @@ public class Lesson {
 
     public static final class Builder {
         private UUID id;
-        private Timer startTime;
-        private Timer endTime;
+        private Time startTime;
+        private Time endTime;
         private String subject;
         private LessonType type;
         private String place;
@@ -140,12 +142,12 @@ public class Lesson {
         }
 
         public Builder startTime(String val) {
-            startTime = Timer.of(val);
+            startTime = Time.of(val);
             return this;
         }
 
         public Builder endTime(String val) {
-            endTime = Timer.of(val);
+            endTime = Time.of(val);
             return this;
         }
 

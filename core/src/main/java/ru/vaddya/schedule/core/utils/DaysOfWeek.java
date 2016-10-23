@@ -1,9 +1,12 @@
 package ru.vaddya.schedule.core.utils;
 
 /**
- * Created by Vadim on 10/5/2016.
+ * Перечисление дней недели
+ *
+ * @author vaddya
  */
 public enum DaysOfWeek {
+    // TODO: 10/23/2016 Интернационализация из файла
     MONDAY("Понедельник"),
     TUESDAY("Вторник"),
     WEDNESDAY("Среда"),
@@ -15,16 +18,24 @@ public enum DaysOfWeek {
     private String ru;
     private String en;
 
+    public static void main(String[] args) {
+        for (DaysOfWeek day : DaysOfWeek.values()) {
+            System.out.println(day.en);
+        }
+    }
+
     DaysOfWeek(String ru) {
         this.ru = ru;
-        this.en = name().substring(1).toLowerCase();
+        this.en = name().charAt(0) + name().substring(1).toLowerCase();
     }
 
     public String ru() {
         return ru;
     }
 
-    public String en() { return en; }
+    public String en() {
+        return en;
+    }
 
     public static DaysOfWeek valueOfRu(String ru) {
         for (DaysOfWeek day : DaysOfWeek.values()) {

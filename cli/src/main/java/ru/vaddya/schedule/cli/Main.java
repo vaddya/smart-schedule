@@ -4,11 +4,15 @@ import ru.vaddya.schedule.core.Schedule;
 import ru.vaddya.schedule.core.ScheduleAPI;
 
 /**
- * Created by Vadim on 9/22/2016.
+ * Класс демонстрирующий текущее расписание занятий и задания
+ *
+ * @author vaddya
  */
 public class Main {
     public static void main(String[] args) {
+        // TODO: 10/23/2016 Добавить взаимодействие с пользователем
         ScheduleAPI schedule = new Schedule();
+
         System.out.println("Активные задания:");
         schedule.getActiveTasks().forEach(System.out::println);
 

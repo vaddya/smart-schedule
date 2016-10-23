@@ -4,7 +4,9 @@ import ru.vaddya.schedule.core.Lesson;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 /**
- * Created by Vadim on 10/21/2016.
+ * Plain Old Java Object для класса Lesson
+ *
+ * @author vaddya
  */
 public class LessonPOJO {
 

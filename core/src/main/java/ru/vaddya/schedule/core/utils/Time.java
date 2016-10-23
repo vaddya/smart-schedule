@@ -1,28 +1,31 @@
 package ru.vaddya.schedule.core.utils;
 
 /**
- * Created by Vadim on 9/25/2016.
+ * Класс для представления времени
+ *
+ * @author vaddya
  */
-public class Timer {
+public class Time {
 
     private int hours;
     private int minutes;
-    public static final char DELIMITER = ':';
 
-    public static Timer of(String time) {
-        return new Timer(time);
+    private static final char DELIMITER = ':';
+
+    public static Time of(String time) {
+        return new Time(time);
     }
 
-    public static Timer of(int hours, int minutes) {
-        return new Timer(hours, minutes);
+    public static Time of(int hours, int minutes) {
+        return new Time(hours, minutes);
     }
 
-    private Timer(int hours, int minutes) {
+    private Time(int hours, int minutes) {
         this.hours = hours;
         this.minutes = minutes;
     }
 
-    private Timer(String time) {
+    private Time(String time) {
         int indexOfDel = time.indexOf(DELIMITER);
         if (indexOfDel == -1) {
             throw new IllegalArgumentException("Illegal time format");
@@ -47,11 +50,11 @@ public class Timer {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Timer)) return false;
+        if (!(o instanceof Time)) return false;
 
-        Timer timer = (Timer) o;
+        Time time = (Time) o;
 
-        return hours == timer.hours && minutes == timer.minutes;
+        return hours == time.hours && minutes == time.minutes;
     }
 
     @Override

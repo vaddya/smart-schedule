@@ -1,16 +1,15 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.utils.DateFormat;
 import ru.vaddya.schedule.core.utils.LessonType;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 
 /**
- * Created by Vadim on 10/5/2016.
+ * Класс для представления задания
+ *
+ * @author vaddya
  */
 public class Task {
 
@@ -20,10 +19,6 @@ public class Task {
     private Date deadline;
     private String textTask;
     private boolean isComplete;
-
-    private static final SimpleDateFormat EXTEND_DATE_FORMAT = new SimpleDateFormat("E dd.MM.Y", new Locale("ru"));
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
-    public static final Comparator<Task> DATE_ORDER = (t1, t2) -> t1.getDeadline().compareTo(t2.getDeadline());
 
     private Task(Builder builder) {
         this.id = builder.id != null
@@ -56,16 +51,16 @@ public class Task {
         this.type = type;
     }
 
-    public Date getDeadline() {
-        return deadline;
+    public Date getDeadlineDate() {
+        return (Date) deadline.clone();
     }
 
-    public String getDeadlineStr() {
-        return DATE_FORMAT.format(deadline);
+    public String getDeadline() {
+        return DateFormat.formatShort(deadline);
     }
 
     public void setDeadline(Date deadline) {
-        this.deadline = deadline;
+        this.deadline = (Date) deadline.clone();
     }
 
     public String getTextTask() {
@@ -86,7 +81,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return EXTEND_DATE_FORMAT.format(deadline) +
+        return DateFormat.formatExtend(deadline) +
                 " | " + subject +
                 " [" + type.ru() +
                 "]" + ": " + textTask;
@@ -124,16 +119,12 @@ public class Task {
         }
 
         public Builder deadline(Date val) {
-            deadline = val;
+            deadline = (Date) val.clone();
             return this;
         }
 
         public Builder deadline(String val) {
-            try {
-                deadline = DATE_FORMAT.parse(val);
-            } catch (ParseException e) {
-                deadline = new Date();
-            }
+            deadline = DateFormat.parseShort(val);
             return this;
         }
 

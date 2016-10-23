@@ -2,14 +2,24 @@ package ru.vaddya.schedule.core;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import ru.vaddya.schedule.core.io.Database;
+import ru.vaddya.schedule.core.io.FakeDB;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Vadim on 10/6/2016.
+ * Функциональное тестирование приложения
+ *
+ * @author vaddya
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Database.class)
 public class ScheduleTest {
 
     private ScheduleAPI schedule;
@@ -18,8 +28,10 @@ public class ScheduleTest {
 
     @Before
     public void setUp() {
-        // TODO: 10/23/2016 нужны моки, а то в ДБ лезет
-        //schedule = new Schedule();
+        PowerMockito.mockStatic(Database.class);
+        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
+
+        schedule = new Schedule();
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")

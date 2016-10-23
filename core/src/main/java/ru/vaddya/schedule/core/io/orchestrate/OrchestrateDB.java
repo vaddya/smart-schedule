@@ -11,28 +11,39 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Created by Vadim on 10/21/2016.
+ * Реализация взаимодействия с OrchestrateDB
+ *
+ * @author vaddya
  */
 public class OrchestrateDB implements Database {
 
-    private static Client client = new OrchestrateClient("e34b621e-515c-4588-86ac-ae306894bdee");
-    private static Logger log = Logger.getLogger("OrchestrateDB");
+    private static Database db = new OrchestrateDB();
+    private static Client client = new OrchestrateClient("0e1ce0c0-6de9-498d-b7bf-ca9eacb429fe");
+    private static Logger logger = Logger.getLogger("OrchestrateDB");
 
     private static final String TASKS = "tasks";
     private static final String LESSONS = "lessons";
     private static final int LIMIT = 100;
 
+    private OrchestrateDB() {
+    }
+
+    public static Database getConnection() {
+        return db;
+    }
+
     @Override
     public List<Lesson> getLessons(DaysOfWeek day) {
         List<Lesson> list = new ArrayList<>();
-        KvList<LessonPOJO> response = client.listCollection(LESSONS)
+        KvList<LessonPOJO> response = client
+                .listCollection(LESSONS)
                 .limit(LIMIT)
                 .get(LessonPOJO.class)
                 .get();
         for (KvObject<LessonPOJO> obj : response) {
             LessonPOJO pojo = obj.getValue();
             if (pojo.getDay().equals(day.toString())) {
-                log.fine("Lesson was read: " + pojo);
+                logger.fine("Lesson was read: " + pojo);
                 Lesson lesson = new Lesson.Builder()
                         .id(obj.getKey())
                         .startTime(pojo.getStartTime())
@@ -54,7 +65,7 @@ public class OrchestrateDB implements Database {
                 .kv(LESSONS, lesson.getId())
                 .put(LessonPOJO.of(day, lesson))
                 .get();
-        log.fine("Lesson was added: " + metadata.toString());
+        logger.fine("Lesson was added: " + metadata.toString());
         return true;
     }
 
@@ -77,9 +88,9 @@ public class OrchestrateDB implements Database {
                 .delete()
                 .get();
         if (res) {
-            log.fine("Lesson " + lesson.getSubject() + " was removed");
+            logger.fine("Lesson " + lesson.getSubject() + " was removed");
         } else {
-            log.warning("Lesson " + lesson.getSubject() + " wasn't removed");
+            logger.warning("Lesson " + lesson.getSubject() + " wasn't removed");
         }
         return res;
     }
@@ -87,13 +98,14 @@ public class OrchestrateDB implements Database {
     @Override
     public List<Task> getTasks() {
         List<Task> list = new ArrayList<>();
-        KvList<TaskPOJO> response = client.listCollection(TASKS)
+        KvList<TaskPOJO> response = client
+                .listCollection(TASKS)
                 .limit(LIMIT)
                 .get(TaskPOJO.class)
                 .get();
         for (KvObject<TaskPOJO> obj : response) {
             TaskPOJO pojo = obj.getValue();
-            log.fine("Task was read: " + pojo);
+            logger.fine("Task was read: " + pojo);
             Task task = new Task.Builder()
                     .id(obj.getKey())
                     .subject(pojo.getSubject())
@@ -113,7 +125,7 @@ public class OrchestrateDB implements Database {
                 .kv(TASKS, task.getId())
                 .put(TaskPOJO.of(task))
                 .get();
-        log.fine("Task was added: " + metadata.toString());
+        logger.fine("Task was added: " + metadata.toString());
         return true;
     }
 
@@ -129,9 +141,9 @@ public class OrchestrateDB implements Database {
                 .delete()
                 .get();
         if (res) {
-            log.fine("Task " + task.getTextTask() + " was removed");
+            logger.fine("Task " + task.getTextTask() + " was removed");
         } else {
-            log.warning("Task " + task.getTextTask() + " wasn't removed");
+            logger.warning("Task " + task.getTextTask() + " wasn't removed");
         }
         return res;
     }
