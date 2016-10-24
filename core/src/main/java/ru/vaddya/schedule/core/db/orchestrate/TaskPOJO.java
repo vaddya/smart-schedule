@@ -1,6 +1,6 @@
-package ru.vaddya.schedule.core.io.orchestrate;
+package ru.vaddya.schedule.core.db.orchestrate;
 
-import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.tasks.Task;
 
 /**
  * Plain Old Java Object для класса Task

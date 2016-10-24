@@ -1,9 +1,14 @@
 package ru.vaddya.schedule.core;
 
-import ru.vaddya.schedule.core.io.Database;
+import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.StudyWeek;
+import ru.vaddya.schedule.core.tasks.StudyTasks;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Реализация интерфейса приложения Smart Schedule
@@ -13,16 +18,10 @@ import java.util.List;
  */
 public class Schedule implements ScheduleAPI {
 
-    private StudyTasks tasks;
-    private StudyWeek week;
+    private StudyTasks tasks = new StudyTasks();
+    private StudyWeek week = new StudyWeek();
 
-    // TODO: 10/23/2016 куда ее?
     private static Database db = Database.getConnection();
-
-    public Schedule() {
-        this.tasks = new StudyTasks();
-        this.week = new StudyWeek();
-    }
 
     public static Database db() {
         return db;
@@ -44,8 +43,8 @@ public class Schedule implements ScheduleAPI {
     }
 
     @Override
-    public void removeLesson(DaysOfWeek day, Lesson lesson) {
-        week.get(day).remove(lesson);
+    public void removeLesson(DaysOfWeek day, int i) {
+        week.get(day).remove(i);
     }
 
     @Override
@@ -79,17 +78,22 @@ public class Schedule implements ScheduleAPI {
     }
 
     @Override
-    public List<StudyDay> getAllDays() {
+    public void removeTask(int i) {
+        tasks.remove(i);
+    }
+
+    @Override
+    public Map<DaysOfWeek, List<Lesson>> getAllLessons() {
         return week.getAll();
     }
 
     @Override
-    public StudyDay getDay(DaysOfWeek day) {
-        return week.get(day);
+    public List<Lesson> getLessons(DaysOfWeek day) {
+        return week.get(day).getAll();
     }
 
     @Override
-    public List<Task> getTasks() {
+    public List<Task> getAllTasks() {
         return tasks.getAll();
     }
 

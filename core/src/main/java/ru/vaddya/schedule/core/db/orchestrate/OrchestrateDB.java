@@ -1,9 +1,9 @@
-package ru.vaddya.schedule.core.io.orchestrate;
+package ru.vaddya.schedule.core.db.orchestrate;
 
 import io.orchestrate.client.*;
-import ru.vaddya.schedule.core.Lesson;
-import ru.vaddya.schedule.core.Task;
-import ru.vaddya.schedule.core.io.Database;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.tasks.Task;
+import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class OrchestrateDB implements Database {
 
     private static Database db = new OrchestrateDB();
-    private static Client client = new OrchestrateClient("0e1ce0c0-6de9-498d-b7bf-ca9eacb429fe");
+    private static Client client = new OrchestrateClient("bfdb6c2e-f8be-4835-9b79-1a83421b9786");
     private static Logger logger = Logger.getLogger("OrchestrateDB");
 
     private static final String TASKS = "tasks";

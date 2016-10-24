@@ -1,6 +1,6 @@
-package ru.vaddya.schedule.core.io.orchestrate;
+package ru.vaddya.schedule.core.db.orchestrate;
 
-import ru.vaddya.schedule.core.Lesson;
+import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 /**

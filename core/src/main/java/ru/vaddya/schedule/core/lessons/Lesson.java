@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.lessons;
 
 import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.Time;
@@ -162,7 +162,7 @@ public class Lesson {
         }
 
         public Builder type(String val) {
-            type = LessonType.valueOf(val);
+            type = LessonType.valueOf(val.toUpperCase());
             return this;
         }
 

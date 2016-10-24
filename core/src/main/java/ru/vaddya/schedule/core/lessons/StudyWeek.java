@@ -1,12 +1,12 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.lessons;
 
-import ru.vaddya.schedule.core.io.Database;
+import ru.vaddya.schedule.core.Schedule;
+import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Класс для представления учебной недели (списка учебных дней)
@@ -36,11 +36,13 @@ public class StudyWeek {
         return days.get(day);
     }
 
-    public List<StudyDay> getAll() {
-        return days.entrySet()
-                .stream()
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+    public Map<DaysOfWeek, List<Lesson>> getAll() {
+        // TODO: 10/24/2016 Хочется Stream API
+        Map<DaysOfWeek, List<Lesson>> map = new EnumMap<>(DaysOfWeek.class);
+        for (Map.Entry<DaysOfWeek, StudyDay> day : days.entrySet()) {
+            map.put(day.getKey(), day.getValue().getAll());
+        }
+        return map;
     }
 
     @Override

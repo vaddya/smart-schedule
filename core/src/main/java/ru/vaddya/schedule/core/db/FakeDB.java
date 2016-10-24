@@ -1,7 +1,7 @@
-package ru.vaddya.schedule.core.io;
+package ru.vaddya.schedule.core.db;
 
-import ru.vaddya.schedule.core.Lesson;
-import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.ArrayList;

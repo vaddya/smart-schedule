@@ -1,6 +1,7 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.tasks;
 
-import ru.vaddya.schedule.core.io.Database;
+import ru.vaddya.schedule.core.Schedule;
+import ru.vaddya.schedule.core.db.Database;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -16,14 +17,15 @@ import java.util.stream.Collectors;
  */
 public class StudyTasks {
 
-    private Database db = Schedule.db();
+    private static Database db = Schedule.db();
 
     private List<Task> tasks;
 
     private static final Comparator<Task> DATE_ORDER = (t1, t2) -> t1.getDeadlineDate().compareTo(t2.getDeadlineDate());
 
     public StudyTasks() {
-        tasks = db.getTasks().stream()
+        tasks = db.getTasks()
+                .stream()
                 .sorted(DATE_ORDER)
                 .collect(Collectors.toList());
     }
@@ -77,7 +79,23 @@ public class StudyTasks {
         tasks.remove(task);
     }
 
+    public void remove(int i) {
+        remove(tasks.get(i - 1));
+    }
+
     public void update(Task task) {
         db.updateTask(task);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        int i = 1;
+        for (Task task : tasks) {
+            builder.append(i++)
+                    .append(" | ")
+                    .append(task);
+        }
+        return builder.toString();
     }
 }

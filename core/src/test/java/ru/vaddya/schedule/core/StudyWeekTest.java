@@ -6,8 +6,10 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import ru.vaddya.schedule.core.io.Database;
-import ru.vaddya.schedule.core.io.FakeDB;
+import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.db.FakeDB;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 

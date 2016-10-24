@@ -1,8 +1,11 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Интерфейс приложения Smart Schedule
@@ -39,10 +42,10 @@ public interface ScheduleAPI {
     /**
      * Удалить занятие из расписания
      *
-     * @param day    день недели
-     * @param lesson удаляемое занятие
+     * @param day день недели
+     * @param i   порядковый номер занятия
      */
-    void removeLesson(DaysOfWeek day, Lesson lesson);
+    void removeLesson(DaysOfWeek day, int i);
 
     /**
      * Получить занятие по дню недели и ID занятия
@@ -54,11 +57,12 @@ public interface ScheduleAPI {
     Lesson getLesson(DaysOfWeek day, String id);
 
     /**
-     * Получить все учебные дни
+     * Получить все учебные дни и все занятие в эти дни
      *
-     * @return запрашиваемые учебные дни
+     * @return Карта, ключами которой являются элекменты DaysOfWeek,
+     * а значениями являются списки занятий в этот день
      */
-    List<StudyDay> getAllDays();
+    Map<DaysOfWeek, List<Lesson>> getAllLessons();
 
     /**
      * Получить учебный день по дню недели
@@ -66,7 +70,7 @@ public interface ScheduleAPI {
      * @param day день недели
      * @return запрашиваемый учебный день
      */
-    StudyDay getDay(DaysOfWeek day);
+    List<Lesson> getLessons(DaysOfWeek day);
 
     /**
      * Добавить задание в список заданий
@@ -105,11 +109,18 @@ public interface ScheduleAPI {
     void removeTask(Task task);
 
     /**
+     * Удалить задание
+     *
+     * @param i порядковый номер задания
+     */
+    void removeTask(int i);
+
+    /**
      * Получить все задания
      *
      * @return запрашиваемые задания
      */
-    List<Task> getTasks();
+    List<Task> getAllTasks();
 
     /**
      * Получить активные задания (не отмеченные как выполненные)

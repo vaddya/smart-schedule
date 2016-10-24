@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core;
+package ru.vaddya.schedule.core.tasks;
 
 import ru.vaddya.schedule.core.utils.DateFormat;
 import ru.vaddya.schedule.core.utils.LessonType;
@@ -114,7 +114,7 @@ public class Task {
         }
 
         public Builder type(String val) {
-            type = LessonType.valueOf(val);
+            type = LessonType.valueOf(val.toUpperCase());
             return this;
         }
 

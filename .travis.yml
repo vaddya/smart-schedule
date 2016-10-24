@@ -17,4 +17,4 @@ script:
   - docker run -v $TRAVIS_BUILD_DIR:/radix-converter lamtev/java /bin/bash -c " cd radix-converter && gradle build "
   
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.db/bash)

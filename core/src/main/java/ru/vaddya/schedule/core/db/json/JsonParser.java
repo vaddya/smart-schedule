@@ -1,12 +1,12 @@
-package ru.vaddya.schedule.core.io.json;
+package ru.vaddya.schedule.core.db.json;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import ru.vaddya.schedule.core.Lesson;
-import ru.vaddya.schedule.core.StudyDay;
-import ru.vaddya.schedule.core.StudyWeek;
-import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.StudyDay;
+import ru.vaddya.schedule.core.lessons.StudyWeek;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.io.File;

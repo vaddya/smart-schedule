@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core.io.mongo;
+package ru.vaddya.schedule.core.db.mongo;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -7,8 +7,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import ru.vaddya.schedule.core.Lesson;
-import ru.vaddya.schedule.core.Task;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 

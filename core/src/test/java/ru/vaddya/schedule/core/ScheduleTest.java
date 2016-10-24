@@ -6,8 +6,10 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import ru.vaddya.schedule.core.io.Database;
-import ru.vaddya.schedule.core.io.FakeDB;
+import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.db.FakeDB;
+import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
@@ -49,19 +51,19 @@ public class ScheduleTest {
 
     @Test
     public void addLessonTest() throws Exception {
-        assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getSize());
+        assertEquals(0, schedule.getLessons(DaysOfWeek.MONDAY).size());
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
-        assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getSize());
-        assertEquals("Программирование", schedule.getDay(DaysOfWeek.MONDAY).get(1).getSubject());
+        assertEquals(1, schedule.getLessons(DaysOfWeek.MONDAY).size());
+        assertEquals("Программирование", schedule.getLessons(DaysOfWeek.MONDAY).get(0).getSubject());
         assertEquals("Программирование", schedule.getLesson(DaysOfWeek.MONDAY, lesson.getId()).getSubject());
     }
 
     @Test
     public void removeLessonTest() throws Exception {
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
-        assertEquals(1, schedule.getDay(DaysOfWeek.MONDAY).getSize());
-        schedule.removeLesson(DaysOfWeek.MONDAY, lesson);
-        assertEquals(0, schedule.getDay(DaysOfWeek.MONDAY).getSize());
+        assertEquals(1, schedule.getLessons(DaysOfWeek.MONDAY).size());
+        schedule.removeLesson(DaysOfWeek.MONDAY, 1);
+        assertEquals(0, schedule.getLessons(DaysOfWeek.MONDAY).size());
     }
 
     @Test
