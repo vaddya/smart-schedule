@@ -32,8 +32,8 @@ public class Lesson {
         this.teacher = builder.teacher;
     }
 
-    public String getId() {
-        return id.toString();
+    public UUID getId() {
+        return id;
     }
 
     public Time getStartTime() {

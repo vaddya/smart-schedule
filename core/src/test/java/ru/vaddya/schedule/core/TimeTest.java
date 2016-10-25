@@ -1,6 +1,7 @@
 package ru.vaddya.schedule.core;
 
 import org.junit.Test;
+import ru.vaddya.schedule.core.exceptions.IllegalTimeFormatException;
 import ru.vaddya.schedule.core.utils.Time;
 
 import static org.junit.Assert.assertEquals;
@@ -16,14 +17,14 @@ public class TimeTest {
     public void parseTest() {
         String time = "8:00";
         Time timer = Time.of(time);
-        assertEquals(8, timer.getHours());
-        assertEquals(0, timer.getMinutes());
+        assertEquals(8, timer.hours());
+        assertEquals(0, timer.minutes());
         assertEquals(time, timer.toString());
 
         time = "16:30";
         timer = Time.of(time);
-        assertEquals(16, timer.getHours());
-        assertEquals(30, timer.getMinutes());
+        assertEquals(16, timer.hours());
+        assertEquals(30, timer.minutes());
         assertEquals(time, timer.toString());
     }
 
@@ -36,9 +37,15 @@ public class TimeTest {
         assertEquals(time1.hashCode(), time2.hashCode());
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void illegalArgumentsTest() {
+    @Test(expected=IllegalTimeFormatException.class)
+    public void illegalIllegalTimeFormatTest() {
         String time = "ItIsCertainlyNotTheTime";
+        Time.of(time);
+    }
+
+    @Test(expected=IllegalTimeFormatException.class)
+    public void anotherIllegalTimeFormatTest() {
+        String time = "05:61";
         Time.of(time);
     }
 }

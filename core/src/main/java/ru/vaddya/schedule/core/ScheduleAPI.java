@@ -1,11 +1,14 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
+import ru.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Интерфейс приложения Smart Schedule
@@ -21,6 +24,41 @@ public interface ScheduleAPI {
      * @param lesson добавляемое занятие
      */
     void addLesson(DaysOfWeek day, Lesson lesson);
+
+    /**
+     * Найти занятие по ID
+     *
+     * @param id UUID занятия
+     * @return запрашиваемое занятие
+     * @throws NoSuchLessonException если указан несуществующий ID
+     */
+    Lesson findLesson(UUID id);
+
+    /**
+     * Найти занятие по дню недели и порядковому номеру
+     *
+     * @param day   день недели
+     * @param index порядковый номер
+     * @return запрашиваемое занятие
+     * @throws IndexOutOfBoundsException если указан неверный индекс
+     */
+    Lesson findLesson(DaysOfWeek day, int index);
+
+    /**
+     * Получить учебный день по дню недели
+     *
+     * @param day день недели
+     * @return запрашиваемый учебный день
+     */
+    List<Lesson> getLessons(DaysOfWeek day);
+
+    /**
+     * Получить все учебные дни и все занятие в эти дни
+     *
+     * @return Карта, ключами которой являются элекменты DaysOfWeek,
+     * а значениями являются списки занятий в этот день
+     */
+    Map<DaysOfWeek, List<Lesson>> getAllLessons();
 
     /**
      * Обновить информацию о занятии
@@ -42,35 +80,10 @@ public interface ScheduleAPI {
     /**
      * Удалить занятие из расписания
      *
-     * @param day день недели
-     * @param i   порядковый номер занятия
+     * @param day    день недели
+     * @param lesson удаляемое занятие
      */
-    void removeLesson(DaysOfWeek day, int i);
-
-    /**
-     * Получить занятие по дню недели и ID занятия
-     *
-     * @param day день недели
-     * @param id  UUID занятия
-     * @return запрашиваемое занятие
-     */
-    Lesson getLesson(DaysOfWeek day, String id);
-
-    /**
-     * Получить все учебные дни и все занятие в эти дни
-     *
-     * @return Карта, ключами которой являются элекменты DaysOfWeek,
-     * а значениями являются списки занятий в этот день
-     */
-    Map<DaysOfWeek, List<Lesson>> getAllLessons();
-
-    /**
-     * Получить учебный день по дню недели
-     *
-     * @param day день недели
-     * @return запрашиваемый учебный день
-     */
-    List<Lesson> getLessons(DaysOfWeek day);
+    void removeLesson(DaysOfWeek day, Lesson lesson);
 
     /**
      * Добавить задание в список заданий
@@ -80,40 +93,22 @@ public interface ScheduleAPI {
     void addTask(Task task);
 
     /**
-     * Получить задания по ID
+     * Получить задание по ID
      *
      * @param id UUID задания
      * @return запрашиваемое задание
+     * @throws NoSuchTaskException если указан несуществующий ID
      */
-    Task getTask(String id);
+    Task findTask(UUID id);
 
     /**
-     * Отметить задание как выполненное
+     * Получить задание по порядковому номеру
      *
-     * @param task выполненное задание
+     * @param index порядковый номер
+     * @return запрашиваемое задание
+     * @throws IndexOutOfBoundsException если указан неверный индекс
      */
-    void completeTask(Task task);
-
-    /**
-     * Обновить данные задания
-     *
-     * @param task измененное задание
-     */
-    void updateTask(Task task);
-
-    /**
-     * Удалить задание
-     *
-     * @param task удаляемое задание
-     */
-    void removeTask(Task task);
-
-    /**
-     * Удалить задание
-     *
-     * @param i порядковый номер задания
-     */
-    void removeTask(int i);
+    Task findTask(int index);
 
     /**
      * Получить все задания
@@ -142,4 +137,25 @@ public interface ScheduleAPI {
      * @return просроченные задания
      */
     List<Task> getOverdueTasks();
+
+    /**
+     * Отметить задание как выполненное
+     *
+     * @param task выполненное задание
+     */
+    void completeTask(Task task);
+
+    /**
+     * Обновить данные задания
+     *
+     * @param task измененное задание
+     */
+    void updateTask(Task task);
+
+    /**
+     * Удалить задание
+     *
+     * @param task удаляемое задание
+     */
+    void removeTask(Task task);
 }

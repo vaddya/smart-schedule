@@ -1,5 +1,7 @@
 package ru.vaddya.schedule.core.utils;
 
+import ru.vaddya.schedule.core.exceptions.IllegalTimeFormatException;
+
 /**
  * Класс для представления времени
  *
@@ -21,6 +23,7 @@ public class Time {
     }
 
     private Time(int hours, int minutes) {
+        validate(hours, minutes);
         this.hours = hours;
         this.minutes = minutes;
     }
@@ -28,18 +31,25 @@ public class Time {
     private Time(String time) {
         int indexOfDel = time.indexOf(DELIMITER);
         if (indexOfDel == -1) {
-            throw new IllegalArgumentException("Illegal time format");
+            throw new IllegalTimeFormatException("Illegal time format: " + time);
         }
-        hours = Integer.parseInt(time.substring(0, indexOfDel));
-        minutes = Integer.parseInt(time.substring(indexOfDel + 1));
+        this.hours = Integer.parseInt(time.substring(0, indexOfDel));
+        this.minutes = Integer.parseInt(time.substring(indexOfDel + 1));
+        validate(hours, minutes);
     }
 
-    public int getHours() {
+    public int hours() {
         return hours;
     }
 
-    public int getMinutes() {
+    public int minutes() {
         return minutes;
+    }
+
+    private void validate(int hours, int minutes) {
+        if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+            throw new IllegalTimeFormatException("Illegal time format: " + hours + ":" + minutes);
+        }
     }
 
     @Override

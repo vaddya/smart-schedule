@@ -14,11 +14,13 @@ import java.util.List;
  */
 public class FakeDB implements Database {
 
+    private static Database db = new FakeDB();
+
     private FakeDB() {
     }
 
     public static Database getConnection() {
-        return new FakeDB();
+        return db;
     }
 
     @Override

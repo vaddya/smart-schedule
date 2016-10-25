@@ -1,6 +1,6 @@
 package ru.vaddya.schedule.core.tasks;
 
-import ru.vaddya.schedule.core.utils.DateFormat;
+import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.util.Date;
@@ -31,8 +31,8 @@ public class Task {
         this.isComplete = builder.isComplete;
     }
 
-    public String getId() {
-        return id.toString();
+    public UUID getId() {
+        return id;
     }
 
     public String getSubject() {
@@ -56,7 +56,7 @@ public class Task {
     }
 
     public String getDeadline() {
-        return DateFormat.formatShort(deadline);
+        return Dates.formatShort(deadline);
     }
 
     public void setDeadline(Date deadline) {
@@ -81,10 +81,19 @@ public class Task {
 
     @Override
     public String toString() {
-        return DateFormat.formatExtend(deadline) +
-                " | " + subject +
-                " [" + type.ru() +
-                "]" + ": " + textTask;
+        StringBuilder builder = new StringBuilder();
+        int daysUntil = Dates.daysUntil(deadline);
+        return builder.append(isComplete ? "☑ " : "☐ ")
+                .append(Dates.formatBrief(deadline))
+                .append(" (")
+                .append(daysUntil >= 0 ? daysUntil + " days" : (isComplete ? "done!" :"overdue!"))
+                .append(") | ")
+                .append(subject)
+                .append(" [")
+                .append(type.ru())
+                .append("] :")
+                .append(textTask)
+                .toString();
     }
 
     public static final class Builder {
@@ -124,7 +133,7 @@ public class Task {
         }
 
         public Builder deadline(String val) {
-            deadline = DateFormat.parseShort(val);
+            deadline = Dates.parseShort(val);
             return this;
         }
 

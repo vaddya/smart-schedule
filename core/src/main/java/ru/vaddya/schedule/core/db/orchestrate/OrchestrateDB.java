@@ -62,7 +62,7 @@ public class OrchestrateDB implements Database {
     @Override
     public boolean addLesson(DaysOfWeek day, Lesson lesson) {
         KvMetadata metadata = client
-                .kv(LESSONS, lesson.getId())
+                .kv(LESSONS, lesson.getId().toString())
                 .put(LessonPOJO.of(day, lesson))
                 .get();
         logger.fine("Lesson was added: " + metadata.toString());
@@ -84,7 +84,7 @@ public class OrchestrateDB implements Database {
     @Override
     public boolean removeLesson(DaysOfWeek day, Lesson lesson) {
         boolean res = client
-                .kv(LESSONS, lesson.getId())
+                .kv(LESSONS, lesson.getId().toString())
                 .delete()
                 .get();
         if (res) {
@@ -122,7 +122,7 @@ public class OrchestrateDB implements Database {
     @Override
     public boolean addTask(Task task) {
         KvMetadata metadata = client
-                .kv(TASKS, task.getId())
+                .kv(TASKS, task.getId().toString())
                 .put(TaskPOJO.of(task))
                 .get();
         logger.fine("Task was added: " + metadata.toString());
@@ -137,7 +137,7 @@ public class OrchestrateDB implements Database {
     @Override
     public boolean removeTask(Task task) {
         boolean res = client
-                .kv(TASKS, task.getId())
+                .kv(TASKS, task.getId().toString())
                 .delete()
                 .get();
         if (res) {

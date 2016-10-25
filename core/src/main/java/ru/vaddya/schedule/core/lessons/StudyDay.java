@@ -1,9 +1,6 @@
 package ru.vaddya.schedule.core.lessons;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Класс для представления учебного дня (списка занятий)
@@ -31,23 +28,23 @@ public class StudyDay implements Iterable<Lesson> {
         lessons.add(lesson);
     }
 
-    public Lesson get(int index) {
+    public Lesson getLesson(int index) {
         return lessons.get(index - 1);
     }
 
-    public Lesson getById(String id) {
+    public Lesson getLesson(UUID id) {
         Optional<Lesson> res = lessons.stream()
                 .filter((lesson -> id.equals(lesson.getId())))
                 .findFirst();
         return res.isPresent() ? res.get() : null;
     }
 
-    public List<Lesson> getAll() {
+    public List<Lesson> getAllLessons() {
         return new ArrayList<>(lessons);
     }
 
-    public void update(Lesson lesson) {
-        Lesson prev = getById(lesson.getId());
+    public void updateLesson(Lesson lesson) {
+        Lesson prev = getLesson(lesson.getId());
         if (prev != null) {
             lessons.set(lessons.indexOf(prev), lesson);
         }
@@ -55,10 +52,6 @@ public class StudyDay implements Iterable<Lesson> {
 
     public void remove(Lesson lesson) {
         lessons.remove(lesson);
-    }
-
-    public void remove(int i) {
-        lessons.remove(i-1);
     }
 
     @Override
@@ -83,7 +76,7 @@ public class StudyDay implements Iterable<Lesson> {
 
             @Override
             public Lesson next() {
-                return get(index++);
+                return getLesson(index++);
             }
 
             @Override

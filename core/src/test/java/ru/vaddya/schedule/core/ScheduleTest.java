@@ -55,14 +55,14 @@ public class ScheduleTest {
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
         assertEquals(1, schedule.getLessons(DaysOfWeek.MONDAY).size());
         assertEquals("Программирование", schedule.getLessons(DaysOfWeek.MONDAY).get(0).getSubject());
-        assertEquals("Программирование", schedule.getLesson(DaysOfWeek.MONDAY, lesson.getId()).getSubject());
+        assertEquals("Программирование", schedule.findLesson(lesson.getId()).getSubject());
     }
 
     @Test
     public void removeLessonTest() throws Exception {
         schedule.addLesson(DaysOfWeek.MONDAY, lesson);
         assertEquals(1, schedule.getLessons(DaysOfWeek.MONDAY).size());
-        schedule.removeLesson(DaysOfWeek.MONDAY, 1);
+        schedule.removeLesson(DaysOfWeek.MONDAY, schedule.findLesson(DaysOfWeek.MONDAY, 1));
         assertEquals(0, schedule.getLessons(DaysOfWeek.MONDAY).size());
     }
 
@@ -72,7 +72,7 @@ public class ScheduleTest {
         schedule.addTask(task);
         assertEquals(1, schedule.getActiveTasks().size());
         assertEquals("Выполнить курсовую работу", schedule.getActiveTasks().get(0).getTextTask());
-        assertEquals("Программирование", schedule.getTask(task.getId()).getSubject());
+        assertEquals("Программирование", schedule.findTask(task.getId()).getSubject());
     }
 
     @Test

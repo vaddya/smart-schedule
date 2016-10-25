@@ -1,12 +1,12 @@
 package ru.vaddya.schedule.core.lessons;
 
+import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import ru.vaddya.schedule.core.Schedule;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Класс для представления учебной недели (списка учебных дней)
@@ -16,10 +16,9 @@ import java.util.Map;
  */
 public class StudyWeek {
 
-    // TODO: 10/23/2016 подумать над архитектурой
     private Database db = Schedule.db();
 
-    private EnumMap<DaysOfWeek, StudyDay> days = new EnumMap<>(DaysOfWeek.class);
+    private Map<DaysOfWeek, StudyDay> days = new EnumMap<>(DaysOfWeek.class);
 
     public StudyWeek() {
         for (DaysOfWeek day : DaysOfWeek.values()) {
@@ -27,35 +26,66 @@ public class StudyWeek {
         }
     }
 
-    public void set(DaysOfWeek day, StudyDay studyDay) {
-        days.remove(day);
-        days.put(day, studyDay);
+    public void addLesson(DaysOfWeek day, Lesson lesson) {
+        days.get(day).add(lesson);
+        db.addLesson(day, lesson);
     }
 
-    public StudyDay get(DaysOfWeek day) {
-        return days.get(day);
-    }
-
-    public Map<DaysOfWeek, List<Lesson>> getAll() {
-        // TODO: 10/24/2016 Хочется Stream API
-        Map<DaysOfWeek, List<Lesson>> map = new EnumMap<>(DaysOfWeek.class);
-        for (Map.Entry<DaysOfWeek, StudyDay> day : days.entrySet()) {
-            map.put(day.getKey(), day.getValue().getAll());
+    public Lesson findLesson(UUID id) {
+        Optional<Lesson> res = days.entrySet().stream()
+                .flatMap(entrySet -> entrySet.getValue().getAllLessons().stream())
+                .filter(lesson -> lesson.getId().equals(id))
+                .findFirst();
+        if (res.isPresent()) {
+            return res.get();
+        } else {
+            throw new NoSuchLessonException("Wrong lesson ID: " + id);
         }
-        return map;
+    }
+
+    public Lesson findLesson(DaysOfWeek day, int index) {
+        return days.get(day).getLesson(index);
+    }
+
+    public void updateLesson(DaysOfWeek day, Lesson lesson) {
+        days.get(day).updateLesson(lesson);
+        db.updateLesson(day, lesson);
+    }
+
+    public void removeLesson(DaysOfWeek day, Lesson lesson) {
+        days.get(day).remove(lesson);
+        db.removeLesson(day, lesson);
+    }
+
+    public Map<DaysOfWeek, List<Lesson>> getAllLessons() {
+        return days.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().getAllLessons())
+                );
+    }
+
+    public void changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson) {
+        days.get(from).remove(lesson);
+        days.get(to).add(lesson);
+        db.changeLessonDay(from, to, lesson);
+    }
+
+    public List<Lesson> getLessons(DaysOfWeek day) {
+        return days.get(day).getAllLessons();
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<DaysOfWeek, StudyDay> entry : days.entrySet()) {
-            if (entry.getValue().isEmpty()) {
-                builder
+        days.entrySet()
+                .stream()
+                .filter(entry -> !entry.getValue().isEmpty())
+                .forEach(entry -> builder
                         .append(entry.getKey().ru())
                         .append(":\n")
-                        .append(entry.getValue());
-            }
-        }
+                        .append(entry.getValue()));
         return builder.toString();
     }
 }

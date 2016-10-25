@@ -8,11 +8,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.db.FakeDB;
+import ru.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.util.Date;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -55,13 +57,18 @@ public class StudyTasksTest {
 
     @Test
     public void testSetAndGet() throws Exception {
-        tasks.add(task1);
-        tasks.add(task2);
+        tasks.addTask(task1);
+        tasks.addTask(task2);
 
         assertEquals(tasks.getSize(), 2);
-        assertNotNull(tasks.get(task1.getId()));
-        assertNull(tasks.get("NOT_ID"));
-        assertEquals(tasks.get(task1.getId()).getSubject(), "Программирование");
-        assertEquals(tasks.get(task2.getId()).getTextTask(), "№1, №2");
+        assertNotNull(tasks.findTask(task1.getId()));
+        assertEquals(tasks.findTask(task1.getId()).getSubject(), "Программирование");
+        assertEquals(tasks.findTask(task2.getId()).getTextTask(), "№1, №2");
+    }
+
+    @Test(expected = NoSuchTaskException.class)
+    public void testNoSuchTaskException() throws Exception {
+        assertNull(tasks.findTask(UUID.randomUUID()));
     }
 }
+

@@ -88,9 +88,11 @@ public class Application {
         out.println("\t>> active - print active tasks");
         out.println("\t>> completed - print completed tasks");
         out.println("\t>> overdue - print overdue tasks");
-        out.println("\t>> add lesson - add lesson to the lesson list");
+        out.println("\t>> add lesson - add lesson to the schedule");
         out.println("\t>> add task - add task to the task list");
-        out.println("\t>> remove lesson - remove lesson from the lesson list");
+        out.println("\t>> done - mark the task completed");
+        out.println("\t>> undone - mark the task uncompleted");
+        out.println("\t>> remove lesson - remove lesson from the schedule");
         out.println("\t>> remove task - remove task from the task list");
         out.println("\t>> help - print help");
     }
@@ -114,12 +116,12 @@ public class Application {
             out.print("Day of week: ");
             DaysOfWeek day = DaysOfWeek.valueOf(in.next().toUpperCase());
             out.print("Lesson number: ");
-            int i = in.nextInt();
-            schedule.removeLesson(day, i);
+            int index = in.nextInt();
+            schedule.removeLesson(day, schedule.findLesson(day, index));
         } else if ("task".equals(kind)) {
-            out.print("Task number: ");
-            int i = in.nextInt();
-            schedule.removeTask(i);
+            out.print("Task index: ");
+            int index = in.nextInt();
+            schedule.removeTask(schedule.findTask(index));
         } else {
             printHelp();
         }
