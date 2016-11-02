@@ -2,6 +2,9 @@ package ru.vaddya.schedule.core.utils;
 
 import ru.vaddya.schedule.core.exceptions.IllegalTimeFormatException;
 
+
+//TODO: Может этот класс сделать оболчкой над каким-нибудь классом для работы со временем из стандартной библиотеки и
+//не хранить часы и минуты самому? Как Dates.
 /**
  * Класс для представления времени
  *
