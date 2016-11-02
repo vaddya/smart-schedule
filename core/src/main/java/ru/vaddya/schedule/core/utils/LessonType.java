@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.core.utils;
 
+//TODO: аналогично DaysOfWeek
 /**
  * Перечисление типов занятий
  *

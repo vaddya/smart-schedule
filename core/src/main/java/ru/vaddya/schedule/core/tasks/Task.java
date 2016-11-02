@@ -6,6 +6,7 @@ import ru.vaddya.schedule.core.utils.LessonType;
 import java.util.Date;
 import java.util.UUID;
 
+//TODO аналогично Lesson
 /**
  * Класс для представления задания
  *

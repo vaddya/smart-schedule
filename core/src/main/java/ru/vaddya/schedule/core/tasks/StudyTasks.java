@@ -7,6 +7,7 @@ import ru.vaddya.schedule.core.db.Database;
 import java.util.*;
 import java.util.stream.Collectors;
 
+//TODO: мне не очень нравится название класса: множественное число, по моему, не очень хорошо.
 /**
  * Класс для представления списка учебных заданий
  *

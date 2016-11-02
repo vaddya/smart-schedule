@@ -38,11 +38,9 @@ public class StudyDay implements Iterable<Lesson> {
                 .findFirst();
         return res.isPresent() ? res.get() : null;
     }
-
     public List<Lesson> getAllLessons() {
         return new ArrayList<>(lessons);
     }
-
     public void updateLesson(Lesson lesson) {
         Lesson prev = getLesson(lesson.getId());
         if (prev != null) {
