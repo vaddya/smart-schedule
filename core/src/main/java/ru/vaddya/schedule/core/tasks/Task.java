@@ -3,10 +3,9 @@ package ru.vaddya.schedule.core.tasks;
 import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
-//TODO аналогично Lesson
 /**
  * Класс для представления задания
  *
@@ -17,7 +16,7 @@ public class Task {
     private UUID id;
     private String subject;
     private LessonType type;
-    private Date deadline;
+    private LocalDate deadline;
     private String textTask;
     private boolean isComplete;
 
@@ -25,11 +24,11 @@ public class Task {
         this.id = builder.id != null
                 ? builder.id
                 : UUID.randomUUID();
-        this.subject = builder.subject;
-        this.type = builder.type;
-        this.deadline = builder.deadline;
-        this.textTask = builder.textTask;
-        this.isComplete = builder.isComplete;
+        setSubject(builder.subject);
+        setType(builder.type);
+        setDeadline(builder.deadline);
+        setTextTask(builder.textTask);
+        isComplete = builder.isComplete;
     }
 
     public UUID getId() {
@@ -52,16 +51,12 @@ public class Task {
         this.type = type;
     }
 
-    public Date getDeadlineDate() {
-        return (Date) deadline.clone();
+    public LocalDate getDeadline() {
+        return deadline;
     }
 
-    public String getDeadline() {
-        return Dates.formatShort(deadline);
-    }
-
-    public void setDeadline(Date deadline) {
-        this.deadline = (Date) deadline.clone();
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 
     public String getTextTask() {
@@ -80,18 +75,22 @@ public class Task {
         isComplete = complete;
     }
 
+    public void update() {
+        // TODO: 11/8/2016
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        int daysUntil = Dates.daysUntil(deadline);
+        long daysUntil = Dates.daysUntil(deadline);
         return builder.append(isComplete ? "☑ " : "☐ ")
                 .append(Dates.formatBrief(deadline))
                 .append(" (")
-                .append(daysUntil >= 0 ? daysUntil + " days" : (isComplete ? "done!" :"overdue!"))
+                .append(daysUntil >= 0 ? daysUntil + " days" : (isComplete ? "done!" : "overdue!"))
                 .append(") | ")
                 .append(subject)
                 .append(" [")
-                .append(type.ru())
+                .append(type)
                 .append("] :")
                 .append(textTask)
                 .toString();
@@ -101,15 +100,15 @@ public class Task {
         private UUID id;
         private String subject;
         private LessonType type;
-        private Date deadline;
+        private LocalDate deadline;
         private String textTask;
         private boolean isComplete;
 
         public Builder() {
         }
 
-        public Builder id(String val) {
-            id = UUID.fromString(val);
+        public Builder id(UUID val) {
+            id = val;
             return this;
         }
 
@@ -123,18 +122,8 @@ public class Task {
             return this;
         }
 
-        public Builder type(String val) {
-            type = LessonType.valueOf(val.toUpperCase());
-            return this;
-        }
-
-        public Builder deadline(Date val) {
-            deadline = (Date) val.clone();
-            return this;
-        }
-
-        public Builder deadline(String val) {
-            deadline = Dates.parseShort(val);
+        public Builder deadline(LocalDate val) {
+            deadline = val;
             return this;
         }
 

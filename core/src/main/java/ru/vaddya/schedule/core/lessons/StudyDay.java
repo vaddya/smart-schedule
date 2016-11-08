@@ -24,7 +24,12 @@ public class StudyDay implements Iterable<Lesson> {
         return lessons.size();
     }
 
-    public void add(Lesson lesson) {
+    /**
+     * Добавить занятие в расписание
+     *
+     * @param lesson добавляемое занятие
+     */
+    public void addLesson(Lesson lesson) {
         lessons.add(lesson);
     }
 
@@ -38,9 +43,10 @@ public class StudyDay implements Iterable<Lesson> {
                 .findFirst();
         return res.isPresent() ? res.get() : null;
     }
-    public List<Lesson> getAllLessons() {
+    public List<Lesson> getLessons() {
         return new ArrayList<>(lessons);
     }
+
     public void updateLesson(Lesson lesson) {
         Lesson prev = getLesson(lesson.getId());
         if (prev != null) {
@@ -48,8 +54,12 @@ public class StudyDay implements Iterable<Lesson> {
         }
     }
 
-    public void remove(Lesson lesson) {
+    public void removeLesson(Lesson lesson) {
         lessons.remove(lesson);
+    }
+
+    public void removeLesson(int index) {
+        lessons.remove(index-1);
     }
 
     @Override
@@ -79,8 +89,16 @@ public class StudyDay implements Iterable<Lesson> {
 
             @Override
             public void remove() {
-                StudyDay.this.remove(lessons.get(index));
+                StudyDay.this.removeLesson(lessons.get(index));
             }
         };
+    }
+
+    public Lesson findLesson(UUID id) {
+        return null;
+    }
+
+    public Lesson findLesson(int index) {
+        return null;
     }
 }

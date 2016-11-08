@@ -2,20 +2,16 @@ package ru.vaddya.schedule.core.utils;
 
 import ru.vaddya.schedule.core.exceptions.IllegalTimeFormatException;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-//TODO: Может этот класс сделать оболчкой над каким-нибудь классом для работы со временем из стандартной библиотеки и
-//не хранить часы и минуты самому? Как Dates.
 /**
- * Класс для представления времени
+ * Вспомогательный класс для представления времени
  *
  * @author vaddya
  */
 public class Time {
-
-    private int hours;
-    private int minutes;
-
-    private static final char DELIMITER = ':';
 
     public static Time of(String time) {
         return new Time(time);
@@ -25,39 +21,35 @@ public class Time {
         return new Time(hours, minutes);
     }
 
+    private LocalTime time;
+
     private Time(int hours, int minutes) {
-        validate(hours, minutes);
-        this.hours = hours;
-        this.minutes = minutes;
-    }
-
-    private Time(String time) {
-        int indexOfDel = time.indexOf(DELIMITER);
-        if (indexOfDel == -1) {
-            throw new IllegalTimeFormatException("Illegal time format: " + time);
-        }
-        this.hours = Integer.parseInt(time.substring(0, indexOfDel));
-        this.minutes = Integer.parseInt(time.substring(indexOfDel + 1));
-        validate(hours, minutes);
-    }
-
-    public int hours() {
-        return hours;
-    }
-
-    public int minutes() {
-        return minutes;
-    }
-
-    private void validate(int hours, int minutes) {
-        if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        try {
+            this.time = LocalTime.of(hours, minutes);
+        } catch (DateTimeParseException e) {
             throw new IllegalTimeFormatException("Illegal time format: " + hours + ":" + minutes);
         }
     }
 
+    private Time(String time) {
+        try {
+            this.time = LocalTime.parse(time);
+        } catch (DateTimeParseException e) {
+            throw new IllegalTimeFormatException("Illegal time format: " + time);
+        }
+    }
+
+    public int hours() {
+        return time.getHour();
+    }
+
+    public int minutes() {
+        return time.getMinute();
+    }
+
     @Override
     public String toString() {
-        return String.format("%d:%02d", hours, minutes);
+        return time.format(DateTimeFormatter.ISO_LOCAL_TIME);
     }
 
     @Override
@@ -65,15 +57,14 @@ public class Time {
         if (this == o) return true;
         if (!(o instanceof Time)) return false;
 
-        Time time = (Time) o;
+        Time time1 = (Time) o;
 
-        return hours == time.hours && minutes == time.minutes;
+        return time.equals(time1.time);
+
     }
 
     @Override
     public int hashCode() {
-        int result = hours;
-        result = 31 * result + minutes;
-        return result;
+        return time.hashCode();
     }
 }

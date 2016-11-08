@@ -1,7 +1,8 @@
 package ru.vaddya.schedule.core.db.orchestrate;
 
 import ru.vaddya.schedule.core.lessons.Lesson;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
+
+import java.time.DayOfWeek;
 
 /**
  * Plain Old Java Object для класса Lesson
@@ -87,7 +88,7 @@ public class LessonPOJO {
         this.teacher = teacher;
     }
 
-    public static LessonPOJO of(DaysOfWeek day, Lesson lesson) {
+    public static LessonPOJO of(DayOfWeek day, Lesson lesson) {
         return new LessonPOJO(
                 day.toString(),
                 lesson.getStartTime().toString(),

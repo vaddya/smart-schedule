@@ -9,9 +9,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
+import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +28,9 @@ public class MongoDB {
     public static void main(String[] args) {
         MongoClient mongo = new MongoClient("localhost", 27017);
         System.out.println(mongo.getAddress());
-        MongoDatabase database = mongo.getDatabase("Schedule");
+        MongoDatabase database = mongo.getDatabase("SmartSchedule");
         //MongoCollection<Document> tasks = database.getCollection("Tasks");
-        MongoCollection<Document> schedule = database.getCollection("Schedule");
+        MongoCollection<Document> schedule = database.getCollection("SmartSchedule");
         //tasks.drop();
 
         System.out.println(schedule.count());
@@ -86,7 +86,7 @@ public class MongoDB {
 //        schedule.insertOne(createDocument(DaysOfWeek.TUESDAY, Arrays.asList(lesson2, lesson3)));
 
         Map<String, Object> map = new HashMap<>();
-        for (DaysOfWeek day : DaysOfWeek.values()) {
+        for (DayOfWeek day : DayOfWeek.values()) {
             map.put(day.toString(), createObject(Arrays.asList(lesson1, lesson2)));
         }
         schedule.insertOne(new Document(map));
@@ -95,7 +95,7 @@ public class MongoDB {
 //        while (iterator2.hasNext()) {
 //            System.out.println(iterator2.next().toJson(new JsonWriterSettings(JsonMode.SHELL, true)));
 //        }
-        System.out.println(schedule.find().first().get(DaysOfWeek.FRIDAY.toString()));
+        System.out.println(schedule.find().first().get(DayOfWeek.FRIDAY.toString()));
 
         System.out.println(schedule.count());
     }
@@ -105,13 +105,13 @@ public class MongoDB {
         doc.append("_id", task.getId());
         doc.append("subject", task.getSubject());
         doc.append("type", task.getType().toString());
-        doc.append("deadline", task.getDeadlineDate());
+        doc.append("deadline", task.getDeadline());
         doc.append("textTask", task.getTextTask());
         doc.append("isComplete", task.isComplete());
         return doc;
     }
 
-    private static Document createDocument(DaysOfWeek day, List<Lesson> lessons) {
+    private static Document createDocument(DayOfWeek day, List<Lesson> lessons) {
         Document document = new Document();
         BasicDBList list = new BasicDBList();
         for (Lesson lesson : lessons) {

@@ -13,6 +13,7 @@ import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.LessonType;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -42,14 +43,14 @@ public class StudyTasksTest {
         task1 = new Task.Builder()
                 .subject("Программирование")
                 .type(LessonType.LAB)
-                .deadline("31.12.2016")
+                .deadline(LocalDate.of(2016, 12, 31))
                 .textTask("Доделать курсовой проект")
                 .isComplete(false)
                 .build();
         task2 = new Task.Builder()
                 .subject("Высшая математика")
-                .type("PRACTICE")
-                .deadline(new Date())
+                .type(LessonType.PRACTICE)
+                .deadline(LocalDate.of(2016, 12, 10))
                 .textTask("№1, №2")
                 .isComplete(true)
                 .build();

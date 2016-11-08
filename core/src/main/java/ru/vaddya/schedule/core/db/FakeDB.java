@@ -2,8 +2,8 @@ package ru.vaddya.schedule.core.db;
 
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,27 +24,27 @@ public class FakeDB implements Database {
     }
 
     @Override
-    public List<Lesson> getLessons(DaysOfWeek day) {
+    public List<Lesson> getLessons(DayOfWeek day) {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean addLesson(DaysOfWeek day, Lesson lesson) {
+    public boolean addLesson(DayOfWeek day, Lesson lesson) {
         return true;
     }
 
     @Override
-    public boolean updateLesson(DaysOfWeek day, Lesson lesson) {
+    public boolean updateLesson(DayOfWeek day, Lesson lesson) {
         return true;
     }
 
     @Override
-    public boolean changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson) {
+    public boolean changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         return true;
     }
 
     @Override
-    public boolean removeLesson(DaysOfWeek day, Lesson lesson) {
+    public boolean removeLesson(DayOfWeek day, Lesson lesson) {
         return true;
     }
 

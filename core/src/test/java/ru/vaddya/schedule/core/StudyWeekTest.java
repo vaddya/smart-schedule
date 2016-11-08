@@ -11,9 +11,9 @@ import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
 import ru.vaddya.schedule.core.utils.LessonType;
 
+import java.time.DayOfWeek;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -55,14 +55,14 @@ public class StudyWeekTest {
 
     @Test
     public void testSetAndGet() {
-        week.addLesson(DaysOfWeek.MONDAY, lesson1);
-        week.addLesson(DaysOfWeek.FRIDAY, lesson2);
+        week.addLesson(DayOfWeek.MONDAY, lesson1);
+        week.addLesson(DayOfWeek.FRIDAY, lesson2);
 
-        assertEquals(week.getLessons(DaysOfWeek.MONDAY).size(), 1);
-        assertEquals(week.getLessons(DaysOfWeek.TUESDAY).size(), 0);
-        assertEquals(week.getLessons(DaysOfWeek.FRIDAY).size(), 1);
-        assertEquals("Программирование", week.getLessons(DaysOfWeek.MONDAY).get(0).getSubject());
-        assertEquals("Высшая математика", week.getLessons(DaysOfWeek.FRIDAY).get(0).getSubject());
+        assertEquals(week.getLessons(DayOfWeek.MONDAY).size(), 1);
+        assertEquals(week.getLessons(DayOfWeek.TUESDAY).size(), 0);
+        assertEquals(week.getLessons(DayOfWeek.FRIDAY).size(), 1);
+        assertEquals("Программирование", week.getLessons(DayOfWeek.MONDAY).get(0).getSubject());
+        assertEquals("Высшая математика", week.getLessons(DayOfWeek.FRIDAY).get(0).getSubject());
     }
 
     @Test(expected = NoSuchLessonException.class)

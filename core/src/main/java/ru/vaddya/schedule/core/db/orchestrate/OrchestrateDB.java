@@ -4,10 +4,13 @@ import io.orchestrate.client.*;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.db.Database;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
+import ru.vaddya.schedule.core.utils.LessonType;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -33,7 +36,7 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
-    public List<Lesson> getLessons(DaysOfWeek day) {
+    public List<Lesson> getLessons(DayOfWeek day) {
         List<Lesson> list = new ArrayList<>();
         KvList<LessonPOJO> response = client
                 .listCollection(LESSONS)
@@ -60,7 +63,7 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
-    public boolean addLesson(DaysOfWeek day, Lesson lesson) {
+    public boolean addLesson(DayOfWeek day, Lesson lesson) {
         KvMetadata metadata = client
                 .kv(LESSONS, lesson.getId().toString())
                 .put(LessonPOJO.of(day, lesson))
@@ -70,19 +73,19 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
-    public boolean updateLesson(DaysOfWeek day, Lesson lesson) {
+    public boolean updateLesson(DayOfWeek day, Lesson lesson) {
         return addLesson(day, lesson);
     }
 
     @Override
-    public boolean changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson) {
+    public boolean changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         removeLesson(from, lesson);
         addLesson(to, lesson);
         return false;
     }
 
     @Override
-    public boolean removeLesson(DaysOfWeek day, Lesson lesson) {
+    public boolean removeLesson(DayOfWeek day, Lesson lesson) {
         boolean res = client
                 .kv(LESSONS, lesson.getId().toString())
                 .delete()
@@ -107,10 +110,10 @@ public class OrchestrateDB implements Database {
             TaskPOJO pojo = obj.getValue();
             logger.fine("Task was read: " + pojo);
             Task task = new Task.Builder()
-                    .id(obj.getKey())
+                    .id(UUID.fromString(obj.getKey()))
                     .subject(pojo.getSubject())
-                    .type(pojo.getType())
-                    .deadline(pojo.getDeadline())
+                    .type(LessonType.valueOf(pojo.getType()))
+                    .deadline(LocalDate.parse(pojo.getDeadline()))
                     .textTask(pojo.getTextTask())
                     .isComplete(pojo.isComplete())
                     .build();

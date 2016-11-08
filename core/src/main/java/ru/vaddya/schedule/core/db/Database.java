@@ -3,8 +3,8 @@ package ru.vaddya.schedule.core.db;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.db.orchestrate.OrchestrateDB;
-import ru.vaddya.schedule.core.utils.DaysOfWeek;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 /**
@@ -14,20 +14,19 @@ import java.util.List;
  */
 public interface Database {
 
-    // TODO: 10/23/2016 Хорошо ли это
     static Database getConnection() {
         return OrchestrateDB.getConnection();
     }
 
-    List<Lesson> getLessons(DaysOfWeek day);
+    List<Lesson> getLessons(DayOfWeek day);
 
-    boolean addLesson(DaysOfWeek day, Lesson lesson);
+    boolean addLesson(DayOfWeek day, Lesson lesson);
 
-    boolean updateLesson(DaysOfWeek day, Lesson lesson);
+    boolean updateLesson(DayOfWeek day, Lesson lesson);
 
-    boolean changeLessonDay(DaysOfWeek from, DaysOfWeek to, Lesson lesson);
+    boolean changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson);
 
-    boolean removeLesson(DaysOfWeek day, Lesson lesson);
+    boolean removeLesson(DayOfWeek day, Lesson lesson);
 
     List<Task> getTasks();
 

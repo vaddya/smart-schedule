@@ -1,59 +1,40 @@
 package ru.vaddya.schedule.core.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
- * Вспомогательный класс для различных представлений класса java.util.Date
+ * Вспомогательный класс для представления даты
  *
  * @author vaddya
  */
-public final class Dates {
+public class Dates {
 
-    private static final Locale locale = new Locale("ru");
+    public static long daysUntil(LocalDate date) {
+        return DAYS.between(LocalDate.now(), date);
+    }
 
-    private static final SimpleDateFormat EXTEND_DATE_FORMAT = new SimpleDateFormat("EEE dd.MM.yyyy", locale);
+    public static boolean isAfter(LocalDate date) {
+        return date.isAfter(LocalDate.now());
+    }
 
-    private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", locale);
-
-    private static final SimpleDateFormat BRIEF_DATE_FORMAT = new SimpleDateFormat("EEE dd.MM", locale);
-
-    private static final SimpleDateFormat DAY_OF_WEEK = new SimpleDateFormat("EEEE", locale);
-
-    public static String formatExtend(Date date) {
+    public static String formatExtend(LocalDate date) {
         return EXTEND_DATE_FORMAT.format(date);
     }
 
-    public static int daysUntil(Date date) {
-        long diff = date.getTime() - new Date().getTime();
-        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-    }
-
-    public static String dayOfWeek(Date date) {
-        return DAY_OF_WEEK.format(date);
-    }
-
-    public static String formatShort(Date date) {
+    public static String formatShort(LocalDate date) {
         return SHORT_DATE_FORMAT.format(date);
     }
 
-    public static String formatBrief(Date date) {
+    public static String formatBrief(LocalDate date) {
         return BRIEF_DATE_FORMAT.format(date);
     }
 
-    public static Date parseShort(String string) {
-        Date date = new Date();
-        try {
-            date = SHORT_DATE_FORMAT.parse(string);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
+    private static final DateTimeFormatter EXTEND_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM.yyyy");
+
+    private static final DateTimeFormatter SHORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private static final DateTimeFormatter BRIEF_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM");
 }
