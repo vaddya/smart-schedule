@@ -9,7 +9,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.lessons.LessonType;
 
 import java.time.DayOfWeek;
 import java.util.Arrays;

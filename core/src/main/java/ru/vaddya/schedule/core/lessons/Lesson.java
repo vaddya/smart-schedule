@@ -1,12 +1,8 @@
 package ru.vaddya.schedule.core.lessons;
 
-import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.Time;
 
 import java.util.UUID;
-
-//TODO: мне кажется не очень целесообразным наличие билдера. Может если бы не было сетторов и объекты были неизменяемыми,
-//он был бы оправдан. А так даже альтернативных конструкторов нет.
 
 /**
  * Класс для представления занятия

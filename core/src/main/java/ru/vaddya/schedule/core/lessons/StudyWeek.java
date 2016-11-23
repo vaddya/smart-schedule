@@ -1,8 +1,7 @@
 package ru.vaddya.schedule.core.lessons;
 
-import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
-import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -16,19 +15,40 @@ import java.util.stream.Collectors;
  */
 public class StudyWeek {
 
-    private Database db = SmartSchedule.db();
+    private static final Database db = Database.getConnection();
+
+    private StudyWeekType weekType;
 
     private Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
-    public StudyWeek() {
+    /**
+     * Конструктор класса StudyWeek
+     *
+     * @param weekType тип недели (четная или нечетая)
+     */
+    public StudyWeek(StudyWeekType weekType) {
+        this.weekType = weekType;
         for (DayOfWeek day : DayOfWeek.values()) {
             days.put(day, new StudyDay(db.getLessons(day)));
         }
     }
 
-    public void addLesson(DayOfWeek day, Lesson lesson) {
-        days.get(day).addLesson(lesson);
-        db.addLesson(day, lesson);
+    /**
+     * Получить тип недели (четная или нечетная)
+     *
+     * @return тип недели
+     */
+    public StudyWeekType getWeekType() {
+        return weekType;
+    }
+
+    /**
+     * Обновить тип недели (четная или нечетная)
+     *
+     * @param weekType тип недели
+     */
+    public void setWeekType(StudyWeekType weekType) {
+        this.weekType = weekType;
     }
 
     /**
@@ -54,6 +74,12 @@ public class StudyWeek {
         return days.get(day);
     }
 
+    /**
+     * Получить все уроки
+     *
+     * @return Map, ключи которой - дни недели,
+     * а значения - список уроков в этот день
+     */
     public Map<DayOfWeek, List<Lesson>> getAllLessons() {
         return days.entrySet()
                 .stream()
@@ -76,13 +102,12 @@ public class StudyWeek {
         db.changeLessonDay(from, to, lesson);
     }
 
-    public List<Lesson> getLessons(DayOfWeek day) {
-        return days.get(day).getLessons();
-    }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        builder.append("Week Type: ")
+                .append(weekType)
+                .append("\n");
         days.entrySet()
                 .stream()
                 .filter(entry -> !entry.getValue().isEmpty())

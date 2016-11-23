@@ -1,11 +1,9 @@
 package ru.vaddya.schedule.core.tasks;
 
-import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import ru.vaddya.schedule.core.utils.Dates;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,11 +15,15 @@ import java.util.stream.Collectors;
  */
 public class StudyTasks {
 
-    private static Database db = SmartSchedule.db();
+    public static void main(String[] args) {
+        List<Integer> integers = new ArrayList<>();
+    }
+
+    private static final Database db = Database.getConnection();
+
+    private static final Comparator<Task> DATE_ORDER = Comparator.comparing(Task::getDeadline);
 
     private List<Task> tasks;
-
-    private static final Comparator<Task> DATE_ORDER = (t1, t2) -> t1.getDeadline().compareTo(t2.getDeadline());
 
     public StudyTasks() {
         tasks = db.getTasks()
@@ -30,10 +32,11 @@ public class StudyTasks {
                 .collect(Collectors.toList());
     }
 
-    public boolean isEmpty() {
-        return tasks.isEmpty();
-    }
-
+    /**
+     * Получить количество заданий
+     *
+     * @return количество заданий
+     */
     public int getSize() {
         return tasks.size();
     }
@@ -66,43 +69,33 @@ public class StudyTasks {
         }
     }
 
+    /**
+     * Получить задание по индексу
+     *
+     * @param index порядковый номер задания
+     * @return запрашиваемое задание
+     * @throws NoSuchTaskException если указан неверный индекс
+     */
     public Task findTask(int index) {
-        return tasks.get(index);
+        if (index >= 0 && index < tasks.size()) {
+            return tasks.get(index);
+        } else {
+            throw new NoSuchTaskException("Wrong task index: " + index +
+                    ", Size: " + tasks.size());
+        }
     }
 
-    public void completeTask(Task task) {
-        Task upd = findTask(task.getId());
-        upd.setComplete(true);
-        db.updateTask(upd);
-    }
-
+    /**
+     * Обновить информацию о задании
+     *
+     * @param task выолненное задание
+     * @throws NoSuchTaskException если указано несуществующее задание
+     */
     public void updateTask(Task task) {
         Task upd = findTask(task.getId());
-        upd.setComplete(true);
-        db.updateTask(upd);
-    }
-
-    public List<Task> getAllTasks() {
-        return new ArrayList<>(tasks);
-    }
-
-    public List<Task> getActiveTasks() {
-        return tasks.stream()
-                .filter((task) -> !task.isComplete())
-                .collect(Collectors.toList());
-    }
-
-    public List<Task> getCompletedTasks() {
-        return tasks.stream()
-                .filter(Task::isComplete)
-                .collect(Collectors.toList());
-    }
-
-    public List<Task> getOverdueTasks() {
-        return tasks.stream()
-                .filter(task -> !task.isComplete())
-                .filter(task -> Dates.isAfter(task.getDeadline()))
-                .collect(Collectors.toList());
+        tasks.set(tasks.indexOf(upd), task);
+        upd.update(task);
+        db.updateTask(task);
     }
 
     /**
@@ -115,6 +108,49 @@ public class StudyTasks {
         tasks.remove(task);
     }
 
+    /**
+     * Получить все задания
+     *
+     * @return все задания
+     */
+    public List<Task> getAllTasks() {
+        return new ArrayList<>(tasks);
+    }
+
+    /**
+     * Получить только активные задания
+     *
+     * @return активные задания
+     */
+    public List<Task> getActiveTasks() {
+        return tasks.stream()
+                .filter(task -> !task.isComplete())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Получить только выполненные задания
+     *
+     * @return выполненные задания
+     */
+    public List<Task> getCompletedTasks() {
+        return tasks.stream()
+                .filter(Task::isComplete)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Получить только просроченные задания
+     *
+     * @return просроченные задания
+     */
+    public List<Task> getOverdueTasks() {
+        return tasks.stream()
+                .filter(task -> !task.isComplete())
+                .filter(task -> Dates.isAfter(task.getDeadline()))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -122,16 +158,9 @@ public class StudyTasks {
         for (Task task : tasks) {
             builder.append(i++)
                     .append(" | ")
-                    .append(task);
+                    .append(task)
+                    .append("\n");
         }
         return builder.toString();
-    }
-
-    public Task get(int index) {
-        return tasks.get(index);
-    }
-
-    public void removeTask(int index) {
-        tasks.remove(index-1);
     }
 }

@@ -21,13 +21,15 @@ public class Time {
         return new Time(hours, minutes);
     }
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
     private LocalTime time;
 
     private Time(int hours, int minutes) {
         try {
             this.time = LocalTime.of(hours, minutes);
         } catch (DateTimeParseException e) {
-            throw new IllegalTimeFormatException("Illegal time format: " + hours + ":" + minutes);
+            throw new IllegalTimeFormatException("Illegal time FORMATTER: " + hours + ":" + minutes);
         }
     }
 
@@ -35,7 +37,7 @@ public class Time {
         try {
             this.time = LocalTime.parse(time);
         } catch (DateTimeParseException e) {
-            throw new IllegalTimeFormatException("Illegal time format: " + time);
+            throw new IllegalTimeFormatException("Illegal time FORMATTER: " + time);
         }
     }
 
@@ -49,7 +51,7 @@ public class Time {
 
     @Override
     public String toString() {
-        return time.format(DateTimeFormatter.ISO_LOCAL_TIME);
+        return time.format(FORMATTER);
     }
 
     @Override

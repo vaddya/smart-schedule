@@ -1,5 +1,10 @@
 package ru.vaddya.schedule.core.lessons;
 
+import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -10,16 +15,32 @@ import java.util.*;
  */
 public class StudyDay implements Iterable<Lesson> {
 
+    private static final Database db = Database.getConnection();
+
     private List<Lesson> lessons;
+
+    private DayOfWeek day;
+
+    private LocalDate date;
 
     public StudyDay(List<Lesson> lessons) {
         this.lessons = lessons;
     }
 
+    /**
+     * Проверить пуст ли список занятий
+     *
+     * @return есть ли занятия
+     */
     public boolean isEmpty() {
         return lessons.isEmpty();
     }
 
+    /**
+     * Получить количество занятий
+     *
+     * @return количество занятий
+     */
     public int getSize() {
         return lessons.size();
     }
@@ -33,25 +54,58 @@ public class StudyDay implements Iterable<Lesson> {
         lessons.add(lesson);
     }
 
-    public Lesson getLesson(int index) {
-        return lessons.get(index - 1);
-    }
-
-    public Lesson getLesson(UUID id) {
+    /**
+     * Найти занятие по ID
+     *
+     * @param id UUID занятия
+     * @return запрашиваемое занятие
+     * @throws NoSuchLessonException если указан несуществующий ID
+     */
+    public Lesson findLesson(UUID id) {
         Optional<Lesson> res = lessons.stream()
                 .filter((lesson -> id.equals(lesson.getId())))
                 .findFirst();
-        return res.isPresent() ? res.get() : null;
+        if (res.isPresent()) {
+            return res.get();
+        } else {
+            throw new NoSuchLessonException("Wrong task ID: " + id);
+        }
     }
+
+    /**
+     * Найти занятие по индеку
+     *
+     * @param index порядковый номер занятия
+     * @return запрашиваемое занятие
+     * @throws NoSuchLessonException если указан неверный индекс
+     */
+    public Lesson findLesson(int index) {
+        if (index >= 0 && index < lessons.size()) {
+            return lessons.get(index - 1);
+        } else {
+            throw new NoSuchLessonException("Wrong lesson index: " + index +
+                    ", Size: " + lessons.size());
+        }
+    }
+
+    /**
+     * Получить спсок занятий
+     *
+     * @return список занятий
+     */
     public List<Lesson> getLessons() {
         return new ArrayList<>(lessons);
     }
 
+    /**
+     * Обновить занятие
+     *
+     * @param lesson обновляемое занятие
+     * @throws NoSuchLessonException если указано несуществующее занятие
+     */
     public void updateLesson(Lesson lesson) {
-        Lesson prev = getLesson(lesson.getId());
-        if (prev != null) {
-            lessons.set(lessons.indexOf(prev), lesson);
-        }
+        Lesson prev = findLesson(lesson.getId());
+        lessons.set(lessons.indexOf(prev), lesson);
     }
 
     public void removeLesson(Lesson lesson) {
@@ -59,7 +113,7 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     public void removeLesson(int index) {
-        lessons.remove(index-1);
+        lessons.remove(index - 1);
     }
 
     @Override
@@ -75,30 +129,17 @@ public class StudyDay implements Iterable<Lesson> {
     public Iterator<Lesson> iterator() {
         return new Iterator<Lesson>() {
 
-            private int index = 1;
+            private int index = 0;
 
             @Override
             public boolean hasNext() {
-                return index <= getSize();
+                return index < getSize();
             }
 
             @Override
             public Lesson next() {
-                return getLesson(index++);
-            }
-
-            @Override
-            public void remove() {
-                StudyDay.this.removeLesson(lessons.get(index));
+                return findLesson(index++);
             }
         };
-    }
-
-    public Lesson findLesson(UUID id) {
-        return null;
-    }
-
-    public Lesson findLesson(int index) {
-        return null;
     }
 }

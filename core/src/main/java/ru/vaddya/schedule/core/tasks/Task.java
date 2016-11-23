@@ -1,7 +1,7 @@
 package ru.vaddya.schedule.core.tasks;
 
 import ru.vaddya.schedule.core.utils.Dates;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.lessons.LessonType;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -28,7 +28,7 @@ public class Task {
         setType(builder.type);
         setDeadline(builder.deadline);
         setTextTask(builder.textTask);
-        isComplete = builder.isComplete;
+        setComplete(builder.isComplete);
     }
 
     public UUID getId() {
@@ -75,8 +75,12 @@ public class Task {
         isComplete = complete;
     }
 
-    public void update() {
-        // TODO: 11/8/2016
+    public void update(Task task) {
+        this.subject = task.subject;
+        this.type = task.type;
+        this.deadline = task.deadline;
+        this.textTask = task.textTask;
+        this.isComplete = task.isComplete;
     }
 
     @Override
@@ -91,7 +95,7 @@ public class Task {
                 .append(subject)
                 .append(" [")
                 .append(type)
-                .append("] :")
+                .append("]: ")
                 .append(textTask)
                 .toString();
     }

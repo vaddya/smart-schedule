@@ -12,6 +12,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
  */
 public class Dates {
 
+    private static final DateTimeFormatter EXTEND_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM.yyyy");
+
+    private static final DateTimeFormatter SHORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private static final DateTimeFormatter BRIEF_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM");
+
     public static long daysUntil(LocalDate date) {
         return DAYS.between(LocalDate.now(), date);
     }
@@ -32,9 +38,7 @@ public class Dates {
         return BRIEF_DATE_FORMAT.format(date);
     }
 
-    private static final DateTimeFormatter EXTEND_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM.yyyy");
-
-    private static final DateTimeFormatter SHORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-    private static final DateTimeFormatter BRIEF_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM");
+    public static LocalDate parseShort(String s) {
+        return LocalDate.from(SHORT_DATE_FORMAT.parse(s));
+    }
 }

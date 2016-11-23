@@ -7,14 +7,14 @@ import ru.vaddya.schedule.core.tasks.StudyTasks;
 import java.time.DayOfWeek;
 
 /**
- * Интерфейс приложения Smart SmartSchedule
+ * Интерфейс приложения Smart Schedule
  *
  * @author vaddya
  */
 public interface Schedule {
 
     /**
-     * Получить учебный день по дню недели
+     * Получить учебный день на текущей неделе
      *
      * @param day день недели
      * @return учебный день
@@ -22,11 +22,11 @@ public interface Schedule {
     StudyDay getDay(DayOfWeek day);
 
     /**
-     * Получить учебную неделю, содержашаю учебные дни
+     * Получить текущую учебную неделю, содержашаю учебные дни
      *
-     * @return учебную неделю
+     * @return текущая учебная неделя
      */
-    StudyWeek getWeek();
+    StudyWeek getCurrentWeek();
 
     /**
      * Получить учебные задания

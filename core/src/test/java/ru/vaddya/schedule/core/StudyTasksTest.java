@@ -11,10 +11,9 @@ import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.lessons.LessonType;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;

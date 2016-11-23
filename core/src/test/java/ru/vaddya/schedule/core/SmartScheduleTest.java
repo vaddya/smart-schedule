@@ -12,7 +12,7 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.lessons.LessonType;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -53,7 +53,6 @@ public class SmartScheduleTest {
                 .textTask("Выполнить курсовую работу")
                 .isComplete(false)
                 .build();
-
         day = schedule.getDay(DayOfWeek.MONDAY);
         tasks = schedule.getTasks();
     }
@@ -63,7 +62,7 @@ public class SmartScheduleTest {
         assertEquals(0, day.getLessons().size());
         day.addLesson(lesson);
         assertEquals(1, day.getLessons().size());
-        assertEquals("Программирование", day.getLesson(1).getSubject());
+        assertEquals("Программирование", day.findLesson(1).getSubject());
         assertEquals("Программирование", day.findLesson(lesson.getId()).getSubject());
     }
 
@@ -81,7 +80,7 @@ public class SmartScheduleTest {
         assertEquals(0, tasks.getActiveTasks().size());
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
-        assertEquals("Выполнить курсовую работу", tasks.get(1).getTextTask());
+        assertEquals("Выполнить курсовую работу", tasks.findTask(1).getTextTask());
         assertEquals("Программирование", tasks.findTask(task.getId()).getSubject());
     }
 
