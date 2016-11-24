@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 @PrepareForTest(Database.class)
 public class SmartScheduleTest {
 
-    private Schedule schedule;
+    private SmartSchedule schedule;
     private Lesson lesson;
     private Task task;
     private StudyDay day;
@@ -39,7 +39,7 @@ public class SmartScheduleTest {
         PowerMockito.mockStatic(Database.class);
         PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
 
-        schedule = new SmartSchedule();
+        schedule = new SmartScheduleImpl();
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")
@@ -53,7 +53,7 @@ public class SmartScheduleTest {
                 .textTask("Выполнить курсовую работу")
                 .isComplete(false)
                 .build();
-        day = schedule.getDay(DayOfWeek.MONDAY);
+        day = schedule.getCurrentWeek().getDay(DayOfWeek.MONDAY);
         tasks = schedule.getTasks();
     }
 

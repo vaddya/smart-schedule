@@ -1,8 +1,9 @@
 package ru.vaddya.schedule.cli;
 
-import ru.vaddya.schedule.core.Schedule;
 import ru.vaddya.schedule.core.SmartSchedule;
+import ru.vaddya.schedule.core.SmartScheduleImpl;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.lessons.LessonType;
@@ -18,7 +19,8 @@ import java.util.Scanner;
  */
 public class Application {
 
-    private Schedule schedule = new SmartSchedule();
+    private SmartSchedule schedule = new SmartScheduleImpl();
+    private StudyWeek current = schedule.getCurrentWeek();
     private Scanner in = new Scanner(System.in, "UTF-8");
     private PrintStream out = System.out;
 
@@ -60,7 +62,7 @@ public class Application {
 
     public void printSchedule() {
         out.println("\nРасписание");
-        out.println(schedule.getCurrentWeek());
+        out.println(current);
     }
 
     public void printTasks() {
@@ -84,7 +86,7 @@ public class Application {
     }
 
     public void printHelp() {
-        out.println("Usage of Smart SmartSchedule: ");
+        out.println("Usage of Smart SmartScheduleImpl: ");
         out.println("\t>> schedule - print schedule");
         out.println("\t>> tasks - print all tasks");
         out.println("\t>> active - print active tasks");
@@ -104,7 +106,7 @@ public class Application {
         if ("lesson".equals(kind)) {
             out.print("Day of week: ");
             DayOfWeek day = DayOfWeek.valueOf(in.next().toUpperCase());
-            schedule.getDay(day).addLesson(parseLesson());
+            current.getDay(day).addLesson(parseLesson());
         } else if ("task".equals(kind)) {
             schedule.getTasks().addTask(parseTask());
         } else {
@@ -119,7 +121,7 @@ public class Application {
             DayOfWeek day = DayOfWeek.valueOf(in.next().toUpperCase());
             out.print("Lesson number: ");
             int index = in.nextInt();
-            schedule.getDay(day).removeLesson(index);
+            current.getDay(day).removeLesson(current.getDay(day).findLesson(index));
         } else if ("task".equals(kind)) {
             out.print("Task index: ");
             int index = in.nextInt();

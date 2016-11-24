@@ -3,7 +3,6 @@ package ru.vaddya.schedule.core.lessons;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -19,12 +18,11 @@ public class StudyDay implements Iterable<Lesson> {
 
     private List<Lesson> lessons;
 
-    private DayOfWeek day;
-
     private LocalDate date;
 
-    public StudyDay(List<Lesson> lessons) {
+    public StudyDay(List<Lesson> lessons, LocalDate date) {
         this.lessons = lessons;
+        this.date = date;
     }
 
     /**
@@ -43,6 +41,15 @@ public class StudyDay implements Iterable<Lesson> {
      */
     public int getSize() {
         return lessons.size();
+    }
+
+    /**
+     * Получить дату учебного дня
+     *
+     * @return дата учебного дня
+     */
+    public LocalDate getDate() {
+        return date;
     }
 
     /**
@@ -108,12 +115,13 @@ public class StudyDay implements Iterable<Lesson> {
         lessons.set(lessons.indexOf(prev), lesson);
     }
 
+    /**
+     * Удалить занятие
+     *
+     * @param lesson удаляемое занятие
+     */
     public void removeLesson(Lesson lesson) {
         lessons.remove(lesson);
-    }
-
-    public void removeLesson(int index) {
-        lessons.remove(index - 1);
     }
 
     @Override

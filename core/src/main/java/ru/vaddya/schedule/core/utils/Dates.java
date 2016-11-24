@@ -10,7 +10,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
  *
  * @author vaddya
  */
-public class Dates {
+public final class Dates {
 
     private static final DateTimeFormatter EXTEND_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE dd.MM.yyyy");
 

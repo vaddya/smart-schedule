@@ -11,7 +11,7 @@ import java.time.format.DateTimeParseException;
  *
  * @author vaddya
  */
-public class Time {
+public final class Time {
 
     public static Time of(String time) {
         return new Time(time);

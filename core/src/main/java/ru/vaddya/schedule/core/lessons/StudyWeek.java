@@ -2,6 +2,7 @@ package ru.vaddya.schedule.core.lessons;
 
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
+import ru.vaddya.schedule.core.utils.WeekTime;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -17,7 +18,9 @@ public class StudyWeek {
 
     private static final Database db = Database.getConnection();
 
-    private StudyWeekType weekType;
+    private final WeekTime weekTime;
+
+    private WeekType weekType;
 
     private Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
@@ -26,10 +29,11 @@ public class StudyWeek {
      *
      * @param weekType тип недели (четная или нечетая)
      */
-    public StudyWeek(StudyWeekType weekType) {
+    public StudyWeek(WeekType weekType, WeekTime weekTime) {
         this.weekType = weekType;
+        this.weekTime = weekTime;
         for (DayOfWeek day : DayOfWeek.values()) {
-            days.put(day, new StudyDay(db.getLessons(day)));
+            days.put(day, new StudyDay(db.getLessons(day), weekTime.getDateOf(day)));
         }
     }
 
@@ -38,7 +42,7 @@ public class StudyWeek {
      *
      * @return тип недели
      */
-    public StudyWeekType getWeekType() {
+    public WeekType getWeekType() {
         return weekType;
     }
 
@@ -47,8 +51,16 @@ public class StudyWeek {
      *
      * @param weekType тип недели
      */
-    public void setWeekType(StudyWeekType weekType) {
+    public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
+    }
+
+    /**
+     * Получить период времени учебной недели
+     * @return период времени
+     */
+    public WeekTime getWeekTime() {
+        return weekTime;
     }
 
     /**
@@ -105,7 +117,7 @@ public class StudyWeek {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Week Type: ")
+        builder.append("WeekTime Type: ")
                 .append(weekType)
                 .append("\n");
         days.entrySet()

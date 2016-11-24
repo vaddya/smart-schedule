@@ -28,9 +28,9 @@ public class MongoDB {
     public static void main(String[] args) {
         MongoClient mongo = new MongoClient("localhost", 27017);
         System.out.println(mongo.getAddress());
-        MongoDatabase database = mongo.getDatabase("SmartSchedule");
+        MongoDatabase database = mongo.getDatabase("SmartScheduleImpl");
         //MongoCollection<Document> tasks = database.getCollection("Tasks");
-        MongoCollection<Document> schedule = database.getCollection("SmartSchedule");
+        MongoCollection<Document> schedule = database.getCollection("SmartScheduleImpl");
         //tasks.drop();
 
         System.out.println(schedule.count());

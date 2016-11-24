@@ -6,7 +6,7 @@ package ru.vaddya.schedule.core.lessons;
  * @author vaddya
  * @see StudyWeek
  */
-public enum StudyWeekType {
+public enum WeekType {
 
     /**
      * Нечетная неделя

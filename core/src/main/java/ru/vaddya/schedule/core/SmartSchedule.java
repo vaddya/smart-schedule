@@ -1,36 +1,36 @@
 package ru.vaddya.schedule.core;
 
+import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
-import ru.vaddya.schedule.core.lessons.StudyWeekType;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 
 import java.time.DayOfWeek;
 
 /**
- * Реализация интерфейса приложения Smart Schedule
+ * Интерфейс приложения Smart Schedule
  *
  * @author vaddya
- * @see Schedule
  */
-public class SmartSchedule implements Schedule {
+public interface SmartSchedule {
 
-    private final StudyTasks tasks = new StudyTasks();
 
-    private final StudyWeek week = new StudyWeek(StudyWeekType.ODD);
+    Schedule getOddSchedule();
 
-    @Override
-    public StudyDay getDay(DayOfWeek day) {
-        return week.getDay(day);
-    }
+    Schedule getEvenSchedule();
 
-    @Override
-    public StudyWeek getCurrentWeek() {
-        return week;
-    }
+    /**
+     * Получить текущую учебную неделю, содержашаю учебные дни
+     *
+     * @return текущая учебная неделя
+     */
+    StudyWeek getCurrentWeek();
 
-    @Override
-    public StudyTasks getTasks() {
-        return tasks;
-    }
+    /**
+     * Получить учебные задания
+     *
+     * @return учебные задания
+     */
+    StudyTasks getTasks();
+
 }
