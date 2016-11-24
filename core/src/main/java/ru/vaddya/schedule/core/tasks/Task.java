@@ -1,7 +1,7 @@
 package ru.vaddya.schedule.core.tasks;
 
 import ru.vaddya.schedule.core.utils.Dates;
-import ru.vaddya.schedule.core.lessons.LessonType;
+import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.LocalDate;
 import java.util.UUID;

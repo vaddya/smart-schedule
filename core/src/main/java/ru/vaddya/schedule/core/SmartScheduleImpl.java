@@ -3,15 +3,15 @@ package ru.vaddya.schedule.core;
 import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.lessons.StudyWeeks;
-import ru.vaddya.schedule.core.lessons.WeekType;
+import ru.vaddya.schedule.core.utils.WeekType;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import static ru.vaddya.schedule.core.lessons.WeekType.EVEN;
-import static ru.vaddya.schedule.core.lessons.WeekType.ODD;
+import static ru.vaddya.schedule.core.utils.WeekType.EVEN;
+import static ru.vaddya.schedule.core.utils.WeekType.ODD;
 
 /**
  * Реализация интерфейса приложения Smart Schedule

@@ -1,4 +1,6 @@
-package ru.vaddya.schedule.core.lessons;
+package ru.vaddya.schedule.core.utils;
+
+import ru.vaddya.schedule.core.lessons.StudyWeek;
 
 /**
  * Перечисление типов недели

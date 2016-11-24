@@ -12,7 +12,8 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.lessons.LessonType;
+import ru.vaddya.schedule.core.utils.Dates;
+import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -49,7 +50,7 @@ public class SmartScheduleTest {
         task = new Task.Builder()
                 .subject("Программирование")
                 .type(LessonType.LAB)
-                .deadline(LocalDate.parse("31.12.2016"))
+                .deadline(Dates.parseShort("31.12.2016"))
                 .textTask("Выполнить курсовую работу")
                 .isComplete(false)
                 .build();
@@ -62,7 +63,7 @@ public class SmartScheduleTest {
         assertEquals(0, day.getLessons().size());
         day.addLesson(lesson);
         assertEquals(1, day.getLessons().size());
-        assertEquals("Программирование", day.findLesson(1).getSubject());
+        assertEquals("Программирование", day.findLesson(0).getSubject());
         assertEquals("Программирование", day.findLesson(lesson.getId()).getSubject());
     }
 
@@ -70,7 +71,7 @@ public class SmartScheduleTest {
     public void removeLessonTest() throws Exception {
         day.addLesson(lesson);
         assertEquals(1, day.getLessons().size());
-        day.removeLesson(day.findLesson(1));
+        day.removeLesson(day.findLesson(0));
         assertEquals(0, day.getLessons().size());
     }
 
@@ -80,7 +81,7 @@ public class SmartScheduleTest {
         assertEquals(0, tasks.getActiveTasks().size());
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
-        assertEquals("Выполнить курсовую работу", tasks.findTask(1).getTextTask());
+        assertEquals("Выполнить курсовую работу", tasks.findTask(0).getTextTask());
         assertEquals("Программирование", tasks.findTask(task.getId()).getSubject());
     }
 
@@ -93,7 +94,7 @@ public class SmartScheduleTest {
         task.setComplete(true);
         assertEquals(0, tasks.getActiveTasks().size());
         assertEquals(1, tasks.getCompletedTasks().size());
-        assertEquals("Выполнить курсовую работу", tasks.getCompletedTasks().get(1).getTextTask());
+        assertEquals("Выполнить курсовую работу", tasks.getCompletedTasks().get(0).getTextTask());
     }
 
     @Test

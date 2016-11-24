@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.core.lessons;
 
+import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.Time;
 
 import java.util.UUID;

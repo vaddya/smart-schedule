@@ -15,7 +15,7 @@ public class TimeTest {
 
     @Test
     public void parseTest() {
-        String time = "8:00";
+        String time = "08:00";
         Time timer = Time.of(time);
         assertEquals(8, timer.hours());
         assertEquals(0, timer.minutes());

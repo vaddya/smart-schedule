@@ -5,7 +5,7 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.utils.Dates;
-import ru.vaddya.schedule.core.lessons.LessonType;
+import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;

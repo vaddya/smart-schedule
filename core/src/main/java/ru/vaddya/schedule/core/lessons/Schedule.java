@@ -1,6 +1,7 @@
 package ru.vaddya.schedule.core.lessons;
 
 import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;

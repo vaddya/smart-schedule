@@ -88,7 +88,7 @@ public class StudyDay implements Iterable<Lesson> {
      */
     public Lesson findLesson(int index) {
         if (index >= 0 && index < lessons.size()) {
-            return lessons.get(index - 1);
+            return lessons.get(index);
         } else {
             throw new NoSuchLessonException("Wrong lesson index: " + index +
                     ", Size: " + lessons.size());

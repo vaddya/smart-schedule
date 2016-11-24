@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
  *
  * @author vaddya
  */
-public final class WeekTime {
+public class WeekTime {
 
     private final LocalDate firstDay;
 
