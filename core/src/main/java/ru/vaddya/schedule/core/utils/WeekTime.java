@@ -2,6 +2,8 @@ package ru.vaddya.schedule.core.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.GregorianCalendar;
 
@@ -46,9 +48,7 @@ public class WeekTime {
 
     @Override
     public int hashCode() {
-        int weekYear = new GregorianCalendar(firstDay.getYear(), firstDay.getMonthValue(),
-                firstDay.getDayOfMonth()).getWeekYear();
-        return firstDay.getYear() + weekYear; // unique for any week
+        return firstDay.getYear() + firstDay.getMonthValue() + firstDay.getDayOfMonth(); // unique for any week
     }
 
     public static WeekTime current() {

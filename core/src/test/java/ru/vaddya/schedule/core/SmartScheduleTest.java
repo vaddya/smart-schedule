@@ -95,7 +95,7 @@ public class SmartScheduleTest {
         tasks.updateTask(task);
         assertEquals(0, tasks.getActiveTasks().size());
         assertEquals(1, tasks.getCompletedTasks().size());
-        assertEquals("Выполнить курсовую работу", tasks.getCompletedTasks().get(0).getTextTask());
+        assertEquals("Todo course work", tasks.getCompletedTasks().get(0).getTextTask());
     }
 
     @Test
