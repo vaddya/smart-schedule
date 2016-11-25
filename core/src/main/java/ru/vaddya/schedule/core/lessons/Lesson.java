@@ -84,10 +84,6 @@ public class Lesson {
         this.teacher = teacher;
     }
 
-    public void update() {
-        // TODO: 11/8/2016
-    }
-
     @Override
     public String toString() {
         return String.valueOf(startTime) +

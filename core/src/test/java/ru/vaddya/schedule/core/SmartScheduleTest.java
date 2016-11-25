@@ -44,14 +44,14 @@ public class SmartScheduleTest {
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")
-                .subject("Программирование")
+                .subject("Programming")
                 .type(LessonType.LECTURE)
                 .build();
         task = new Task.Builder()
-                .subject("Программирование")
+                .subject("Programming")
                 .type(LessonType.LAB)
                 .deadline(Dates.parseShort("31.12.2016"))
-                .textTask("Выполнить курсовую работу")
+                .textTask("Todo course work")
                 .isComplete(false)
                 .build();
         day = schedule.getCurrentWeek().getDay(DayOfWeek.MONDAY);
@@ -60,19 +60,19 @@ public class SmartScheduleTest {
 
     @Test
     public void addLessonTest() throws Exception {
-        assertEquals(0, day.getLessons().size());
+        assertEquals(0, day.getNumberOfLessons());
         day.addLesson(lesson);
-        assertEquals(1, day.getLessons().size());
-        assertEquals("Программирование", day.findLesson(0).getSubject());
-        assertEquals("Программирование", day.findLesson(lesson.getId()).getSubject());
+        assertEquals(1, day.getNumberOfLessons());
+        assertEquals("Programming", day.findLesson(0).getSubject());
+        assertEquals("Programming", day.findLesson(lesson.getId()).getSubject());
     }
 
     @Test
     public void removeLessonTest() throws Exception {
         day.addLesson(lesson);
-        assertEquals(1, day.getLessons().size());
+        assertEquals(1, day.getNumberOfLessons());
         day.removeLesson(day.findLesson(0));
-        assertEquals(0, day.getLessons().size());
+        assertEquals(0, day.getNumberOfLessons());
     }
 
     @Test
@@ -81,17 +81,18 @@ public class SmartScheduleTest {
         assertEquals(0, tasks.getActiveTasks().size());
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
-        assertEquals("Выполнить курсовую работу", tasks.findTask(0).getTextTask());
-        assertEquals("Программирование", tasks.findTask(task.getId()).getSubject());
+        assertEquals("Todo course work", tasks.findTask(0).getTextTask());
+        assertEquals("Programming", tasks.findTask(task.getId()).getSubject());
     }
 
     @Test
-    public void completeTaskTest() throws Exception {
+    public void editTaskTest() throws Exception {
         StudyTasks tasks = schedule.getTasks();
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
         assertEquals(0, tasks.getCompletedTasks().size());
         task.setComplete(true);
+        tasks.updateTask(task);
         assertEquals(0, tasks.getActiveTasks().size());
         assertEquals(1, tasks.getCompletedTasks().size());
         assertEquals("Выполнить курсовую работу", tasks.getCompletedTasks().get(0).getTextTask());

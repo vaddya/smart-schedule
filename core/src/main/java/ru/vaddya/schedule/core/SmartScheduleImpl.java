@@ -36,6 +36,10 @@ public class SmartScheduleImpl implements SmartSchedule {
         }};
     }
 
+    public void swapSchedules() {
+        schedules.put(EVEN, schedules.put(ODD, schedules.get(EVEN)));
+    }
+
     public StudyWeek getCurrentWeek() {
         return weeks.get(schedules.get(currentWeek), WeekTime.current());
     }

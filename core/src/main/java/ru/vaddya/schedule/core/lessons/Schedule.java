@@ -37,6 +37,10 @@ public class Schedule {
         this.weekType = weekType;
     }
 
+    public void addLesson(DayOfWeek day, Lesson lesson) {
+        days.get(day).add(lesson);
+    }
+
     public List<Lesson> getLessons(DayOfWeek day) {
         return days.get(day);
     }

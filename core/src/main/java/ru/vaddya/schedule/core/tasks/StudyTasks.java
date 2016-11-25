@@ -37,7 +37,7 @@ public class StudyTasks {
      *
      * @return количество заданий
      */
-    public int getSize() {
+    public int getNumberOfTasks() {
         return tasks.size();
     }
 
@@ -49,6 +49,12 @@ public class StudyTasks {
     public void addTask(Task task) {
         tasks.add(task);
         db.addTask(task);
+    }
+
+    public void addAllTasks(Task...tasks) {
+        for (Task task : tasks) {
+            this.tasks.add(task);
+        }
     }
 
     /**

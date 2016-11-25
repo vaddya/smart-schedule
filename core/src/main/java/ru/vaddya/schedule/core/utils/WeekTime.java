@@ -18,6 +18,10 @@ public class WeekTime {
         return new WeekTime(date);
     }
 
+    public static WeekTime of(String date) {
+        return new WeekTime(Dates.parseShort(date));
+    }
+
     public static WeekTime getNext(WeekTime current) {
         return new WeekTime(current.getDateOf(DayOfWeek.SUNDAY).plus(1, ChronoUnit.DAYS));
     }

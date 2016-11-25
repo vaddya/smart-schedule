@@ -39,7 +39,7 @@ public class StudyDay implements Iterable<Lesson> {
      *
      * @return количество занятий
      */
-    public int getSize() {
+    public int getNumberOfLessons() {
         return lessons.size();
     }
 
@@ -141,7 +141,7 @@ public class StudyDay implements Iterable<Lesson> {
 
             @Override
             public boolean hasNext() {
-                return index < getSize();
+                return index < getNumberOfLessons();
             }
 
             @Override

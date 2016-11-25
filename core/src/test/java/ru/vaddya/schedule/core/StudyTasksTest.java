@@ -11,14 +11,15 @@ import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.utils.Dates;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static ru.vaddya.schedule.core.utils.LessonType.LAB;
+import static ru.vaddya.schedule.core.utils.LessonType.PRACTICE;
 
 /**
  * Модульное тестирование учебных заданий
@@ -40,30 +41,36 @@ public class StudyTasksTest {
 
         tasks = new StudyTasks();
         task1 = new Task.Builder()
-                .subject("Программирование")
-                .type(LessonType.LAB)
+                .subject("Programming")
+                .type(LAB)
                 .deadline(LocalDate.of(2016, 12, 31))
-                .textTask("Доделать курсовой проект")
+                .textTask("Todo course work")
                 .isComplete(false)
                 .build();
         task2 = new Task.Builder()
-                .subject("Высшая математика")
-                .type(LessonType.PRACTICE)
-                .deadline(LocalDate.of(2016, 12, 10))
+                .subject("High math")
+                .type(PRACTICE)
+                .deadline(Dates.parseShort("31.12.2016"))
                 .textTask("№1, №2")
                 .isComplete(true)
                 .build();
     }
 
     @Test
-    public void testSetAndGet() throws Exception {
+    public void testAddAndRemove() throws Exception {
         tasks.addTask(task1);
         tasks.addTask(task2);
 
-        assertEquals(tasks.getSize(), 2);
-        assertNotNull(tasks.findTask(task1.getId()));
-        assertEquals(tasks.findTask(task1.getId()).getSubject(), "Программирование");
-        assertEquals(tasks.findTask(task2.getId()).getTextTask(), "№1, №2");
+        assertEquals(2, tasks.getNumberOfTasks());
+        assertEquals("Programming", tasks.findTask(task1.getId()).getSubject());
+        assertEquals("№1, №2", tasks.findTask(task2.getId()).getTextTask());
+
+        tasks.removeTask(task1);
+        tasks.removeTask(task2);
+        assertEquals(0, tasks.getNumberOfTasks());
+
+        tasks.addAllTasks(task1, task2);
+        assertEquals(2, tasks.getNumberOfTasks());
     }
 
     @Test(expected = NoSuchTaskException.class)

@@ -18,6 +18,10 @@ public enum WeekType {
     /**
      * Четная неделя
      */
-    EVEN
+    EVEN;
+
+    public WeekType next() {
+        return equals(ODD) ? EVEN : ODD;
+    }
 
 }

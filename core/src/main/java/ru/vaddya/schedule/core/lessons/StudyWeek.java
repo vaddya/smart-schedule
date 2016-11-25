@@ -19,22 +19,19 @@ public class StudyWeek {
 
     private static final Database db = Database.getConnection();
 
-    private final WeekTime weekTime;
-
     private WeekType weekType;
+
+    private final WeekTime weekTime;
 
     private Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
-    /**
-     * Конструктор класса StudyWeek
-     *
-     * @param weekType тип недели (четная или нечетая)
-     */
-    public StudyWeek(WeekType weekType, WeekTime weekTime) {
-        this.weekType = weekType;
+
+    public StudyWeek(Schedule schedule, WeekTime weekTime) {
+        this.weekType = schedule.getWeekType();
         this.weekTime = weekTime;
-        for (DayOfWeek day : DayOfWeek.values()) {
-            days.put(day, new StudyDay(db.getLessons(day), weekTime.getDateOf(day)));
+        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+            StudyDay studyDay = new StudyDay(schedule.getLessons(dayOfWeek), weekTime.getDateOf(dayOfWeek));
+            days.put(dayOfWeek, studyDay);
         }
     }
 
