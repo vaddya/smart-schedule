@@ -9,6 +9,8 @@ import java.time.DayOfWeek;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
+
 /**
  * Класс для представления учебной недели (списка учебных дней)
  *
@@ -23,15 +25,15 @@ public class StudyWeek {
 
     private final WeekTime weekTime;
 
-    private Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
+    private final Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
 
     public StudyWeek(Schedule schedule, WeekTime weekTime) {
         this.weekType = schedule.getWeekType();
         this.weekTime = weekTime;
-        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            StudyDay studyDay = new StudyDay(schedule.getLessons(dayOfWeek), weekTime.getDateOf(dayOfWeek));
-            days.put(dayOfWeek, studyDay);
+        for (DayOfWeek day : DayOfWeek.values()) {
+            StudyDay studyDay = new StudyDay(schedule.getLessons(day), weekTime.getDateOf(day));
+            days.put(day, studyDay);
         }
     }
 
@@ -114,17 +116,21 @@ public class StudyWeek {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("WeekTime Type: ")
+        StringBuilder sb = new StringBuilder();
+        sb.append("Week Type: ")
                 .append(weekType)
-                .append("\n");
+                .append(" (")
+                .append(weekTime)
+                .append(")\n");
         days.entrySet()
                 .stream()
                 .filter(entry -> !entry.getValue().isEmpty())
-                .forEach(entry -> builder
-                        .append(entry.getKey().toString())
-                        .append(":\n")
+                .forEach(entry -> sb
+                        .append(entry.getKey())
+                        .append(" (")
+                        .append(entry.getValue().getDate().format(SMALL_DATE_FORMAT))
+                        .append("):\n")
                         .append(entry.getValue()));
-        return builder.toString();
+        return sb.toString();
     }
 }

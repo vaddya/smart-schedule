@@ -1,7 +1,9 @@
 package ru.vaddya.schedule.core.exceptions;
 
 /**
- * Created by Vadim on 10/25/2016.
+ * Бросается при неверно указанном времени
+ *
+ * @author vaddya
  */
 public class IllegalTimeFormatException extends IllegalArgumentException {
     public IllegalTimeFormatException(String s) {

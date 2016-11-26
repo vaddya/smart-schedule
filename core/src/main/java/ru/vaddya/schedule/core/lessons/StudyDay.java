@@ -16,9 +16,9 @@ public class StudyDay implements Iterable<Lesson> {
 
     private static final Database db = Database.getConnection();
 
-    private List<Lesson> lessons;
+    private final List<Lesson> lessons;
 
-    private LocalDate date;
+    private final LocalDate date;
 
     public StudyDay(List<Lesson> lessons, LocalDate date) {
         this.lessons = lessons;

@@ -12,7 +12,6 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.DayOfWeek;
@@ -50,7 +49,7 @@ public class SmartScheduleTest {
         task = new Task.Builder()
                 .subject("Programming")
                 .type(LessonType.LAB)
-                .deadline(Dates.parseShort("31.12.2016"))
+                .deadline(LocalDate.of(2016, 12, 31))
                 .textTask("Todo course work")
                 .isComplete(false)
                 .build();

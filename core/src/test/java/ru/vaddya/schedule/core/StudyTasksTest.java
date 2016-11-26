@@ -11,13 +11,13 @@ import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.Dates;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 import static ru.vaddya.schedule.core.utils.LessonType.LAB;
 import static ru.vaddya.schedule.core.utils.LessonType.PRACTICE;
 
@@ -50,7 +50,7 @@ public class StudyTasksTest {
         task2 = new Task.Builder()
                 .subject("High math")
                 .type(PRACTICE)
-                .deadline(Dates.parseShort("31.12.2016"))
+                .deadline(SHORT_DATE_FORMAT.parse("31.12.2016"))
                 .textTask("№1, №2")
                 .isComplete(true)
                 .build();

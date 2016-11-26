@@ -3,14 +3,18 @@ package ru.vaddya.schedule.cli;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.SmartScheduleImpl;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
+import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.io.PrintStream;
 import java.time.DayOfWeek;
+import java.util.List;
 import java.util.Scanner;
+
+import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 
 /**
  * Класс для консольного взаимодействия с пользователем
@@ -19,35 +23,51 @@ import java.util.Scanner;
  */
 public class Application {
 
-    private SmartSchedule schedule = new SmartScheduleImpl();
-    private StudyWeek current = schedule.getCurrentWeek();
-    private Scanner in = new Scanner(System.in, "UTF-8");
-    private PrintStream out = System.out;
+    private final SmartSchedule schedule = new SmartScheduleImpl();
+    private final StudyWeek week = schedule.getCurrentWeek();
+    private final StudyTasks tasks = schedule.getTasks();
+    private final Scanner in = new Scanner(System.in, "UTF-8");
+    private final PrintStream out = System.out;
 
     private static final String CANCEL = "q";
+
+    public Application() {
+        printWeek("Current Week", week);
+        printTasks("All tasks", tasks.getAllTasks());
+        parseInput();
+    }
 
     public void parseInput() {
         String request;
         out.print(">> ");
         while (!CANCEL.equals(request = in.next())) {
             switch (request) {
-                case "schedule":
-                    printSchedule();
+                case "current":
+                    printSchedule("Current schedule", schedule.getCurrentSchedule());
+                    break;
+                case "next":
+                    printWeek("Current week", schedule.getCurrentWeek());
                     break;
                 case "tasks":
-                    printTasks();
+                    printTasks("All tasks", tasks.getAllTasks());
                     break;
                 case "active":
-                    printActive();
+                    printTasks("Active tasks", tasks.getActiveTasks());
                     break;
                 case "completed":
-                    printCompleted();
+                    printTasks("Completed tasks", tasks.getCompletedTasks());
                     break;
                 case "overdue":
-                    printOverdue();
+                    printTasks("Overdue tasks", tasks.getOverdueTasks());
                     break;
                 case "add":
                     parseAdd();
+                    break;
+                case "done":
+                    parseComplete(true);
+                    break;
+                case "undone":
+                    parseComplete(false);
                     break;
                 case "remove":
                     parseRemove();
@@ -60,33 +80,23 @@ public class Application {
         }
     }
 
-    public void printSchedule() {
-        out.println("\nРасписание");
-        out.println(current);
+    public void printSchedule(String title, Schedule schedule) {
+        out.println("\n" + title);
+        out.println(schedule);
     }
 
-    public void printTasks() {
-        out.println("\nЗадания:");
-        out.println(schedule.getTasks());
+    public void printWeek(String title, StudyWeek week) {
+        out.println("\n" + title);
+        out.println(week);
     }
 
-    public void printActive() {
-        out.println("\nАктивные задания:");
-        schedule.getTasks().getActiveTasks().forEach(System.out::println);
-    }
-
-    public void printCompleted() {
-        out.println("\nВыполненные задания:");
-        schedule.getTasks().getCompletedTasks().forEach(System.out::println);
-    }
-
-    public void printOverdue() {
-        out.println("\nПросроченные задания:");
-        schedule.getTasks().getOverdueTasks().forEach(System.out::println);
+    public void printTasks(String title, List<Task> tasks) {
+        out.println("\n" + title + ":");
+        tasks.forEach(out::println);
     }
 
     public void printHelp() {
-        out.println("Usage of Smart SmartScheduleImpl: ");
+        out.println("Usage of Smart Schedule: ");
         out.println("\t>> schedule - print schedule");
         out.println("\t>> tasks - print all tasks");
         out.println("\t>> active - print active tasks");
@@ -106,12 +116,21 @@ public class Application {
         if ("lesson".equals(kind)) {
             out.print("Day of week: ");
             DayOfWeek day = DayOfWeek.valueOf(in.next().toUpperCase());
-            current.getDay(day).addLesson(parseLesson());
+            week.getDay(day).addLesson(parseLesson());
         } else if ("task".equals(kind)) {
-            schedule.getTasks().addTask(parseTask());
+            tasks.addTask(parseTask());
         } else {
             printHelp();
         }
+    }
+
+
+    private void parseComplete(boolean isComplete) {
+        out.println("Task index: ");
+        int index = in.nextInt();
+        Task task = tasks.findTask(index);
+        task.setComplete(isComplete);
+        tasks.updateTask(task);
     }
 
     private void parseRemove() {
@@ -121,12 +140,12 @@ public class Application {
             DayOfWeek day = DayOfWeek.valueOf(in.next().toUpperCase());
             out.print("Lesson number: ");
             int index = in.nextInt();
-            current.getDay(day).removeLesson(current.getDay(day).findLesson(index));
+            week.getDay(day).removeLesson(week.getDay(day).findLesson(index));
         } else if ("task".equals(kind)) {
             out.print("Task index: ");
             int index = in.nextInt();
-            Task task = schedule.getTasks().findTask(index);
-            schedule.getTasks().removeTask(task);
+            Task task = tasks.findTask(index);
+            tasks.removeTask(task);
         } else {
             printHelp();
         }
@@ -139,7 +158,7 @@ public class Application {
         out.print("Lesson type: ");
         builder.type(LessonType.valueOf(in.next()));
         out.print("Deadline: ");
-        builder.deadline(Dates.parseShort(in.next()));
+        builder.deadline(SHORT_DATE_FORMAT.parse(in.next()));
         out.print("Task: ");
         builder.textTask(in.next());
         return builder.build();

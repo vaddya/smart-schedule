@@ -2,10 +2,10 @@ package ru.vaddya.schedule.core.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.GregorianCalendar;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
+import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
 
 /**
  * Класс для представления недельного периода времени
@@ -21,19 +21,24 @@ public class WeekTime {
     }
 
     public static WeekTime of(String date) {
-        return new WeekTime(Dates.parseShort(date));
+        return new WeekTime(LocalDate.from(SHORT_DATE_FORMAT.parse(date)));
     }
 
     public static WeekTime getNext(WeekTime current) {
-        return new WeekTime(current.getDateOf(DayOfWeek.SUNDAY).plus(1, ChronoUnit.DAYS));
+        return new WeekTime(current.getDateOf(DayOfWeek.SUNDAY).plus(1, DAYS));
     }
 
     private WeekTime(LocalDate date) {
-        firstDay = date.minus(date.getDayOfWeek().ordinal(), ChronoUnit.DAYS);
+        firstDay = date.minus(date.getDayOfWeek().ordinal(), DAYS);
     }
 
     public LocalDate getDateOf(DayOfWeek day) {
-        return firstDay.plus(day.ordinal(), ChronoUnit.DAYS);
+        return firstDay.plus(day.ordinal(), DAYS);
+    }
+
+    @Override
+    public String toString() {
+        return firstDay.format(SMALL_DATE_FORMAT) + " - " + firstDay.plus(6, DAYS).format(SMALL_DATE_FORMAT);
     }
 
     @Override

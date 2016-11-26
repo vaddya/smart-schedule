@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ru.vaddya.schedule.core.lessons at smart-schedule
+ * Класс для представления расписания
  *
  * @author vaddya
- * @since November 25, 2016
  */
 public class Schedule {
 
@@ -20,7 +19,7 @@ public class Schedule {
 
     private WeekType weekType;
 
-    private Map<DayOfWeek, List<Lesson>> days = new EnumMap<>(DayOfWeek.class);
+    private final Map<DayOfWeek, List<Lesson>> days = new EnumMap<>(DayOfWeek.class);
 
     public Schedule(WeekType weekType) {
         this.weekType = weekType;
@@ -45,4 +44,14 @@ public class Schedule {
         return days.get(day);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (DayOfWeek day : DayOfWeek.values()) {
+            sb.append(day)
+                    .append(":\n");
+            days.get(day).forEach(l -> sb.append(l).append("\n"));
+        }
+        return sb.toString();
+    }
 }

@@ -13,7 +13,6 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
-import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
@@ -82,7 +81,7 @@ public class StudyWeekTest {
 
     @Test
     public void testWeekTime() throws Exception {
-        LocalDate mon = Dates.parseShort("21.11.2016");
+        LocalDate mon = LocalDate.of(2016, 11, 21);
         assertEquals(mon, week.getWeekTime().getDateOf(MONDAY));
     }
 

@@ -1,10 +1,10 @@
 package ru.vaddya.schedule.core;
 
 import org.junit.Test;
-import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -13,14 +13,13 @@ import static org.junit.Assert.assertNotEquals;
  * Модульное тестирование представления недели
  *
  * @author vaddya
- * @since November 25, 2016
  */
 public class WeekTimeTest {
 
     @Test
     public void testCreateWeekTime() throws Exception {
-        WeekTime week = WeekTime.of(Dates.parseShort("21.11.2016"));
-        int i = 21; // monday day of month
+        WeekTime week = WeekTime.of(LocalDate.of(2016, 11, 21));
+        int i = 21; // day of month of MONDAY
         for (DayOfWeek day : DayOfWeek.values()) {
             assertEquals(i++, week.getDateOf(day).getDayOfMonth());
         }
@@ -28,9 +27,9 @@ public class WeekTimeTest {
 
     @Test
     public void testHashCode() throws Exception {
-        WeekTime week1 = WeekTime.of(Dates.parseShort("21.11.2016"));
-        WeekTime week2 = WeekTime.of(Dates.parseShort("25.11.2016"));
-        WeekTime week3 = WeekTime.of(Dates.parseShort("28.11.2016"));
+        WeekTime week1 = WeekTime.of(LocalDate.of(2016, 11, 21));
+        WeekTime week2 = WeekTime.of(LocalDate.of(2016, 11, 25));
+        WeekTime week3 = WeekTime.of(LocalDate.of(2016, 11, 28));
 
         assertEquals(week1, week2);
         assertEquals(week1.hashCode(), week2.hashCode());

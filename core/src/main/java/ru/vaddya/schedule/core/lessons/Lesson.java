@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 public class Lesson {
 
-    private UUID id;
+    private final UUID id;
     private Time startTime;
     private Time endTime;
     private String subject;

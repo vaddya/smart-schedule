@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ru.vaddya.schedule.core.lessons at smart-schedule
+ * Класс для хранения учебных недель
  *
  * @author vaddya
- * @since November 25, 2016
  */
 public class StudyWeeks {
 

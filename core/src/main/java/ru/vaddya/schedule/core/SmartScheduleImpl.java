@@ -3,9 +3,9 @@ package ru.vaddya.schedule.core;
 import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.lessons.StudyWeeks;
-import ru.vaddya.schedule.core.utils.WeekType;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.utils.WeekTime;
+import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -23,11 +23,11 @@ public class SmartScheduleImpl implements SmartSchedule {
 
     private final StudyTasks tasks = new StudyTasks();
 
+    private final StudyWeeks weeks = new StudyWeeks();
+
     private final Map<WeekType, Schedule> schedules;
 
     private WeekType currentWeek = ODD;
-
-    private final StudyWeeks weeks = new StudyWeeks();
 
     public SmartScheduleImpl() {
         schedules = new EnumMap<WeekType, Schedule>(WeekType.class) {{
@@ -42,6 +42,10 @@ public class SmartScheduleImpl implements SmartSchedule {
 
     public StudyWeek getCurrentWeek() {
         return weeks.get(schedules.get(currentWeek), WeekTime.current());
+    }
+
+    public Schedule getCurrentSchedule() {
+        return schedules.get(currentWeek);
     }
 
     public Schedule getOddSchedule() {

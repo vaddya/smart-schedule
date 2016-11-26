@@ -1,7 +1,8 @@
 package ru.vaddya.schedule.core.db.orchestrate;
 
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.Dates;
+
+import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 
 /**
  * Plain Old Java Object для класса Task
@@ -82,7 +83,7 @@ public class TaskPOJO {
         return new TaskPOJO(
                 task.getSubject(),
                 task.getType().toString(),
-                Dates.formatShort(task.getDeadline()),
+                task.getDeadline().format(SHORT_DATE_FORMAT),
                 task.getTextTask(),
                 task.isComplete()
         );

@@ -1,10 +1,9 @@
 package ru.vaddya.schedule.core.db.orchestrate;
 
 import io.orchestrate.client.*;
+import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.db.Database;
-import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.DayOfWeek;
@@ -13,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
+
 /**
  * Реализация взаимодействия с OrchestrateDB
  *
@@ -20,9 +21,9 @@ import java.util.logging.Logger;
  */
 public class OrchestrateDB implements Database {
 
-    private static Database db = new OrchestrateDB();
-    private static Client client = new OrchestrateClient("b8ed25ed-1c39-41be-bdab-ec717e105049");
-    private static Logger logger = Logger.getLogger("OrchestrateDB");
+    private static final Database db = new OrchestrateDB();
+    private static final Client client = new OrchestrateClient("b8ed25ed-1c39-41be-bdab-ec717e105049");
+    private static final Logger logger = Logger.getLogger("OrchestrateDB");
 
     private static final String TASKS = "tasks";
     private static final String LESSONS = "lessons";
@@ -113,7 +114,7 @@ public class OrchestrateDB implements Database {
                     .id(UUID.fromString(obj.getKey()))
                     .subject(pojo.getSubject())
                     .type(LessonType.valueOf(pojo.getType()))
-                    .deadline(Dates.parseShort(pojo.getDeadline()))
+                    .deadline(SHORT_DATE_FORMAT.parse(pojo.getDeadline()))
                     .textTask(pojo.getTextTask())
                     .isComplete(pojo.isComplete())
                     .build();

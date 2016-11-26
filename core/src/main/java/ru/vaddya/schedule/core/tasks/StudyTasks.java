@@ -15,15 +15,11 @@ import java.util.stream.Collectors;
  */
 public class StudyTasks {
 
-    public static void main(String[] args) {
-        List<Integer> integers = new ArrayList<>();
-    }
-
     private static final Database db = Database.getConnection();
 
     private static final Comparator<Task> DATE_ORDER = Comparator.comparing(Task::getDeadline);
 
-    private List<Task> tasks;
+    private final List<Task> tasks;
 
     public StudyTasks() {
         tasks = db.getTasks()
@@ -48,13 +44,12 @@ public class StudyTasks {
      */
     public void addTask(Task task) {
         tasks.add(task);
+        tasks.sort(DATE_ORDER);
         db.addTask(task);
     }
 
     public void addAllTasks(Task...tasks) {
-        for (Task task : tasks) {
-            this.tasks.add(task);
-        }
+        Collections.addAll(this.tasks, tasks);
     }
 
     /**
@@ -100,7 +95,7 @@ public class StudyTasks {
     public void updateTask(Task task) {
         Task upd = findTask(task.getId());
         tasks.set(tasks.indexOf(upd), task);
-        upd.update(task);
+        tasks.sort(DATE_ORDER);
         db.updateTask(task);
     }
 

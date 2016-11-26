@@ -4,7 +4,10 @@ import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.UUID;
+
+import static ru.vaddya.schedule.core.utils.Dates.BRIEF_DATE_FORMAT;
 
 /**
  * Класс для представления задания
@@ -13,7 +16,7 @@ import java.util.UUID;
  */
 public class Task {
 
-    private UUID id;
+    private final UUID id;
     private String subject;
     private LessonType type;
     private LocalDate deadline;
@@ -75,22 +78,16 @@ public class Task {
         isComplete = complete;
     }
 
-    public void update(Task task) {
-        this.subject = task.subject;
-        this.type = task.type;
-        this.deadline = task.deadline;
-        this.textTask = task.textTask;
-        this.isComplete = task.isComplete;
-    }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         long daysUntil = Dates.daysUntil(deadline);
         return builder.append(isComplete ? "☑ " : "☐ ")
-                .append(Dates.formatBrief(deadline))
+                .append(BRIEF_DATE_FORMAT.format(deadline))
                 .append(" (")
-                .append(daysUntil >= 0 ? daysUntil + " days" : (isComplete ? "done!" : "overdue!"))
+                .append(daysUntil >= 0
+                        ? daysUntil + " days"
+                        : (isComplete ? "done!" : "overdue!"))
                 .append(") | ")
                 .append(subject)
                 .append(" [")
@@ -128,6 +125,11 @@ public class Task {
 
         public Builder deadline(LocalDate val) {
             deadline = val;
+            return this;
+        }
+
+        public Builder deadline(TemporalAccessor val) {
+            deadline = LocalDate.from(val);
             return this;
         }
 

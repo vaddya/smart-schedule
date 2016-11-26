@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class FakeDB implements Database {
 
-    private static Database db = new FakeDB();
+    private static final Database db = new FakeDB();
 
     private FakeDB() {
     }
