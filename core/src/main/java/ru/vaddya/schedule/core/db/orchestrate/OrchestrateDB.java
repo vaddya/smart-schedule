@@ -2,11 +2,14 @@ package ru.vaddya.schedule.core.db.orchestrate;
 
 import io.orchestrate.client.*;
 import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.lessons.ChangedLesson;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +30,11 @@ public class OrchestrateDB implements Database {
 
     private static final String TASKS = "tasks";
     private static final String LESSONS = "lessons";
+
+    private static final String ODD = "odd";
+    private static final String EVEN = "even";
+    private static final String CHANGES = "changes";
+
     private static final int LIMIT = 100;
 
     private OrchestrateDB() {
@@ -36,8 +44,9 @@ public class OrchestrateDB implements Database {
         return db;
     }
 
+
     @Override
-    public List<Lesson> getLessons(DayOfWeek day) {
+    public List<Lesson> getLessons(WeekType week, DayOfWeek day) {
         List<Lesson> list = new ArrayList<>();
         KvList<LessonPOJO> response = client
                 .listCollection(LESSONS)
@@ -64,7 +73,7 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
-    public boolean addLesson(DayOfWeek day, Lesson lesson) {
+    public boolean addLesson(WeekType week, DayOfWeek day, Lesson lesson) {
         KvMetadata metadata = client
                 .kv(LESSONS, lesson.getId().toString())
                 .put(LessonPOJO.of(day, lesson))
@@ -74,19 +83,19 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
-    public boolean updateLesson(DayOfWeek day, Lesson lesson) {
-        return addLesson(day, lesson);
+    public boolean updateLesson(WeekType week, DayOfWeek day, Lesson lesson) {
+        return addLesson(week, day, lesson);
     }
 
     @Override
-    public boolean changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
-        removeLesson(from, lesson);
-        addLesson(to, lesson);
+    public boolean changeLessonDay(WeekType week, DayOfWeek from, DayOfWeek to, Lesson lesson) {
+        removeLesson(week, from, lesson);
+        addLesson(week, to, lesson);
         return false;
     }
 
     @Override
-    public boolean removeLesson(DayOfWeek day, Lesson lesson) {
+    public boolean removeLesson(WeekType week, DayOfWeek day, Lesson lesson) {
         boolean res = client
                 .kv(LESSONS, lesson.getId().toString())
                 .delete()
@@ -98,6 +107,33 @@ public class OrchestrateDB implements Database {
         }
         return res;
     }
+
+
+    @Override
+    public List<ChangedLesson> getChanges(LocalDate date) {
+        return null;
+    }
+
+    @Override
+    public boolean addLesson(ChangedLesson lesson) {
+        return false;
+    }
+
+    @Override
+    public boolean updateLesson(ChangedLesson lesson) {
+        return false;
+    }
+
+    @Override
+    public boolean changeLessonDay(LocalDate from, LocalDate to, Lesson lesson) {
+        return false;
+    }
+
+    @Override
+    public boolean removeLesson(ChangedLesson lesson) {
+        return false;
+    }
+
 
     @Override
     public List<Task> getTasks() {

@@ -44,7 +44,7 @@ public class StudyWeekTest {
         PowerMockito.mockStatic(Database.class);
         PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
 
-        week = new StudyWeek(new Schedule(ODD), WeekTime.of("25.11.2016"));
+        week = new StudyWeek(WeekTime.of("25.11.2016"), new Schedule(ODD));
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

@@ -19,7 +19,7 @@ public class StudyWeeks {
     }
 
     public StudyWeek get(Schedule schedule, WeekTime weekTime) {
-        datedWeeks.putIfAbsent(weekTime, new StudyWeek(schedule, weekTime));
+        datedWeeks.putIfAbsent(weekTime, new StudyWeek(weekTime, schedule));
         return datedWeeks.get(weekTime);
     }
 }

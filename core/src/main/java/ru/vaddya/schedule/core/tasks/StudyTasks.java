@@ -148,7 +148,7 @@ public class StudyTasks {
     public List<Task> getOverdueTasks() {
         return tasks.stream()
                 .filter(task -> !task.isComplete())
-                .filter(task -> Dates.isAfter(task.getDeadline()))
+                .filter(task -> !Dates.isAfter(task.getDeadline()))
                 .collect(Collectors.toList());
     }
 

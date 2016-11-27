@@ -4,6 +4,7 @@ import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class Schedule {
     public Schedule(WeekType weekType) {
         this.weekType = weekType;
         for (DayOfWeek day : DayOfWeek.values()) {
-            days.put(day, db.getLessons(day));
+            days.put(day, db.getLessons(weekType, day));
         }
     }
 
@@ -36,12 +37,30 @@ public class Schedule {
         this.weekType = weekType;
     }
 
+    public Lesson getLesson() {
+        // TODO: 11/27/2016
+        return null;
+    }
+
     public void addLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).add(lesson);
+        db.addLesson(weekType, day, lesson);
+    }
+
+    public void updateLesson(DayOfWeek day, Lesson lesson) {
+        days.get(day).add(lesson);
+        db.updateLesson(weekType, day, lesson);
+    }
+
+    public void removeLesson(DayOfWeek day, Lesson lesson) {
+        days.get(day).add(lesson);
+        db.removeLesson(weekType, day, lesson);
     }
 
     public List<Lesson> getLessons(DayOfWeek day) {
-        return days.get(day);
+        List<Lesson> clone = new ArrayList<>();
+        days.get(day).forEach(lesson -> clone.add(new Lesson(lesson)));
+        return clone;
     }
 
     @Override
@@ -50,7 +69,7 @@ public class Schedule {
         for (DayOfWeek day : DayOfWeek.values()) {
             sb.append(day)
                     .append(":\n");
-            days.get(day).forEach(l -> sb.append(l).append("\n"));
+            days.get(day).forEach(lesson -> sb.append(lesson).append("\n"));
         }
         return sb.toString();
     }

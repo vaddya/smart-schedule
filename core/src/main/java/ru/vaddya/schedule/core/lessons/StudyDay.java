@@ -6,8 +6,10 @@ import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import java.time.LocalDate;
 import java.util.*;
 
+import static ru.vaddya.schedule.core.utils.LessonChanges.*;
+
 /**
- * Класс для представления учебного дня (списка занятий)
+ * Класс для представления учебного дня (списка занятий) в определенный день
  *
  * @author vaddya
  * @see Lesson
@@ -23,6 +25,21 @@ public class StudyDay implements Iterable<Lesson> {
     public StudyDay(List<Lesson> lessons, LocalDate date) {
         this.lessons = lessons;
         this.date = date;
+        for (ChangedLesson change : db.getChanges(date)) {
+            switch (change.getChanges()) {
+                case ADD:
+                    lessons.add(change.getLesson());
+                    break;
+                case UPDATE:
+                    UUID id = change.getLesson().getId();
+                    int index = lessons.indexOf(findLesson(id));
+                    lessons.add(index, change.getLesson());
+                    break;
+                case REMOVE:
+                    lessons.remove(change.getLesson());
+                    break;
+            }
+        }
     }
 
     /**
@@ -59,6 +76,7 @@ public class StudyDay implements Iterable<Lesson> {
      */
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);
+        db.addLesson(new ChangedLesson(ADD, date, lesson));
     }
 
     /**
@@ -113,6 +131,7 @@ public class StudyDay implements Iterable<Lesson> {
     public void updateLesson(Lesson lesson) {
         Lesson prev = findLesson(lesson.getId());
         lessons.set(lessons.indexOf(prev), lesson);
+        db.updateLesson(new ChangedLesson(UPDATE, date, lesson));
     }
 
     /**
@@ -122,6 +141,7 @@ public class StudyDay implements Iterable<Lesson> {
      */
     public void removeLesson(Lesson lesson) {
         lessons.remove(lesson);
+        db.removeLesson(new ChangedLesson(REMOVE, date, lesson));
     }
 
     @Override

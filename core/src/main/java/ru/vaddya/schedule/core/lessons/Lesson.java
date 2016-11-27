@@ -32,6 +32,16 @@ public class Lesson {
         this.teacher = builder.teacher;
     }
 
+    public Lesson(Lesson lesson) {
+        this.id = UUID.randomUUID();
+        this.startTime = lesson.startTime;
+        this.endTime = lesson.endTime;
+        this.subject = lesson.subject;
+        this.type = lesson.type;
+        this.place = lesson.place;
+        this.teacher = lesson.teacher;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -102,14 +112,21 @@ public class Lesson {
 
         Lesson lesson = (Lesson) o;
 
-        if (id != null ? !id.equals(lesson.id) : lesson.id != null) return false;
         if (startTime != null ? !startTime.equals(lesson.startTime) : lesson.startTime != null) return false;
         if (endTime != null ? !endTime.equals(lesson.endTime) : lesson.endTime != null) return false;
         if (subject != null ? !subject.equals(lesson.subject) : lesson.subject != null) return false;
         if (type != lesson.type) return false;
         if (place != null ? !place.equals(lesson.place) : lesson.place != null) return false;
         return teacher != null ? teacher.equals(lesson.teacher) : lesson.teacher == null;
+    }
 
+    public boolean deepEquals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lesson)) return false;
+
+        Lesson lesson = (Lesson) o;
+
+        return equals(lesson) && id.equals(lesson.id);
     }
 
     @Override

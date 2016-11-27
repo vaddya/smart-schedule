@@ -21,16 +21,15 @@ public class StudyWeek {
 
     private static final Database db = Database.getConnection();
 
-    private WeekType weekType;
-
     private final WeekTime weekTime;
+
+    private WeekType weekType;
 
     private final Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
-
-    public StudyWeek(Schedule schedule, WeekTime weekTime) {
-        this.weekType = schedule.getWeekType();
+    public StudyWeek(WeekTime weekTime, Schedule schedule) {
         this.weekTime = weekTime;
+        this.weekType = schedule.getWeekType();
         for (DayOfWeek day : DayOfWeek.values()) {
             StudyDay studyDay = new StudyDay(schedule.getLessons(day), weekTime.getDateOf(day));
             days.put(day, studyDay);
@@ -57,6 +56,7 @@ public class StudyWeek {
 
     /**
      * Получить период времени учебной недели
+     *
      * @return период времени
      */
     public WeekTime getWeekTime() {
@@ -111,7 +111,7 @@ public class StudyWeek {
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         days.get(from).removeLesson(lesson);
         days.get(to).addLesson(lesson);
-        db.changeLessonDay(from, to, lesson);
+        db.changeLessonDay(weekType, from, to, lesson);
     }
 
     @Override
