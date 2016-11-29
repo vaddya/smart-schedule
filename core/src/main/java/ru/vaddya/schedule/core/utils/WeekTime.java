@@ -2,8 +2,12 @@ package ru.vaddya.schedule.core.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.GregorianCalendar;
 
+import static java.time.DayOfWeek.MONDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.ChronoUnit.DAYS;
+import static java.util.Calendar.WEEK_OF_YEAR;
 import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
 
@@ -14,7 +18,13 @@ import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
  */
 public class WeekTime {
 
+    public static void main(String[] args) {
+        System.out.println(WeekTime.between(WeekTime.of("27.11.2016"), WeekTime.of("22.11.2016")));
+    }
+
     private final LocalDate firstDay;
+
+    private final int weekNumber;
 
     public static WeekTime of(LocalDate date) {
         return new WeekTime(date);
@@ -24,16 +34,20 @@ public class WeekTime {
         return new WeekTime(LocalDate.from(SHORT_DATE_FORMAT.parse(date)));
     }
 
-    public static WeekTime getNext(WeekTime current) {
-        return new WeekTime(current.getDateOf(DayOfWeek.SUNDAY).plus(1, DAYS));
-    }
-
     private WeekTime(LocalDate date) {
         firstDay = date.minus(date.getDayOfWeek().ordinal(), DAYS);
+        weekNumber = new GregorianCalendar(
+                date.getYear(),
+                date.getMonthValue(),
+                date.getDayOfMonth()).get(WEEK_OF_YEAR);
     }
 
     public LocalDate getDateOf(DayOfWeek day) {
         return firstDay.plus(day.ordinal(), DAYS);
+    }
+
+    public int getWeekNumber() {
+        return weekNumber;
     }
 
     @Override
@@ -58,5 +72,17 @@ public class WeekTime {
 
     public static WeekTime current() {
         return WeekTime.of(LocalDate.now());
+    }
+
+    public static WeekTime before(WeekTime current) {
+        return new WeekTime(current.getDateOf(MONDAY).minus(7, DAYS));
+    }
+
+    public static WeekTime after(WeekTime current) {
+        return new WeekTime(current.getDateOf(SUNDAY).plus(1, DAYS));
+    }
+
+    public static int between(WeekTime first, WeekTime second) {
+        return Math.abs(first.getWeekNumber() - second.getWeekNumber());
     }
 }

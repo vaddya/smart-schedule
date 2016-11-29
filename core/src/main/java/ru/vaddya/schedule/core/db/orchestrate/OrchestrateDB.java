@@ -111,7 +111,7 @@ public class OrchestrateDB implements Database {
 
     @Override
     public List<ChangedLesson> getChanges(LocalDate date) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

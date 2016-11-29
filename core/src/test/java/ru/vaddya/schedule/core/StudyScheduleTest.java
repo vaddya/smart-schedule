@@ -9,7 +9,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.lessons.Lesson;
-import ru.vaddya.schedule.core.lessons.Schedule;
+import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.LessonType;
 
 import static java.time.DayOfWeek.*;
@@ -24,9 +24,9 @@ import static ru.vaddya.schedule.core.utils.WeekType.ODD;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Database.class)
-public class ScheduleTest {
+public class StudyScheduleTest {
 
-    private Schedule schedule;
+    private StudySchedule schedule;
     private Lesson lesson1;
     private Lesson lesson2;
 
@@ -35,7 +35,7 @@ public class ScheduleTest {
         PowerMockito.mockStatic(Database.class);
         PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
 
-        schedule = new Schedule(ODD);
+        schedule = new StudySchedule(ODD);
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

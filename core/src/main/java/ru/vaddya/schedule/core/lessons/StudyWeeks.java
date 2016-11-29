@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.core.lessons;
 
+import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class StudyWeeks {
         datedWeeks = new HashMap<>();
     }
 
-    public StudyWeek get(Schedule schedule, WeekTime weekTime) {
+    public StudyWeek get(StudySchedule schedule, WeekTime weekTime) {
         datedWeeks.putIfAbsent(weekTime, new StudyWeek(weekTime, schedule));
         return datedWeeks.get(weekTime);
     }

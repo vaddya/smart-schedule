@@ -10,9 +10,9 @@ import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import ru.vaddya.schedule.core.lessons.Lesson;
-import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
+import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
@@ -44,7 +44,7 @@ public class StudyWeekTest {
         PowerMockito.mockStatic(Database.class);
         PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
 
-        week = new StudyWeek(WeekTime.of("25.11.2016"), new Schedule(ODD));
+        week = new StudyWeek(WeekTime.of("25.11.2016"), new StudySchedule(ODD));
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

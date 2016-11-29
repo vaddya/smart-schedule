@@ -1,11 +1,13 @@
 package ru.vaddya.schedule.core;
 
-import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
+import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
+import ru.vaddya.schedule.core.utils.WeekTime;
+import ru.vaddya.schedule.core.utils.WeekType;
 
 /**
- * Интерфейс приложения Smart Schedule
+ * Интерфейс приложения Smart StudySchedule
  *
  * @author vaddya
  */
@@ -16,21 +18,14 @@ public interface SmartSchedule {
      *
      * @return расписание на текущую неделю
      */
-    Schedule getCurrentSchedule();
+    StudySchedule getCurrentSchedule();
 
     /**
-     * Получить расписание на нечетную неделю
+     * Получить расписание на заданную неделю
      *
-     * @return раписание на нечетную неделю
+     * @return раписание на заданную неделю
      */
-    Schedule getOddSchedule();
-
-    /**
-     * Получить расписание на четную неделю
-     *
-     * @return раписание на четную неделю
-     */
-    Schedule getEvenSchedule();
+    StudySchedule getSchedule(WeekType weekType);
 
     /**
      * Поменять местами порядок расписаний (четная - нечетная)
@@ -43,6 +38,13 @@ public interface SmartSchedule {
      * @return текущая учебная неделя
      */
     StudyWeek getCurrentWeek();
+
+    /**
+     * Получить заданную учебную неделю, содержашаю учебные дни
+     *
+     * @return текущая учебная неделя
+     */
+    StudyWeek getWeek(WeekTime weekTime);
 
     /**
      * Получить учебные задания

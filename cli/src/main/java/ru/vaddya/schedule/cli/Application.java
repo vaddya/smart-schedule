@@ -3,8 +3,8 @@ package ru.vaddya.schedule.cli;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.SmartScheduleImpl;
 import ru.vaddya.schedule.core.lessons.Lesson;
-import ru.vaddya.schedule.core.lessons.Schedule;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
+import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.LessonType;
@@ -80,7 +80,7 @@ public class Application {
         }
     }
 
-    public void printSchedule(String title, Schedule schedule) {
+    public void printSchedule(String title, StudySchedule schedule) {
         out.println("\n" + title);
         out.println(schedule);
     }
@@ -96,7 +96,7 @@ public class Application {
     }
 
     public void printHelp() {
-        out.println("Usage of Smart Schedule: ");
+        out.println("Usage of Smart StudySchedule: ");
         out.println("\t>> schedule - print schedule");
         out.println("\t>> tasks - print all tasks");
         out.println("\t>> active - print active tasks");

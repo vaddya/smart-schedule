@@ -9,7 +9,7 @@ import java.util.*;
 import static ru.vaddya.schedule.core.utils.LessonChanges.*;
 
 /**
- * Класс для представления учебного дня (списка занятий) в определенный день
+ * Класс для представления учебного дня (списка занятий)
  *
  * @author vaddya
  * @see Lesson
@@ -156,12 +156,11 @@ public class StudyDay implements Iterable<Lesson> {
     @Override
     public Iterator<Lesson> iterator() {
         return new Iterator<Lesson>() {
-
             private int index = 0;
 
             @Override
             public boolean hasNext() {
-                return index < getNumberOfLessons();
+                return index < lessons.size();
             }
 
             @Override

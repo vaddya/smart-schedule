@@ -78,23 +78,21 @@ public class Task {
         isComplete = complete;
     }
 
+    /**
+     * ☑ Tue 29.11 (done!) | Subject [LessonType]: Task
+     */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
         long daysUntil = Dates.daysUntil(deadline);
-        return builder.append(isComplete ? "☑ " : "☐ ")
-                .append(BRIEF_DATE_FORMAT.format(deadline))
-                .append(" (")
-                .append(daysUntil >= 0
+        return String.format("%c %s, %s | %s [%s]: %s",
+                isComplete ? '☑' : '☐',
+                BRIEF_DATE_FORMAT.format(deadline),
+                (daysUntil >= 0
                         ? daysUntil + " days"
-                        : (isComplete ? "done!" : "overdue!"))
-                .append(") | ")
-                .append(subject)
-                .append(" [")
-                .append(type)
-                .append("]: ")
-                .append(textTask)
-                .toString();
+                        : (isComplete ? "done!" : "overdue!")),
+                subject,
+                type,
+                textTask);
     }
 
     public static final class Builder {

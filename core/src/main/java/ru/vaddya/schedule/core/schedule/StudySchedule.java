@@ -1,6 +1,7 @@
-package ru.vaddya.schedule.core.lessons;
+package ru.vaddya.schedule.core.schedule;
 
 import ru.vaddya.schedule.core.db.Database;
+import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
@@ -14,7 +15,7 @@ import java.util.Map;
  *
  * @author vaddya
  */
-public class Schedule {
+public class StudySchedule {
 
     private static final Database db = Database.getConnection();
 
@@ -22,7 +23,7 @@ public class Schedule {
 
     private final Map<DayOfWeek, List<Lesson>> days = new EnumMap<>(DayOfWeek.class);
 
-    public Schedule(WeekType weekType) {
+    public StudySchedule(WeekType weekType) {
         this.weekType = weekType;
         for (DayOfWeek day : DayOfWeek.values()) {
             days.put(day, db.getLessons(weekType, day));

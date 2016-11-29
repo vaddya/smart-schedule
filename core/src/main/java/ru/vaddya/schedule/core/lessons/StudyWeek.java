@@ -2,6 +2,7 @@ package ru.vaddya.schedule.core.lessons;
 
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
+import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.WeekTime;
 import ru.vaddya.schedule.core.utils.WeekType;
 
@@ -27,7 +28,7 @@ public class StudyWeek {
 
     private final Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
-    public StudyWeek(WeekTime weekTime, Schedule schedule) {
+    public StudyWeek(WeekTime weekTime, StudySchedule schedule) {
         this.weekTime = weekTime;
         this.weekType = schedule.getWeekType();
         for (DayOfWeek day : DayOfWeek.values()) {

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * @author vaddya
  * @see Task
  */
-public class StudyTasks {
+public class StudyTasks implements Iterable<Task> {
 
     private static final Database db = Database.getConnection();
 
@@ -48,7 +48,7 @@ public class StudyTasks {
         db.addTask(task);
     }
 
-    public void addAllTasks(Task...tasks) {
+    public void addAllTasks(Task... tasks) {
         Collections.addAll(this.tasks, tasks);
     }
 
@@ -163,5 +163,22 @@ public class StudyTasks {
                     .append("\n");
         }
         return builder.toString();
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < tasks.size();
+            }
+
+            @Override
+            public Task next() {
+                return tasks.get(index);
+            }
+        };
     }
 }
