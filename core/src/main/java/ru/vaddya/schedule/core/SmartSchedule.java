@@ -15,15 +15,11 @@ public interface SmartSchedule {
 
     /**
      * Получить расписание на текующую неделю
-     *
-     * @return расписание на текущую неделю
      */
     StudySchedule getCurrentSchedule();
 
     /**
      * Получить расписание на заданную неделю
-     *
-     * @return раписание на заданную неделю
      */
     StudySchedule getSchedule(WeekType weekType);
 
@@ -34,22 +30,21 @@ public interface SmartSchedule {
 
     /**
      * Получить текущую учебную неделю, содержашаю учебные дни
-     *
-     * @return текущая учебная неделя
      */
     StudyWeek getCurrentWeek();
 
     /**
      * Получить заданную учебную неделю, содержашаю учебные дни
-     *
-     * @return текущая учебная неделя
      */
     StudyWeek getWeek(WeekTime weekTime);
 
     /**
+     * Обновить учебные недели после изменений в расписании
+     */
+    void updateWeeks();
+
+    /**
      * Получить учебные задания
-     *
-     * @return учебные задания
      */
     StudyTasks getTasks();
 

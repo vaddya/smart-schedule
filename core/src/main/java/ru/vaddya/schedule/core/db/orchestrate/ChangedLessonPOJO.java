@@ -1,17 +1,23 @@
 package ru.vaddya.schedule.core.db.orchestrate;
 
+import ru.vaddya.schedule.core.lessons.ChangedLesson;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonChanges;
+import ru.vaddya.schedule.core.utils.Dates;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
- * Plain Old Java Object для класса Lesson
+ * Plain Old Java Object для класса ChangedLesson
  *
  * @author vaddya
+ * @since November 30, 2016
  */
-public class LessonPOJO {
+public class ChangedLessonPOJO {
 
-    private String day;
+    private String changes;
+    private String date;
     private String startTime;
     private String endTime;
     private String subject;
@@ -19,11 +25,12 @@ public class LessonPOJO {
     private String place;
     private String teacher;
 
-    public LessonPOJO() {
+    public ChangedLessonPOJO() {
     }
 
-    public LessonPOJO(String day, String startTime, String endTime, String subject, String type, String place, String teacher) {
-        this.day = day;
+    public ChangedLessonPOJO(String changes, String date, String startTime, String endTime, String subject, String type, String place, String teacher) {
+        this.changes = changes;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;
@@ -32,12 +39,20 @@ public class LessonPOJO {
         this.teacher = teacher;
     }
 
-    public String getDay() {
-        return day;
+    public String getChanges() {
+        return changes;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setChanges(String changes) {
+        this.changes = changes;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getStartTime() {
@@ -88,9 +103,11 @@ public class LessonPOJO {
         this.teacher = teacher;
     }
 
-    public static LessonPOJO of(DayOfWeek day, Lesson lesson) {
-        return new LessonPOJO(
-                day.toString(),
+    public static ChangedLessonPOJO of(ChangedLesson changedLesson) {
+        Lesson lesson = changedLesson.getLesson();
+        return new ChangedLessonPOJO(
+                changedLesson.getChanges().toString(),
+                Dates.FULL_DATE_FORMAT.format(changedLesson.getDate()),
                 lesson.getStartTime().toString(),
                 lesson.getEndTime().toString(),
                 lesson.getSubject(),
@@ -100,9 +117,8 @@ public class LessonPOJO {
         );
     }
 
-    public static Lesson parse(String key, LessonPOJO pojo) {
-        return new Lesson.Builder()
-                .id(key)
+    public static ChangedLesson parse(String key, ChangedLessonPOJO pojo) {
+        Lesson lesson = new Lesson.Builder()
                 .startTime(pojo.getStartTime())
                 .endTime(pojo.getEndTime())
                 .subject(pojo.getSubject())
@@ -110,12 +126,19 @@ public class LessonPOJO {
                 .place(pojo.getPlace())
                 .teacher(pojo.getTeacher())
                 .build();
+        return new ChangedLesson(
+                UUID.fromString(key),
+                LessonChanges.valueOf(pojo.getChanges()),
+                LocalDate.from(Dates.FULL_DATE_FORMAT.parse(pojo.getDate())),
+                lesson
+        );
     }
 
     @Override
     public String toString() {
-        return "LessonPOJO{" +
-                "day='" + day + '\'' +
+        return "ChangedLessonPOJO{" +
+                "changes='" + changes + '\'' +
+                ", date='" + date + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", subject='" + subject + '\'' +

@@ -23,6 +23,9 @@ public class StudySchedule {
 
     private final Map<DayOfWeek, List<Lesson>> days = new EnumMap<>(DayOfWeek.class);
 
+    /**
+     * Конструктор, принимающий тип недели
+     */
     public StudySchedule(WeekType weekType) {
         this.weekType = weekType;
         for (DayOfWeek day : DayOfWeek.values()) {
@@ -30,43 +33,67 @@ public class StudySchedule {
         }
     }
 
+    /**
+     * Получить тип недели
+     */
     public WeekType getWeekType() {
         return weekType;
     }
 
+    /**
+     * Установить тип недели
+     */
     public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
     }
 
-    public Lesson getLesson() {
-        // TODO: 11/27/2016
-        return null;
-    }
-
+    /**
+     * Добавить занятие
+     */
     public void addLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).add(lesson);
         db.addLesson(weekType, day, lesson);
     }
 
+    /**
+     * Найти занятие по индексу
+     */
+    public Lesson findLesson(DayOfWeek day, int index) {
+        return days.get(day).get(index);
+    }
+
+    /**
+     * Обновить занятие
+     */
     public void updateLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).add(lesson);
         db.updateLesson(weekType, day, lesson);
     }
 
+    /**
+     * Удалить занятие
+     */
     public void removeLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).add(lesson);
         db.removeLesson(weekType, day, lesson);
     }
 
+    /**
+     * Получить занятие по дню недели
+     */
     public List<Lesson> getLessons(DayOfWeek day) {
         List<Lesson> clone = new ArrayList<>();
         days.get(day).forEach(lesson -> clone.add(new Lesson(lesson)));
         return clone;
     }
 
+    /**
+     * Возвращает строковое представление расписания
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Week Type: ").append(weekType).append("\n");
         for (DayOfWeek day : DayOfWeek.values()) {
             sb.append(day)
                     .append(":\n");

@@ -17,9 +17,9 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
-import static ru.vaddya.schedule.core.utils.LessonType.LAB;
-import static ru.vaddya.schedule.core.utils.LessonType.PRACTICE;
+import static ru.vaddya.schedule.core.lessons.LessonType.LAB;
+import static ru.vaddya.schedule.core.lessons.LessonType.PRACTICE;
+import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 
 /**
  * Модульное тестирование учебных заданий
@@ -50,7 +50,7 @@ public class StudyTasksTest {
         task2 = new Task.Builder()
                 .subject("High math")
                 .type(PRACTICE)
-                .deadline(SHORT_DATE_FORMAT.parse("31.12.2016"))
+                .deadline(FULL_DATE_FORMAT.parse("31.12.2016"))
                 .textTask("№1, №2")
                 .isComplete(true)
                 .build();

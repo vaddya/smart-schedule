@@ -25,13 +25,21 @@ public class SmartScheduleImpl implements SmartSchedule {
 
     private final StudySchedules schedules = new StudySchedules();
 
-    private WeekType currentWeek = ODD;
+    private WeekType currentWeek;
 
     public SmartScheduleImpl() {
+        currentWeek = getWeekType(WeekTime.current());
     }
 
     public void swapSchedules() {
-        schedules.swapSchedules();
+        schedules.swap();
+        currentWeek = currentWeek.opposite();
+        updateWeeks();
+    }
+
+    @Override
+    public void updateWeeks() {
+        weeks.reset();
     }
 
     public StudyWeek getCurrentWeek() {
@@ -39,9 +47,7 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public StudyWeek getWeek(WeekTime weekTime) {
-        WeekType weekType = weekTime.getWeekNumber() % 2 == 1
-                ? ODD
-                : EVEN;
+        WeekType weekType = getWeekType(weekTime);
         return weeks.get(schedules.get(weekType), weekTime);
     }
 
@@ -55,5 +61,11 @@ public class SmartScheduleImpl implements SmartSchedule {
 
     public StudyTasks getTasks() {
         return tasks;
+    }
+
+    private WeekType getWeekType(WeekTime weekTime) {
+        return weekTime.getWeekNumber() % 2 == 1
+                ? ODD
+                : EVEN;
     }
 }

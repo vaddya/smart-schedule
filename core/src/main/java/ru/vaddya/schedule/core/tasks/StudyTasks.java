@@ -29,9 +29,14 @@ public class StudyTasks implements Iterable<Task> {
     }
 
     /**
+     * Проверить пуст ли список заданий
+     */
+    public boolean isEmpty() {
+        return tasks.isEmpty();
+    }
+
+    /**
      * Получить количество заданий
-     *
-     * @return количество заданий
      */
     public int getNumberOfTasks() {
         return tasks.size();
@@ -39,8 +44,6 @@ public class StudyTasks implements Iterable<Task> {
 
     /**
      * Добавить задание в список заданий
-     *
-     * @param task добавляемоое задание
      */
     public void addTask(Task task) {
         tasks.add(task);
@@ -55,8 +58,6 @@ public class StudyTasks implements Iterable<Task> {
     /**
      * Получить задание по ID
      *
-     * @param id UUID задания
-     * @return запрашиваемое задание
      * @throws NoSuchTaskException если указан несуществующий ID
      */
     public Task findTask(UUID id) {
@@ -73,8 +74,6 @@ public class StudyTasks implements Iterable<Task> {
     /**
      * Получить задание по индексу
      *
-     * @param index порядковый номер задания
-     * @return запрашиваемое задание
      * @throws NoSuchTaskException если указан неверный индекс
      */
     public Task findTask(int index) {
@@ -89,7 +88,6 @@ public class StudyTasks implements Iterable<Task> {
     /**
      * Обновить информацию о задании
      *
-     * @param task выолненное задание
      * @throws NoSuchTaskException если указано несуществующее задание
      */
     public void updateTask(Task task) {
@@ -101,8 +99,6 @@ public class StudyTasks implements Iterable<Task> {
 
     /**
      * Удалить задание
-     *
-     * @param task удаляемое задание
      */
     public void removeTask(Task task) {
         db.removeTask(task);
@@ -111,8 +107,6 @@ public class StudyTasks implements Iterable<Task> {
 
     /**
      * Получить все задания
-     *
-     * @return все задания
      */
     public List<Task> getAllTasks() {
         return new ArrayList<>(tasks);
@@ -120,8 +114,6 @@ public class StudyTasks implements Iterable<Task> {
 
     /**
      * Получить только активные задания
-     *
-     * @return активные задания
      */
     public List<Task> getActiveTasks() {
         return tasks.stream()
@@ -131,8 +123,6 @@ public class StudyTasks implements Iterable<Task> {
 
     /**
      * Получить только выполненные задания
-     *
-     * @return выполненные задания
      */
     public List<Task> getCompletedTasks() {
         return tasks.stream()
@@ -142,8 +132,6 @@ public class StudyTasks implements Iterable<Task> {
 
     /**
      * Получить только просроченные задания
-     *
-     * @return просроченные задания
      */
     public List<Task> getOverdueTasks() {
         return tasks.stream()
@@ -152,6 +140,9 @@ public class StudyTasks implements Iterable<Task> {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Возвращает строковое представление заданий
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -165,6 +156,9 @@ public class StudyTasks implements Iterable<Task> {
         return builder.toString();
     }
 
+    /**
+     * Возвращает итератор по заданиям
+     */
     @Override
     public Iterator<Task> iterator() {
         return new Iterator<Task>() {
@@ -177,7 +171,7 @@ public class StudyTasks implements Iterable<Task> {
 
             @Override
             public Task next() {
-                return tasks.get(index);
+                return tasks.get(index++);
             }
         };
     }

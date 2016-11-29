@@ -5,6 +5,7 @@ import ru.vaddya.schedule.core.exceptions.IllegalTimeFormatException;
 import ru.vaddya.schedule.core.utils.Time;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Модульное тестирование представления времени в приложении
@@ -26,6 +27,16 @@ public class TimeTest {
         assertEquals(16, timer.hours());
         assertEquals(30, timer.minutes());
         assertEquals(time, timer.toString());
+    }
+
+    @Test
+    public void testIsAfter() throws Exception {
+        Time time1 = Time.of(16, 0);
+        Time time2 = Time.of(16, 30);
+        Time time3 = Time.of(16, 30);
+        assertTrue(time1.compareTo(time2) < 0);
+        assertTrue(time2.compareTo(time1) > 0);
+        assertTrue(time2.compareTo(time3) == 0);
     }
 
     @Test

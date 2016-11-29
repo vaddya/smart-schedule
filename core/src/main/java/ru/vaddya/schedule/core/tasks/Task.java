@@ -1,7 +1,7 @@
 package ru.vaddya.schedule.core.tasks;
 
+import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.utils.Dates;
-import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
@@ -92,7 +92,8 @@ public class Task {
                         : (isComplete ? "done!" : "overdue!")),
                 subject,
                 type,
-                textTask);
+                textTask
+        );
     }
 
     public static final class Builder {

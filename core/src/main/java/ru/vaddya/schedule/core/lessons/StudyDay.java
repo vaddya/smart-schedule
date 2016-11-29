@@ -6,7 +6,7 @@ import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import java.time.LocalDate;
 import java.util.*;
 
-import static ru.vaddya.schedule.core.utils.LessonChanges.*;
+import static ru.vaddya.schedule.core.lessons.LessonChanges.*;
 
 /**
  * Класс для представления учебного дня (списка занятий)
@@ -18,12 +18,15 @@ public class StudyDay implements Iterable<Lesson> {
 
     private static final Database db = Database.getConnection();
 
+    private static final Comparator<Lesson> TIME_ORDER = Comparator.comparing(Lesson::getStartTime);
+
     private final List<Lesson> lessons;
 
     private final LocalDate date;
 
     public StudyDay(List<Lesson> lessons, LocalDate date) {
         this.lessons = lessons;
+        this.lessons.sort(TIME_ORDER);
         this.date = date;
         for (ChangedLesson change : db.getChanges(date)) {
             switch (change.getChanges()) {
@@ -44,8 +47,6 @@ public class StudyDay implements Iterable<Lesson> {
 
     /**
      * Проверить пуст ли список занятий
-     *
-     * @return есть ли занятия
      */
     public boolean isEmpty() {
         return lessons.isEmpty();
@@ -53,8 +54,6 @@ public class StudyDay implements Iterable<Lesson> {
 
     /**
      * Получить количество занятий
-     *
-     * @return количество занятий
      */
     public int getNumberOfLessons() {
         return lessons.size();
@@ -62,8 +61,6 @@ public class StudyDay implements Iterable<Lesson> {
 
     /**
      * Получить дату учебного дня
-     *
-     * @return дата учебного дня
      */
     public LocalDate getDate() {
         return date;
@@ -71,19 +68,16 @@ public class StudyDay implements Iterable<Lesson> {
 
     /**
      * Добавить занятие в расписание
-     *
-     * @param lesson добавляемое занятие
      */
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);
+        lessons.sort(TIME_ORDER);
         db.addLesson(new ChangedLesson(ADD, date, lesson));
     }
 
     /**
      * Найти занятие по ID
      *
-     * @param id UUID занятия
-     * @return запрашиваемое занятие
      * @throws NoSuchLessonException если указан несуществующий ID
      */
     public Lesson findLesson(UUID id) {
@@ -100,8 +94,6 @@ public class StudyDay implements Iterable<Lesson> {
     /**
      * Найти занятие по индеку
      *
-     * @param index порядковый номер занятия
-     * @return запрашиваемое занятие
      * @throws NoSuchLessonException если указан неверный индекс
      */
     public Lesson findLesson(int index) {
@@ -115,8 +107,6 @@ public class StudyDay implements Iterable<Lesson> {
 
     /**
      * Получить спсок занятий
-     *
-     * @return список занятий
      */
     public List<Lesson> getLessons() {
         return new ArrayList<>(lessons);
@@ -125,32 +115,32 @@ public class StudyDay implements Iterable<Lesson> {
     /**
      * Обновить занятие
      *
-     * @param lesson обновляемое занятие
      * @throws NoSuchLessonException если указано несуществующее занятие
      */
     public void updateLesson(Lesson lesson) {
         Lesson prev = findLesson(lesson.getId());
         lessons.set(lessons.indexOf(prev), lesson);
+        lessons.sort(TIME_ORDER);
         db.updateLesson(new ChangedLesson(UPDATE, date, lesson));
     }
 
     /**
      * Удалить занятие
-     *
-     * @param lesson удаляемое занятие
      */
     public void removeLesson(Lesson lesson) {
         lessons.remove(lesson);
+        lessons.sort(TIME_ORDER);
         db.removeLesson(new ChangedLesson(REMOVE, date, lesson));
     }
 
+    /**
+     * Возвращает строковое представление учебного дня
+     */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (Lesson lesson : lessons) {
-            builder.append(lesson.toString()).append("\n");
-        }
-        return builder.toString();
+        StringBuilder sb = new StringBuilder();
+        lessons.forEach(lesson -> sb.append(lesson.toString()).append("\n"));
+        return sb.toString();
     }
 
     @Override

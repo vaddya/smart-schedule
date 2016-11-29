@@ -1,27 +1,37 @@
 package ru.vaddya.schedule.core.lessons;
 
-import ru.vaddya.schedule.core.utils.LessonChanges;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
- * Класс для представления измененного урока (перенесенного или отмененного)
+ * Класс для представления перенесенного, измененного или отмененного урока
  *
  * @author vaddya
  */
 public class ChangedLesson {
 
+    private UUID id;
+
     private final LessonChanges changes;
 
-    private LocalDate date;
+    private final LocalDate date;
 
     private final Lesson lesson;
+
+    public ChangedLesson(UUID id, LessonChanges changes, LocalDate date, Lesson lesson) {
+        this(changes, date, lesson);
+        this.id = id;
+    }
 
     public ChangedLesson(LessonChanges changes, LocalDate date, Lesson lesson) {
         this.changes = changes;
         this.date = date;
         this.lesson = lesson;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public LessonChanges getChanges() {

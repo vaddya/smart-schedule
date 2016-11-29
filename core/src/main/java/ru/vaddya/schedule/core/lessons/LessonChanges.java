@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.core.utils;
+package ru.vaddya.schedule.core.lessons;
 
 /**
  * Перечисление изменений в расписании

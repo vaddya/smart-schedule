@@ -10,7 +10,7 @@ import java.time.DayOfWeek;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
+import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 
 /**
  * Класс для представления учебной недели (списка учебных дней)
@@ -39,8 +39,6 @@ public class StudyWeek {
 
     /**
      * Получить тип недели (четная или нечетная)
-     *
-     * @return тип недели
      */
     public WeekType getWeekType() {
         return weekType;
@@ -48,8 +46,6 @@ public class StudyWeek {
 
     /**
      * Обновить тип недели (четная или нечетная)
-     *
-     * @param weekType тип недели
      */
     public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
@@ -57,8 +53,6 @@ public class StudyWeek {
 
     /**
      * Получить период времени учебной недели
-     *
-     * @return период времени
      */
     public WeekTime getWeekTime() {
         return weekTime;
@@ -67,8 +61,6 @@ public class StudyWeek {
     /**
      * Найти занятие по ID
      *
-     * @param id UUID занятия
-     * @return запрашиваемое занятие
      * @throws NoSuchLessonException если указан несуществующий ID
      */
     public Lesson findLesson(UUID id) {
@@ -88,10 +80,8 @@ public class StudyWeek {
     }
 
     /**
-     * Получить все уроки
-     *
-     * @return Map, ключи которой - дни недели,
-     * а значения - список уроков в этот день
+     * Получить <code>Map</code>, ключи которой - дни недели,
+     * а значения - списки занятий
      */
     public Map<DayOfWeek, List<Lesson>> getAllLessons() {
         return days.entrySet()
@@ -104,10 +94,6 @@ public class StudyWeek {
 
     /**
      * Изменить день занятия
-     *
-     * @param from   исходный день недели
-     * @param to     новый день недели
-     * @param lesson обновляемое занятие
      */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         days.get(from).removeLesson(lesson);
@@ -115,6 +101,9 @@ public class StudyWeek {
         db.changeLessonDay(weekType, from, to, lesson);
     }
 
+    /**
+     * Возвращает строковое представление учебной недели
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -129,7 +118,7 @@ public class StudyWeek {
                 .forEach(entry -> sb
                         .append(entry.getKey())
                         .append(" (")
-                        .append(entry.getValue().getDate().format(SMALL_DATE_FORMAT))
+                        .append(entry.getValue().getDate().format(SHORT_DATE_FORMAT))
                         .append("):\n")
                         .append(entry.getValue()));
         return sb.toString();

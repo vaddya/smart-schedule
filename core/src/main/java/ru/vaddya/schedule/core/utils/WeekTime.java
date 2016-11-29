@@ -8,8 +8,8 @@ import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Calendar.WEEK_OF_YEAR;
+import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
-import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
 
 /**
  * Класс для представления недельного периода времени
@@ -17,10 +17,6 @@ import static ru.vaddya.schedule.core.utils.Dates.SMALL_DATE_FORMAT;
  * @author vaddya
  */
 public class WeekTime {
-
-    public static void main(String[] args) {
-        System.out.println(WeekTime.between(WeekTime.of("27.11.2016"), WeekTime.of("22.11.2016")));
-    }
 
     private final LocalDate firstDay;
 
@@ -31,7 +27,7 @@ public class WeekTime {
     }
 
     public static WeekTime of(String date) {
-        return new WeekTime(LocalDate.from(SHORT_DATE_FORMAT.parse(date)));
+        return new WeekTime(LocalDate.from(FULL_DATE_FORMAT.parse(date)));
     }
 
     private WeekTime(LocalDate date) {
@@ -52,7 +48,7 @@ public class WeekTime {
 
     @Override
     public String toString() {
-        return firstDay.format(SMALL_DATE_FORMAT) + " - " + firstDay.plus(6, DAYS).format(SMALL_DATE_FORMAT);
+        return firstDay.format(SHORT_DATE_FORMAT) + " - " + firstDay.plus(6, DAYS).format(SHORT_DATE_FORMAT);
     }
 
     @Override

@@ -20,7 +20,13 @@ public class StudyWeeks {
     }
 
     public StudyWeek get(StudySchedule schedule, WeekTime weekTime) {
-        datedWeeks.putIfAbsent(weekTime, new StudyWeek(weekTime, schedule));
+        if (!datedWeeks.containsKey(weekTime)) {
+            datedWeeks.put(weekTime, new StudyWeek(weekTime, schedule));
+        }
         return datedWeeks.get(weekTime);
+    }
+
+    public void reset() {
+        datedWeeks.clear();
     }
 }

@@ -19,15 +19,17 @@ public class StudySchedules {
     private final Map<WeekType, StudySchedule> schedules;
 
     public StudySchedules() {
-        schedules = new EnumMap<>(WeekType.class);
+        schedules = new EnumMap<WeekType, StudySchedule>(WeekType.class) {{
+            put(ODD, new StudySchedule(ODD));
+            put(EVEN, new StudySchedule(EVEN));
+        }};
     }
 
     public StudySchedule get(WeekType weekType) {
-        schedules.putIfAbsent(weekType, new StudySchedule(weekType));
         return schedules.get(weekType);
     }
 
-    public void swapSchedules() {
+    public void swap() {
         schedules.get(ODD).setWeekType(EVEN);
         schedules.get(EVEN).setWeekType(ODD);
         schedules.put(EVEN, schedules.put(ODD, schedules.get(EVEN)));

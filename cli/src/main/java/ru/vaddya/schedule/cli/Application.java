@@ -3,18 +3,21 @@ package ru.vaddya.schedule.cli;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.SmartScheduleImpl;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.utils.WeekTime;
 
 import java.io.PrintStream;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Scanner;
 
-import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
+import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
+import static ru.vaddya.schedule.core.utils.WeekType.EVEN;
+import static ru.vaddya.schedule.core.utils.WeekType.ODD;
 
 /**
  * Класс для консольного взаимодействия с пользователем
@@ -23,12 +26,12 @@ import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
  */
 public class Application {
 
-    private final SmartSchedule schedule = new SmartScheduleImpl();
-    private final StudyWeek week = schedule.getCurrentWeek();
-    private final StudyTasks tasks = schedule.getTasks();
+    private final SmartSchedule model = new SmartScheduleImpl();
+    private final StudyWeek week = model.getCurrentWeek();
+    private final StudyTasks tasks = model.getTasks();
     private final Scanner in = new Scanner(System.in, "UTF-8");
     private final PrintStream out = System.out;
-
+    private WeekTime weekTime = WeekTime.current();
     private static final String CANCEL = "q";
 
     public Application() {
@@ -42,11 +45,28 @@ public class Application {
         out.print(">> ");
         while (!CANCEL.equals(request = in.next())) {
             switch (request) {
+                case "schedule":
+                    printSchedule("Current schedule", model.getCurrentSchedule());
+                    break;
+                case "odd":
+                    printSchedule("Odd schedule", model.getSchedule(ODD));
+                    break;
+                case "even":
+                    printSchedule("Even schedule", model.getSchedule(EVEN));
+                    break;
                 case "current":
-                    printSchedule("Current schedule", schedule.getCurrentSchedule());
+                    printWeek("Current week", model.getCurrentWeek());
                     break;
                 case "next":
-                    printWeek("Current week", schedule.getCurrentWeek());
+                    weekTime = WeekTime.after(weekTime);
+                    printWeek("Next week", model.getWeek(weekTime));
+                    break;
+                case "prev":
+                    weekTime = WeekTime.before(weekTime);
+                    printWeek("Previous week", model.getWeek(weekTime));
+                    break;
+                case "swap":
+                    model.swapSchedules();
                     break;
                 case "tasks":
                     printTasks("All tasks", tasks.getAllTasks());
@@ -97,16 +117,16 @@ public class Application {
 
     public void printHelp() {
         out.println("Usage of Smart StudySchedule: ");
-        out.println("\t>> schedule - print schedule");
+        out.println("\t>> model - print model");
         out.println("\t>> tasks - print all tasks");
         out.println("\t>> active - print active tasks");
         out.println("\t>> completed - print completed tasks");
         out.println("\t>> overdue - print overdue tasks");
-        out.println("\t>> add lesson - add lesson to the schedule");
+        out.println("\t>> add lesson - add lesson to the model");
         out.println("\t>> add task - add task to the task list");
         out.println("\t>> done - mark the task completed");
         out.println("\t>> undone - mark the task uncompleted");
-        out.println("\t>> remove lesson - remove lesson from the schedule");
+        out.println("\t>> remove lesson - remove lesson from the model");
         out.println("\t>> remove task - remove task from the task list");
         out.println("\t>> help - print help");
     }
@@ -158,7 +178,7 @@ public class Application {
         out.print("Lesson type: ");
         builder.type(LessonType.valueOf(in.next()));
         out.print("Deadline: ");
-        builder.deadline(SHORT_DATE_FORMAT.parse(in.next()));
+        builder.deadline(FULL_DATE_FORMAT.parse(in.next()));
         out.print("Task: ");
         builder.textTask(in.next());
         return builder.build();

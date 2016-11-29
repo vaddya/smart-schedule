@@ -9,10 +9,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

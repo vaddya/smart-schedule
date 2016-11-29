@@ -9,8 +9,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.schedule.StudySchedule;
-import ru.vaddya.schedule.core.utils.LessonType;
 
 import static java.time.DayOfWeek.*;
 import static org.junit.Assert.assertEquals;

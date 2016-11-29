@@ -10,10 +10,10 @@ import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.db.FakeDB;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.lessons.StudyDay;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.schedule.StudySchedule;
-import ru.vaddya.schedule.core.utils.LessonType;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
 import java.time.DayOfWeek;

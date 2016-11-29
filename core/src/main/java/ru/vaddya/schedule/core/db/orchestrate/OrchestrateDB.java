@@ -4,8 +4,9 @@ import io.orchestrate.client.*;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.lessons.ChangedLesson;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.tasks.Task;
-import ru.vaddya.schedule.core.utils.LessonType;
+import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
+import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 
 /**
  * Реализация взаимодействия с OrchestrateDB
@@ -25,15 +26,11 @@ import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 public class OrchestrateDB implements Database {
 
     private static final Database db = new OrchestrateDB();
-    private static final Client client = new OrchestrateClient("b8ed25ed-1c39-41be-bdab-ec717e105049");
+    private static final Client client = new OrchestrateClient("secret-pass");
     private static final Logger logger = Logger.getLogger("OrchestrateDB");
 
-    private static final String TASKS = "tasks";
-    private static final String LESSONS = "lessons";
-
-    private static final String ODD = "odd";
-    private static final String EVEN = "even";
-    private static final String CHANGES = "changes";
+    private static final String TASKS = "TASKS";
+    private static final String CHANGES = "CHANGES";
 
     private static final int LIMIT = 100;
 
@@ -49,7 +46,7 @@ public class OrchestrateDB implements Database {
     public List<Lesson> getLessons(WeekType week, DayOfWeek day) {
         List<Lesson> list = new ArrayList<>();
         KvList<LessonPOJO> response = client
-                .listCollection(LESSONS)
+                .listCollection(week.toString())
                 .limit(LIMIT)
                 .get(LessonPOJO.class)
                 .get();
@@ -57,15 +54,7 @@ public class OrchestrateDB implements Database {
             LessonPOJO pojo = obj.getValue();
             if (pojo.getDay().equals(day.toString())) {
                 logger.fine("Lesson was read: " + pojo);
-                Lesson lesson = new Lesson.Builder()
-                        .id(obj.getKey())
-                        .startTime(pojo.getStartTime())
-                        .endTime(pojo.getEndTime())
-                        .subject(pojo.getSubject())
-                        .type(pojo.getType())
-                        .place(pojo.getPlace())
-                        .teacher(pojo.getTeacher())
-                        .build();
+                Lesson lesson = LessonPOJO.parse(obj.getKey(), pojo);
                 list.add(lesson);
             }
         }
@@ -75,7 +64,7 @@ public class OrchestrateDB implements Database {
     @Override
     public boolean addLesson(WeekType week, DayOfWeek day, Lesson lesson) {
         KvMetadata metadata = client
-                .kv(LESSONS, lesson.getId().toString())
+                .kv(week.toString(), lesson.getId().toString())
                 .put(LessonPOJO.of(day, lesson))
                 .get();
         logger.fine("Lesson was added: " + metadata.toString());
@@ -97,7 +86,7 @@ public class OrchestrateDB implements Database {
     @Override
     public boolean removeLesson(WeekType week, DayOfWeek day, Lesson lesson) {
         boolean res = client
-                .kv(LESSONS, lesson.getId().toString())
+                .kv(week.toString(), lesson.getId().toString())
                 .delete()
                 .get();
         if (res) {
@@ -111,17 +100,36 @@ public class OrchestrateDB implements Database {
 
     @Override
     public List<ChangedLesson> getChanges(LocalDate date) {
-        return new ArrayList<>();
+        List<ChangedLesson> list = new ArrayList<>();
+        KvList<ChangedLessonPOJO> response = client
+                .listCollection(CHANGES)
+                .limit(LIMIT)
+                .get(ChangedLessonPOJO.class)
+                .get();
+        for (KvObject<ChangedLessonPOJO> obj : response) {
+            ChangedLessonPOJO pojo = obj.getValue();
+            if (pojo.getDate().equals(Dates.FULL_DATE_FORMAT.format(date))) {
+                logger.fine("Changed lesson was read: " + pojo);
+                ChangedLesson changedLesson = ChangedLessonPOJO.parse(obj.getKey(), pojo);
+                list.add(changedLesson);
+            }
+        }
+        return list;
     }
 
     @Override
     public boolean addLesson(ChangedLesson lesson) {
-        return false;
+        KvMetadata metadata = client
+                .kv(CHANGES, lesson.getId().toString())
+                .put(ChangedLessonPOJO.of(lesson))
+                .get();
+        logger.fine("Changed lesson was added: " + metadata.toString());
+        return true;
     }
 
     @Override
     public boolean updateLesson(ChangedLesson lesson) {
-        return false;
+        return addLesson(lesson);
     }
 
     @Override
@@ -150,7 +158,7 @@ public class OrchestrateDB implements Database {
                     .id(UUID.fromString(obj.getKey()))
                     .subject(pojo.getSubject())
                     .type(LessonType.valueOf(pojo.getType()))
-                    .deadline(SHORT_DATE_FORMAT.parse(pojo.getDeadline()))
+                    .deadline(FULL_DATE_FORMAT.parse(pojo.getDeadline()))
                     .textTask(pojo.getTextTask())
                     .isComplete(pojo.isComplete())
                     .build();

@@ -20,7 +20,7 @@ public enum WeekType {
      */
     EVEN;
 
-    public WeekType next() {
+    public WeekType opposite() {
         return equals(ODD) ? EVEN : ODD;
     }
 

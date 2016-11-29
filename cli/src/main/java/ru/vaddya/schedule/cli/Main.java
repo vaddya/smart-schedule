@@ -6,6 +6,7 @@ package ru.vaddya.schedule.cli;
  * @author vaddya
  */
 public class Main {
+
     public static void main(String[] args) {
         new Application();
     }
