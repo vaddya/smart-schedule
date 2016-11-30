@@ -15,10 +15,8 @@ import ru.vaddya.schedule.core.tasks.Task;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static ru.vaddya.schedule.core.lessons.LessonType.LAB;
-import static ru.vaddya.schedule.core.lessons.LessonType.PRACTICE;
+import static org.junit.Assert.*;
+import static ru.vaddya.schedule.core.lessons.LessonType.*;
 import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 
 /**
@@ -65,17 +63,42 @@ public class StudyTasksTest {
         assertEquals("Programming", tasks.findTask(task1.getId()).getSubject());
         assertEquals("№1, №2", tasks.findTask(task2.getId()).getTextTask());
 
-        tasks.removeTask(task1);
-        tasks.removeTask(task2);
+        for (Task task : tasks) {
+            task.setType(SEMINAR);
+            tasks.updateTask(task);
+        }
+        assertEquals(SEMINAR, tasks.findTask(0).getType());
+
+        for (Task task : tasks.getAllTasks()) {
+            tasks.removeTask(task);
+        }
         assertEquals(0, tasks.getNumberOfTasks());
 
         tasks.addAllTasks(task1, task2);
         assertEquals(2, tasks.getNumberOfTasks());
+
+        tasks.removeAllTasks();
+        assertTrue(tasks.isEmpty());
+    }
+
+    @Test
+    public void testCompleteTask() throws Exception {
+        tasks.addTask(task1);
+        assertEquals(0, tasks.getCompletedTasks().size());
+
+        task1.setComplete(true);
+        tasks.updateTask(task1);
+        assertEquals(1, tasks.getCompletedTasks().size());
     }
 
     @Test(expected = NoSuchTaskException.class)
     public void testNoSuchTaskException() throws Exception {
         assertNull(tasks.findTask(UUID.randomUUID()));
+    }
+
+    @Test(expected = NoSuchTaskException.class)
+    public void testAnotherNoSuchTaskException() throws Exception {
+        assertNull(tasks.findTask(100));
     }
 }
 

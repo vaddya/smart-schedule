@@ -26,7 +26,7 @@ public class WeekTimeTest {
     }
 
     @Test
-    public void testHashCode() throws Exception {
+    public void testEqualsAndHashCode() throws Exception {
         WeekTime week1 = WeekTime.of(LocalDate.of(2016, 11, 21));
         WeekTime week2 = WeekTime.of(LocalDate.of(2016, 11, 25));
         WeekTime week3 = WeekTime.of(LocalDate.of(2016, 11, 28));

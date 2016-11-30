@@ -51,6 +51,9 @@ public class StudyTasks implements Iterable<Task> {
         db.addTask(task);
     }
 
+    /**
+     * Добавить все задания в список заданий
+     */
     public void addAllTasks(Task... tasks) {
         Collections.addAll(this.tasks, tasks);
     }
@@ -103,6 +106,16 @@ public class StudyTasks implements Iterable<Task> {
     public void removeTask(Task task) {
         db.removeTask(task);
         tasks.remove(task);
+    }
+
+    /**
+     * Удалить все задания
+     */
+    public void removeAllTasks() {
+        for (Task task : tasks) {
+            db.removeTask(task);
+        }
+        tasks.clear();
     }
 
     /**

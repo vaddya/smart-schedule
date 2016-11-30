@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class TimeTest {
 
     @Test
-    public void parseTest() {
+    public void testParse() {
         String time = "08:00";
         Time timer = Time.of(time);
         assertEquals(8, timer.hours());
@@ -40,7 +40,7 @@ public class TimeTest {
     }
 
     @Test
-    public void equalsTest() throws Exception {
+    public void testEquals() throws Exception {
         String time = "10:00";
         Time time1 = Time.of(time);
         Time time2 = Time.of(10, 0);
@@ -49,13 +49,13 @@ public class TimeTest {
     }
 
     @Test(expected=IllegalTimeFormatException.class)
-    public void illegalIllegalTimeFormatTest() {
+    public void testIllegalIllegalTimeFormat() {
         String time = "ItIsCertainlyNotTheTime";
         Time.of(time);
     }
 
     @Test(expected=IllegalTimeFormatException.class)
-    public void anotherIllegalTimeFormatTest() {
+    public void testAnotherIllegalTimeFormat() {
         String time = "05:61";
         Time.of(time);
     }
