@@ -13,20 +13,20 @@ import java.util.Map;
  */
 public class StudyWeeks {
 
-    private final Map<WeekTime, StudyWeek> datedWeeks;
+    private final Map<WeekTime, StudyWeek> weeks;
 
     public StudyWeeks() {
-        datedWeeks = new HashMap<>();
+        weeks = new HashMap<>();
     }
 
     public StudyWeek get(StudySchedule schedule, WeekTime weekTime) {
-        if (!datedWeeks.containsKey(weekTime)) {
-            datedWeeks.put(weekTime, new StudyWeek(weekTime, schedule));
+        if (!weeks.containsKey(weekTime)) {
+            weeks.put(weekTime, new StudyWeek(weekTime, schedule));
         }
-        return datedWeeks.get(weekTime);
+        return weeks.get(weekTime);
     }
 
-    public void reset() {
-        datedWeeks.clear();
+    public void swapWeekTypes() {
+        weeks.forEach((k, v) -> v.swapWeekType());
     }
 }

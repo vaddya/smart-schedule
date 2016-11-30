@@ -16,13 +16,11 @@ import ru.vaddya.schedule.core.lessons.StudyWeek;
 import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.WeekTime;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.UUID;
 
 import static java.time.DayOfWeek.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static ru.vaddya.schedule.core.utils.WeekType.EVEN;
 import static ru.vaddya.schedule.core.utils.WeekType.ODD;
 
@@ -36,8 +34,7 @@ import static ru.vaddya.schedule.core.utils.WeekType.ODD;
 public class StudyWeekTest {
 
     private StudyWeek week;
-    private Lesson lesson1;
-    private Lesson lesson2;
+    private Lesson lesson;
 
     @Before
     public void setUp() {
@@ -45,31 +42,28 @@ public class StudyWeekTest {
         PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
 
         week = new StudyWeek(WeekTime.of("25.11.2016"), new StudySchedule(ODD));
-        lesson1 = new Lesson.Builder()
+        lesson = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")
                 .subject("Programming")
                 .type(LessonType.LAB)
-                .build();
-        lesson2 = new Lesson.Builder()
-                .startTime("14:00")
-                .endTime("15:30")
-                .subject("High math")
-                .type(LessonType.LECTURE)
+                .place("Place")
+                .teacher("Teacher")
                 .build();
     }
 
     @Test
-    public void testSetAndGet() {
-        week.getDay(MONDAY).addLesson(lesson1);
-        week.getDay(DayOfWeek.FRIDAY).addLesson(lesson2);
+    public void testAddAndGet() {
+        week.getDay(MONDAY).addLesson(lesson);
 
+        assertFalse(week.getDay(MONDAY).isEmpty());
         assertEquals(1, week.getDay(MONDAY).getNumberOfLessons());
-        assertEquals(0, week.getDay(TUESDAY).getNumberOfLessons());
-        assertEquals(1, week.getDay(FRIDAY).getNumberOfLessons());
-
+        assertEquals("Programming", week.findLesson(lesson.getId()).getSubject());
         assertEquals("Programming", week.getDay(MONDAY).findLesson(0).getSubject());
-        assertEquals("High math", week.getDay(FRIDAY).findLesson(lesson2.getId()).getSubject());
+        assertEquals("Programming", week.getAllDays().get(MONDAY).findLesson(0).getSubject());
+
+        assertTrue(week.getDay(TUESDAY).isEmpty());
+        assertEquals(0, week.getDay(TUESDAY).getNumberOfLessons());
     }
 
     @Test
@@ -89,11 +83,11 @@ public class StudyWeekTest {
     public void testChangeLessonDay() throws Exception {
         StudyDay wed = week.getDay(WEDNESDAY);
         StudyDay sun = week.getDay(SUNDAY);
-        wed.addLesson(lesson1);
+        wed.addLesson(lesson);
         assertEquals(1, wed.getNumberOfLessons());
         assertEquals(0, sun.getNumberOfLessons());
 
-        week.changeLessonDay(WEDNESDAY, SUNDAY, lesson1);
+        week.changeLessonDay(WEDNESDAY, SUNDAY, lesson);
         assertEquals(0, wed.getNumberOfLessons());
         assertEquals(1, sun.getNumberOfLessons());
     }

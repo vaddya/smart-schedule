@@ -1,14 +1,15 @@
 package ru.vaddya.schedule.core.lessons;
 
-import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.WeekTime;
 import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 
@@ -20,14 +21,15 @@ import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
  */
 public class StudyWeek {
 
-    private static final Database db = Database.getConnection();
-
     private final WeekTime weekTime;
 
     private WeekType weekType;
 
     private final Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
 
+    /**
+     * Конструктор, получающий недельный период времени и расписание
+     */
     public StudyWeek(WeekTime weekTime, StudySchedule schedule) {
         this.weekTime = weekTime;
         this.weekType = schedule.getWeekType();
@@ -49,6 +51,13 @@ public class StudyWeek {
      */
     public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
+    }
+
+    /**
+     * Изменить тип недели на противоположный (четная - нечетная)
+     */
+    public void swapWeekType() {
+        this.weekType = weekType.opposite();
     }
 
     /**
@@ -75,30 +84,25 @@ public class StudyWeek {
         }
     }
 
+    /**
+     * Получить учебный день
+     */
     public StudyDay getDay(DayOfWeek day) {
         return days.get(day);
     }
 
     /**
      * Получить <code>Map</code>, ключи которой - дни недели,
-     * а значения - списки занятий
+     * а значения - учебные дни
      */
-    public Map<DayOfWeek, List<Lesson>> getAllLessons() {
-        return days.entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue().getLessons())
-                );
+    public Map<DayOfWeek, StudyDay> getAllDays() {
+        return new EnumMap<>(days);
     }
 
-    /**
-     * Изменить день занятия
-     */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         days.get(from).removeLesson(lesson);
         days.get(to).addLesson(lesson);
-        db.changeLessonDay(weekType, from, to, lesson);
+        // TODO: 12/1/2016 db request
     }
 
     /**
@@ -106,12 +110,9 @@ public class StudyWeek {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Week Type: ")
-                .append(weekType)
-                .append(" (")
-                .append(weekTime)
-                .append(")\n");
+        StringBuilder sb = new StringBuilder(
+                String.format("Week Type: %s (%s)\n", weekType, weekTime)
+        );
         days.entrySet()
                 .stream()
                 .filter(entry -> !entry.getValue().isEmpty())

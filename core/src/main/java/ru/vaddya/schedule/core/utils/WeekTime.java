@@ -48,7 +48,8 @@ public class WeekTime {
 
     @Override
     public String toString() {
-        return firstDay.format(SHORT_DATE_FORMAT) + " - " + firstDay.plus(6, DAYS).format(SHORT_DATE_FORMAT);
+        return firstDay.format(SHORT_DATE_FORMAT) + " - " + firstDay.plus(6, DAYS).format(SHORT_DATE_FORMAT) +
+                ", №" + weekNumber;
     }
 
     @Override

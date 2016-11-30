@@ -18,6 +18,7 @@ public class ChangedLessonPOJO {
 
     private String changes;
     private String date;
+    private String lessonId;
     private String startTime;
     private String endTime;
     private String subject;
@@ -28,9 +29,10 @@ public class ChangedLessonPOJO {
     public ChangedLessonPOJO() {
     }
 
-    public ChangedLessonPOJO(String changes, String date, String startTime, String endTime, String subject, String type, String place, String teacher) {
+    public ChangedLessonPOJO(String changes, String date, String lessonId, String startTime, String endTime, String subject, String type, String place, String teacher) {
         this.changes = changes;
         this.date = date;
+        this.lessonId = lessonId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;
@@ -53,6 +55,14 @@ public class ChangedLessonPOJO {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getLessonId() {
+        return lessonId;
+    }
+
+    public void setLessonId(String lessonId) {
+        this.lessonId = lessonId;
     }
 
     public String getStartTime() {
@@ -108,6 +118,7 @@ public class ChangedLessonPOJO {
         return new ChangedLessonPOJO(
                 changedLesson.getChanges().toString(),
                 Dates.FULL_DATE_FORMAT.format(changedLesson.getDate()),
+                lesson.getId().toString(),
                 lesson.getStartTime().toString(),
                 lesson.getEndTime().toString(),
                 lesson.getSubject(),
@@ -119,6 +130,7 @@ public class ChangedLessonPOJO {
 
     public static ChangedLesson parse(String key, ChangedLessonPOJO pojo) {
         Lesson lesson = new Lesson.Builder()
+                .id(pojo.getLessonId())
                 .startTime(pojo.getStartTime())
                 .endTime(pojo.getEndTime())
                 .subject(pojo.getSubject())
@@ -139,6 +151,7 @@ public class ChangedLessonPOJO {
         return "ChangedLessonPOJO{" +
                 "changes='" + changes + '\'' +
                 ", date='" + date + '\'' +
+                ", lessonId='" + lessonId + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", subject='" + subject + '\'' +

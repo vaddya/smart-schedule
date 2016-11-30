@@ -36,7 +36,9 @@ public class StudyDay implements Iterable<Lesson> {
                 case UPDATE:
                     UUID id = change.getLesson().getId();
                     int index = lessons.indexOf(findLesson(id));
-                    lessons.add(index, change.getLesson());
+                    if (index != -1) {
+                        lessons.add(index, change.getLesson());
+                    }
                     break;
                 case REMOVE:
                     lessons.remove(change.getLesson());
@@ -67,12 +69,19 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     /**
-     * Добавить занятие в расписание
+     * Добавить занятие в учебный день
      */
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);
         lessons.sort(TIME_ORDER);
-        db.addLesson(new ChangedLesson(ADD, date, lesson));
+        db.addChange(new ChangedLesson(ADD, date, lesson));
+    }
+
+    /**
+     * Добавить все занятия в учебный день
+     */
+    public void addAllLessons(Lesson... lessons) {
+        Collections.addAll(this.lessons, lessons);
     }
 
     /**
@@ -113,7 +122,7 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     /**
-     * Обновить занятие
+     * Обновить информацию о занятии
      *
      * @throws NoSuchLessonException если указано несуществующее занятие
      */
@@ -121,16 +130,27 @@ public class StudyDay implements Iterable<Lesson> {
         Lesson prev = findLesson(lesson.getId());
         lessons.set(lessons.indexOf(prev), lesson);
         lessons.sort(TIME_ORDER);
-        db.updateLesson(new ChangedLesson(UPDATE, date, lesson));
+        db.addChange(new ChangedLesson(UPDATE, date, lesson));
     }
 
     /**
      * Удалить занятие
      */
     public void removeLesson(Lesson lesson) {
-        lessons.remove(lesson);
-        lessons.sort(TIME_ORDER);
-        db.removeLesson(new ChangedLesson(REMOVE, date, lesson));
+        if (lessons.remove(lesson)) {
+            lessons.sort(TIME_ORDER);
+            db.addChange(new ChangedLesson(REMOVE, date, lesson));
+        }
+    }
+
+    /**
+     * Удалить все занятия
+     */
+    public void removeAllLessons() {
+        for (Lesson lesson : lessons) {
+            db.addChange(new ChangedLesson(REMOVE, date, lesson));
+        }
+        lessons.clear();
     }
 
     /**

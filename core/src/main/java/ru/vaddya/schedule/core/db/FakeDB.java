@@ -8,7 +8,9 @@ import ru.vaddya.schedule.core.utils.WeekType;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Реализация класса-заглушки для базы данных
@@ -28,8 +30,12 @@ public class FakeDB implements Database {
 
 
     @Override
-    public List<Lesson> getLessons(WeekType week, DayOfWeek day) {
-        return new ArrayList<>();
+    public Map<DayOfWeek, List<Lesson>> getLessons(WeekType week) {
+        Map<DayOfWeek, List<Lesson>> map = new EnumMap<>(DayOfWeek.class);
+        for (DayOfWeek day : DayOfWeek.values()) {
+            map.put(day, new ArrayList<>());
+        }
+        return map;
     }
 
     @Override
@@ -59,22 +65,7 @@ public class FakeDB implements Database {
     }
 
     @Override
-    public boolean addLesson(ChangedLesson lesson) {
-        return true;
-    }
-
-    @Override
-    public boolean updateLesson(ChangedLesson lesson) {
-        return true;
-    }
-
-    @Override
-    public boolean changeLessonDay(LocalDate from, LocalDate to, Lesson lesson) {
-        return true;
-    }
-
-    @Override
-    public boolean removeLesson(ChangedLesson lesson) {
+    public boolean addChange(ChangedLesson lesson) {
         return true;
     }
 

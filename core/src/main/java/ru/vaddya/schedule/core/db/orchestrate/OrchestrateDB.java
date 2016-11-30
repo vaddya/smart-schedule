@@ -4,6 +4,7 @@ import io.orchestrate.client.*;
 import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.lessons.ChangedLesson;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.core.lessons.LessonChanges;
 import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.Dates;
@@ -11,9 +12,7 @@ import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
@@ -26,7 +25,7 @@ import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 public class OrchestrateDB implements Database {
 
     private static final Database db = new OrchestrateDB();
-    private static final Client client = new OrchestrateClient("secret-pass");
+    private static final Client client = new OrchestrateClient("pass");
     private static final Logger logger = Logger.getLogger("OrchestrateDB");
 
     private static final String TASKS = "TASKS";
@@ -41,10 +40,12 @@ public class OrchestrateDB implements Database {
         return db;
     }
 
-
     @Override
-    public List<Lesson> getLessons(WeekType week, DayOfWeek day) {
-        List<Lesson> list = new ArrayList<>();
+    public Map<DayOfWeek, List<Lesson>> getLessons(WeekType week) {
+        Map<DayOfWeek, List<Lesson>> lists = new EnumMap<>(DayOfWeek.class);
+        for (DayOfWeek day : DayOfWeek.values()) {
+            lists.put(day, new ArrayList<>());
+        }
         KvList<LessonPOJO> response = client
                 .listCollection(week.toString())
                 .limit(LIMIT)
@@ -52,11 +53,25 @@ public class OrchestrateDB implements Database {
                 .get();
         for (KvObject<LessonPOJO> obj : response) {
             LessonPOJO pojo = obj.getValue();
-            if (pojo.getDay().equals(day.toString())) {
-                logger.fine("Lesson was read: " + pojo);
-                Lesson lesson = LessonPOJO.parse(obj.getKey(), pojo);
-                list.add(lesson);
-            }
+            Lesson lesson = LessonPOJO.parse(obj.getKey(), pojo);
+            logger.fine("Lesson was read: " + pojo);
+            lists.get(DayOfWeek.valueOf(pojo.getDay())).add(lesson);
+        }
+        return lists;
+    }
+
+    public List<Lesson> getLessons(WeekType week, DayOfWeek day) {
+        List<Lesson> list = new ArrayList<>();
+        SearchResults<LessonPOJO> results = client
+                .searchCollection(week.toString())
+                .limit(LIMIT)
+                .get(LessonPOJO.class, "day:" + day)
+                .get();
+        for (Result<LessonPOJO> result : results) {
+            LessonPOJO pojo = result.getKvObject().getValue();
+            Lesson lesson = LessonPOJO.parse(result.getKvObject().getKey(), pojo);
+            logger.fine("Lesson was read: " + pojo);
+            list.add(lesson);
         }
         return list;
     }
@@ -118,30 +133,27 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
-    public boolean addLesson(ChangedLesson lesson) {
+    public boolean addChange(ChangedLesson change) {
+        if (change.getChanges() == LessonChanges.REMOVE) {
+            KvList<ChangedLessonPOJO> response = client
+                    .listCollection(CHANGES)
+                    .limit(LIMIT)
+                    .get(ChangedLessonPOJO.class)
+                    .get();
+            for (KvObject<ChangedLessonPOJO> obj : response) {
+                if (obj.getValue().getLessonId().equals(change.getLesson().getId().toString())) {
+                    client.kv(CHANGES, obj.getKey()).delete();
+                    return true;
+                }
+            }
+        }
         KvMetadata metadata = client
-                .kv(CHANGES, lesson.getId().toString())
-                .put(ChangedLessonPOJO.of(lesson))
+                .kv(CHANGES, change.getId().toString())
+                .put(ChangedLessonPOJO.of(change))
                 .get();
-        logger.fine("Changed lesson was added: " + metadata.toString());
+        logger.fine("Change was added: " + metadata.toString());
         return true;
     }
-
-    @Override
-    public boolean updateLesson(ChangedLesson lesson) {
-        return addLesson(lesson);
-    }
-
-    @Override
-    public boolean changeLessonDay(LocalDate from, LocalDate to, Lesson lesson) {
-        return false;
-    }
-
-    @Override
-    public boolean removeLesson(ChangedLesson lesson) {
-        return false;
-    }
-
 
     @Override
     public List<Task> getTasks() {

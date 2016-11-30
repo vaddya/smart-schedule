@@ -9,6 +9,7 @@ import ru.vaddya.schedule.core.utils.WeekType;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Интерфейс взаимодействия с базой данных
@@ -22,7 +23,7 @@ public interface Database {
     }
 
 
-    List<Lesson> getLessons(WeekType week, DayOfWeek day);
+    Map<DayOfWeek, List<Lesson>> getLessons(WeekType week);
 
     boolean addLesson(WeekType week, DayOfWeek day, Lesson lesson);
 
@@ -35,13 +36,7 @@ public interface Database {
 
     List<ChangedLesson> getChanges(LocalDate date);
 
-    boolean addLesson(ChangedLesson lesson);
-
-    boolean updateLesson(ChangedLesson lesson);
-
-    boolean changeLessonDay(LocalDate from, LocalDate to, Lesson lesson);
-
-    boolean removeLesson(ChangedLesson lesson);
+    boolean addChange(ChangedLesson lesson);
 
 
     List<Task> getTasks();

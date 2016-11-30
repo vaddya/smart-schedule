@@ -6,7 +6,6 @@ import ru.vaddya.schedule.core.utils.WeekType;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,16 +20,14 @@ public class StudySchedule {
 
     private WeekType weekType;
 
-    private final Map<DayOfWeek, List<Lesson>> days = new EnumMap<>(DayOfWeek.class);
+    private final Map<DayOfWeek, List<Lesson>> days;
 
     /**
      * Конструктор, принимающий тип недели
      */
     public StudySchedule(WeekType weekType) {
         this.weekType = weekType;
-        for (DayOfWeek day : DayOfWeek.values()) {
-            days.put(day, db.getLessons(weekType, day));
-        }
+        this.days = db.getLessons(weekType);
     }
 
     /**
@@ -83,7 +80,7 @@ public class StudySchedule {
      */
     public List<Lesson> getLessons(DayOfWeek day) {
         List<Lesson> clone = new ArrayList<>();
-        days.get(day).forEach(lesson -> clone.add(new Lesson(lesson)));
+        days.get(day).forEach(clone::add);
         return clone;
     }
 

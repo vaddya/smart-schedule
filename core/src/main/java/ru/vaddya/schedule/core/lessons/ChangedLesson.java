@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class ChangedLesson {
 
-    private UUID id;
+    private final UUID id;
 
     private final LessonChanges changes;
 
@@ -20,11 +20,14 @@ public class ChangedLesson {
     private final Lesson lesson;
 
     public ChangedLesson(UUID id, LessonChanges changes, LocalDate date, Lesson lesson) {
-        this(changes, date, lesson);
         this.id = id;
+        this.changes = changes;
+        this.date = date;
+        this.lesson = lesson;
     }
 
     public ChangedLesson(LessonChanges changes, LocalDate date, Lesson lesson) {
+        this.id = UUID.randomUUID();
         this.changes = changes;
         this.date = date;
         this.lesson = lesson;

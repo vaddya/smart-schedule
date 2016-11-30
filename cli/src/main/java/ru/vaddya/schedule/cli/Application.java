@@ -43,7 +43,7 @@ public class Application {
     public void parseInput() {
         String request;
         out.print(">> ");
-        while (!CANCEL.equals(request = in.next())) {
+        while (!CANCEL.equals(request = in.nextLine())) {
             switch (request) {
                 case "schedule":
                     printSchedule("Current schedule", model.getCurrentSchedule());
@@ -65,7 +65,7 @@ public class Application {
                     weekTime = WeekTime.before(weekTime);
                     printWeek("Previous week", model.getWeek(weekTime));
                     break;
-                case "swap":
+                case "swapWeekTypes":
                     model.swapSchedules();
                     break;
                 case "tasks":
@@ -132,10 +132,10 @@ public class Application {
     }
 
     private void parseAdd() {
-        String kind = in.next();
+        String kind = in.nextLine();
         if ("lesson".equals(kind)) {
             out.print("Day of week: ");
-            DayOfWeek day = DayOfWeek.valueOf(in.next().toUpperCase());
+            DayOfWeek day = DayOfWeek.valueOf(in.nextLine().toUpperCase());
             week.getDay(day).addLesson(parseLesson());
         } else if ("task".equals(kind)) {
             tasks.addTask(parseTask());
@@ -154,10 +154,10 @@ public class Application {
     }
 
     private void parseRemove() {
-        String kind = in.next();
+        String kind = in.nextLine();
         if ("lesson".equals(kind)) {
             out.print("Day of week: ");
-            DayOfWeek day = DayOfWeek.valueOf(in.next().toUpperCase());
+            DayOfWeek day = DayOfWeek.valueOf(in.nextLine().toUpperCase());
             out.print("Lesson number: ");
             int index = in.nextInt();
             week.getDay(day).removeLesson(week.getDay(day).findLesson(index));
@@ -174,30 +174,30 @@ public class Application {
     private Task parseTask() {
         Task.Builder builder = new Task.Builder();
         out.print("Subject: ");
-        builder.subject(in.next());
+        builder.subject(in.nextLine());
         out.print("Lesson type: ");
-        builder.type(LessonType.valueOf(in.next()));
+        builder.type(LessonType.valueOf(in.nextLine()));
         out.print("Deadline: ");
-        builder.deadline(FULL_DATE_FORMAT.parse(in.next()));
+        builder.deadline(FULL_DATE_FORMAT.parse(in.nextLine()));
         out.print("Task: ");
-        builder.textTask(in.next());
+        builder.textTask(in.nextLine());
         return builder.build();
     }
 
     private Lesson parseLesson() {
         Lesson.Builder builder = new Lesson.Builder();
         out.print("Start time: ");
-        builder.startTime(in.next());
+        builder.startTime(in.nextLine());
         out.print("End time: ");
-        builder.endTime(in.next());
+        builder.endTime(in.nextLine());
         out.print("Subject: ");
-        builder.subject(in.next());
+        builder.subject(in.nextLine());
         out.print("Lesson type: ");
-        builder.type(in.next());
+        builder.type(in.nextLine());
         out.print("Place: ");
-        builder.place(in.next());
+        builder.place(in.nextLine());
         out.print("Teacher: ");
-        builder.teacher(in.next());
+        builder.teacher(in.nextLine());
         return builder.build();
     }
 }

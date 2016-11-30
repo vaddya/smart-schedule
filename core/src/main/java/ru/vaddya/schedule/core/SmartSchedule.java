@@ -39,11 +39,6 @@ public interface SmartSchedule {
     StudyWeek getWeek(WeekTime weekTime);
 
     /**
-     * Обновить учебные недели после изменений в расписании
-     */
-    void updateWeeks();
-
-    /**
      * Получить учебные задания
      */
     StudyTasks getTasks();

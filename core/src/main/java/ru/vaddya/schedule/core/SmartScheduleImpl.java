@@ -34,12 +34,7 @@ public class SmartScheduleImpl implements SmartSchedule {
     public void swapSchedules() {
         schedules.swap();
         currentWeek = currentWeek.opposite();
-        updateWeeks();
-    }
-
-    @Override
-    public void updateWeeks() {
-        weeks.reset();
+        weeks.swapWeekTypes();
     }
 
     public StudyWeek getCurrentWeek() {
