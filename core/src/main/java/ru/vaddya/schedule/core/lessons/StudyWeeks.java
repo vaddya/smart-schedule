@@ -19,7 +19,7 @@ public class StudyWeeks {
         weeks = new HashMap<>();
     }
 
-    public StudyWeek get(StudySchedule schedule, WeekTime weekTime) {
+    public StudyWeek get(WeekTime weekTime, StudySchedule schedule) {
         if (!weeks.containsKey(weekTime)) {
             weeks.put(weekTime, new StudyWeek(weekTime, schedule));
         }

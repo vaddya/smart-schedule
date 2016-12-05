@@ -38,12 +38,12 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public StudyWeek getCurrentWeek() {
-        return weeks.get(schedules.get(currentWeek), WeekTime.current());
+        return weeks.get(WeekTime.current(), schedules.get(currentWeek));
     }
 
     public StudyWeek getWeek(WeekTime weekTime) {
         WeekType weekType = getWeekType(weekTime);
-        return weeks.get(schedules.get(weekType), weekTime);
+        return weeks.get(weekTime, schedules.get(weekType));
     }
 
     public StudySchedule getCurrentSchedule() {

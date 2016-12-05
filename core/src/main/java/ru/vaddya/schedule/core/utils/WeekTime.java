@@ -71,6 +71,10 @@ public class WeekTime {
         return WeekTime.of(LocalDate.now());
     }
 
+    public static WeekTime next() {
+        return WeekTime.after(WeekTime.current());
+    }
+
     public static WeekTime before(WeekTime current) {
         return new WeekTime(current.getDateOf(MONDAY).minus(7, DAYS));
     }

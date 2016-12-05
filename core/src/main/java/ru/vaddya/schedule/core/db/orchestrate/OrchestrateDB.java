@@ -25,7 +25,7 @@ import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 public class OrchestrateDB implements Database {
 
     private static final Database db = new OrchestrateDB();
-    private static final Client client = new OrchestrateClient("pass");
+    private static final Client client = new OrchestrateClient("c8840a76-13ef-4770-b3c7-59c0ae659ac6");
     private static final Logger logger = Logger.getLogger("OrchestrateDB");
 
     private static final String TASKS = "TASKS";
