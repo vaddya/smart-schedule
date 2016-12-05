@@ -1,4 +1,7 @@
 allprojects {
+    group 'ru.vaddya'
+    version '1.0'
+
     repositories {
         mavenCentral()
     }

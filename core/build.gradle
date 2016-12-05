@@ -2,7 +2,6 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 
 dependencies {
-    compile 'org.json:json:20090211'
     compile 'org.mongodb:mongodb-driver:3.3.0'
     compile 'org.mongodb:mongo-java-driver:3.3.0'
     compile 'io.orchestrate:orchestrate-client:0.12.1'
