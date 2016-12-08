@@ -111,7 +111,7 @@ public class StudyWeek {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(
-                String.format("Week Type: %s (%s)\n", weekType, weekTime)
+                String.format("Week Type: %s (%s)%n", weekType, weekTime)
         );
         days.entrySet()
                 .stream()

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vaddya.schedule.desktop.Controller">
+    <tabs>
+        <Tab text="Расписание">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Предыдущая" />
+                      <Button layoutX="24.0" layoutY="24.0" mnemonicParsing="false" text="Следующая" />
+                  </HBox>
+               </children></AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Задания">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
