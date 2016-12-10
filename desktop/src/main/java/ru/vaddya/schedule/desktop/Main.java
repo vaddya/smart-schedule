@@ -22,6 +22,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         URL url = getClass().getClassLoader().getResource("fxml/root.fxml");
         Parent root = FXMLLoader.load(url);
+        primaryStage.setTitle("Smart Schedule");
+        primaryStage.setMinWidth(575);
+        primaryStage.setMinHeight(600);
+        primaryStage.setWidth(975);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

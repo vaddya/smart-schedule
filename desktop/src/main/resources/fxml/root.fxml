@@ -1,28 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-
-<TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vaddya.schedule.desktop.Controller">
-    <tabs>
-        <Tab text="Расписание">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Предыдущая" />
-                      <Button layoutX="24.0" layoutY="24.0" mnemonicParsing="false" text="Следующая" />
-                  </HBox>
-               </children></AnchorPane>
-            </content>
-        </Tab>
-        <Tab text="Задания">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-        </Tab>
-    </tabs>
-</TabPane>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:controller="ru.vaddya.schedule.desktop.Controller" prefHeight="600.0" prefWidth="900.0"
+      xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Файл">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Новый"/>
+                        <MenuItem mnemonicParsing="false" text="Открыть…"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Закрыть"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Изменить">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Добавить занятие"/>
+                        <MenuItem mnemonicParsing="false" text="Настройки…"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Помощь">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Smart Schedule"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab text="Расписание">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                            <children>
+                                <TableView fx:id="lessonsTableView" AnchorPane.bottomAnchor="25.0"
+                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                           AnchorPane.topAnchor="75.0">
+                                    <columns>
+                                        <TableColumn prefWidth="150.0" sortable="false" text="Пн"/>
+                                        <TableColumn prefWidth="150.0" sortable="false" text="Вт"/>
+                                        <TableColumn prefWidth="150.0" sortable="false" text="Ср"/>
+                                        <TableColumn prefWidth="150.0" sortable="false" text="Чт"/>
+                                        <TableColumn prefWidth="150.0" sortable="false" text="Пт"/>
+                                        <TableColumn prefWidth="150.0" sortable="false" text="Сб"/>
+                                    </columns>
+                                </TableView>
+                                <Button fx:id="prevWeekButton" mnemonicParsing="false" onAction="#handleAction"
+                                        prefWidth="250.0" text="Предыдущая неделя" AnchorPane.leftAnchor="0.0"
+                                        AnchorPane.topAnchor="0.0"/>
+                                <Button fx:id="nextWeekButton" layoutY="50.0" mnemonicParsing="false" prefWidth="250.0"
+                                        text="Следующая неделя" AnchorPane.rightAnchor="0.0"
+                                        AnchorPane.topAnchor="0.0"/>
+                                <DatePicker fx:id="weekDatePicker" prefWidth="250.0" promptText="Дата"
+                                            AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="35.0"/>
+                                <Button fx:id="addLessonButton" layoutX="610.0" layoutY="35.0" mnemonicParsing="false"
+                                        prefWidth="250.0" text="Добавить занятие" AnchorPane.rightAnchor="0.0"
+                                        AnchorPane.topAnchor="35.0"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+                            </padding>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Задания">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>
