@@ -25,6 +25,14 @@ import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 public class OrchestrateDB implements Database {
 
     private static final Database db = new OrchestrateDB();
+    //TODO: вот этот api key сейчас нельзя поменять.
+    //В качестве первого шага нужно его хранить в файле, а сюда передавать строкой.
+    //Файлов может быть много, их читает то приложение, которое запускает работу с бд,
+    //это могут быть интеграционные тесты -- файлик тестовых ресурсах, причем файлик есть, а ключ в него я, например,
+    // вписываю сама, когда вы мне его на ухо шепнете при встрече, или скажете мне, завести свой орчестрейт,
+    // и я в файл свой ключ вставляю. В репозитории не храним, обычно.
+    // ваше консольное или десктоп-приложение -- у них свои файлы по тому же принципу, или там через гуи задается
+    // главное -- что не в код вшито
     private static final Client client = new OrchestrateClient("c8840a76-13ef-4770-b3c7-59c0ae659ac6");
     private static final Logger logger = Logger.getLogger("OrchestrateDB");
 

@@ -29,6 +29,9 @@ import static ru.vaddya.schedule.core.utils.WeekType.ODD;
  *
  * @author vaddya
  */
+
+//TODO: Были ведь раньше интеграционные тесты тоже? Куда делись?
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Database.class)
 public class SmartScheduleTest {
