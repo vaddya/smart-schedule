@@ -14,6 +14,7 @@ install:
   - docker pull lamtev/java
 
 script:
+#что за radix converter?? кусочки копипасты...
   - docker run -v $TRAVIS_BUILD_DIR:/radix-converter lamtev/java /bin/bash -c " cd radix-converter && gradle build "
   
 after_success:
