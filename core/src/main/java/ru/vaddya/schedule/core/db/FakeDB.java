@@ -17,6 +17,8 @@ import java.util.Map;
  *
  * @author vaddya
  */
+
+// FakeDB это ведь для тестов? Лучше этот класс переместить к тестам
 public class FakeDB implements Database {
 
     private static final Database db = new FakeDB();
