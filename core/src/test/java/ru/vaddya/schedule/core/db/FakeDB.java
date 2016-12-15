@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.core.db;
 
+import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.lessons.ChangedLesson;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;

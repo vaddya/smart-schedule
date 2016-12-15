@@ -5,7 +5,7 @@ allprojects {
     repositories {
         jcenter()
     }
-    
+
     apply plugin: 'findbugs'
     tasks.withType(FindBugs) {
         reports {
@@ -14,8 +14,6 @@ allprojects {
     }
     findbugs {
         effort = "max"
-        //TODO: лучше установить в уровень отчета таким образом, чтобы показывались не только самые
-        // тревожные предупреждения. Бывает средних и низкоприоритетных предупреждений тоже есть что исправить
         reportLevel = "low"
         ignoreFailures = true
     }

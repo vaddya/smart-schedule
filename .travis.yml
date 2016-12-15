@@ -14,8 +14,7 @@ install:
   - docker pull lamtev/java
 
 script:
-#что за radix converter?? кусочки копипасты...
-  - docker run -v $TRAVIS_BUILD_DIR:/radix-converter lamtev/java /bin/bash -c " cd radix-converter && gradle build "
+  - docker run -v $TRAVIS_BUILD_DIR:/smart-schedule lamtev/java /bin/bash -c " cd smart-schedule && gradle build "
   
 after_success:
   - bash <(curl -s https://codecov.io/bash)
