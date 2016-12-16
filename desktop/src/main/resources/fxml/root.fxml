@@ -3,8 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:controller="ru.vaddya.schedule.desktop.Controller" prefHeight="600.0" prefWidth="900.0"
-      xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ru.vaddya.schedule.desktop.Controller">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -39,12 +39,12 @@
                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                            AnchorPane.topAnchor="75.0">
                                     <columns>
-                                        <TableColumn prefWidth="150.0" sortable="false" text="Пн"/>
-                                        <TableColumn prefWidth="150.0" sortable="false" text="Вт"/>
+                                        <TableColumn prefWidth="130.0" sortable="false" text="Пн"/>
+                                        <TableColumn prefWidth="142.0" sortable="false" text="Вт"/>
                                         <TableColumn prefWidth="150.0" sortable="false" text="Ср"/>
-                                        <TableColumn prefWidth="150.0" sortable="false" text="Чт"/>
-                                        <TableColumn prefWidth="150.0" sortable="false" text="Пт"/>
-                                        <TableColumn prefWidth="150.0" sortable="false" text="Сб"/>
+                                        <TableColumn prefWidth="144.0" sortable="false" text="Чт"/>
+                                        <TableColumn prefWidth="143.0" sortable="false" text="Пт"/>
+                                        <TableColumn prefWidth="139.0" sortable="false" text="Сб"/>
                                     </columns>
                                 </TableView>
                                 <Button fx:id="prevWeekButton" mnemonicParsing="false" onAction="#handleAction"
@@ -67,7 +67,25 @@
                 </Tab>
                 <Tab text="Задания">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <TableView fx:id="tasksTableView" editable="true" AnchorPane.bottomAnchor="0.0"
+                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                           AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="taskStatusColumn" prefWidth="102.0" text="Статус"/>
+                                        <TableColumn fx:id="taskSubjectColumn" prefWidth="217.0" text="Предмет"/>
+                                        <TableColumn fx:id="taskTypeColumn" prefWidth="92.0"
+                                                     style="fx-text-align: center;" text="Тип"/>
+                                        <TableColumn fx:id="taskDeadlineColumn" prefWidth="126.0" text="Дедлайн"/>
+                                        <TableColumn fx:id="taskTextColumn" prefWidth="312.0" text="Задание"/>
+                                    </columns>
+                                </TableView>
+                            </children>
+                            <padding>
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+                            </padding>
+                        </AnchorPane>
                     </content>
                 </Tab>
             </tabs>

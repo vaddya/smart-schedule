@@ -85,7 +85,8 @@ public class Task {
     public String toString() {
         long daysUntil = Dates.daysUntil(deadline);
         return String.format("%s %s, %s | %s [%s]: %s",
-                isComplete ? "☑" : "☐",
+//                isComplete ? "☑" : "☐",
+                isComplete ? "(+)" : "(-)",
                 BRIEF_DATE_FORMAT.format(deadline),
                 (daysUntil >= 0
                         ? daysUntil + " days"
