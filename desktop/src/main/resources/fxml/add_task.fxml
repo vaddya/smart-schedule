@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.vaddya.schedule.desktop.AddTaskController">
+    <top>
+        <VBox prefWidth="86.0" BorderPane.alignment="CENTER">
+            <children>
+                <AnchorPane>
+                    <children>
+                        <Label text="Предмет:" AnchorPane.leftAnchor="0.0">
+                        </Label>
+                        <TextField layoutX="71.0" AnchorPane.rightAnchor="0.0">
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <ChoiceBox layoutX="43.0" prefWidth="150.0" AnchorPane.rightAnchor="0.0">
+                        </ChoiceBox>
+                        <Label text="Тип предмета:">
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <Label text="Дедлайн:"/>
+                        <DatePicker layoutX="71.0" prefWidth="150.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <TextArea prefHeight="100.0" prefWidth="150.0" wrapText="true" AnchorPane.rightAnchor="0.0"/>
+                        <Label text="Текст задания:"/>
+                        <CheckBox layoutX="-8.0" layoutY="29.0" mnemonicParsing="false" text="Выполнено"
+                                  AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <BorderPane>
+                    <left>
+                        <Button defaultButton="true" mnemonicParsing="false" prefWidth="100.0" text="Добавить"
+                                BorderPane.alignment="CENTER"/>
+                    </left>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+                    </padding>
+                    <right>
+                        <Button cancelButton="true" minWidth="100.0" mnemonicParsing="false" text="Отмена"
+                                onAction="#closeAction" BorderPane.alignment="CENTER"/>
+                    </right>
+                </BorderPane>
+            </children>
+        </VBox>
+    </top>
+</BorderPane>

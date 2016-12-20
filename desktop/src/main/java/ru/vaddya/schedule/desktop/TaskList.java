@@ -44,4 +44,8 @@ public class TaskList {
     public ObservableList<TaskListItem> getItems() {
         return items;
     }
+
+    public int count() {
+        return items.size();
+    }
 }
