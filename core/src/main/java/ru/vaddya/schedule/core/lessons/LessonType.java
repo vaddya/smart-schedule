@@ -42,4 +42,9 @@ public enum LessonType {
      */
     EXAM,
 
+    /**
+     * Другое
+     */
+    ANOTHER,
+
 }

@@ -6,10 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Стартовый класс для консольного приложения
+ * Стартовый класс для графического приложения
  *
  * @author vaddya
  */
@@ -19,11 +21,18 @@ public class Main extends Application {
         launch(args);
     }
 
+    public static ResourceBundle bundle;
+
     public void start(Stage primaryStage) throws Exception {
-        URL url = getClass().getClassLoader().getResource("fxml/root.fxml");
-        Parent root = FXMLLoader.load(url);
-        primaryStage.setTitle("Smart Schedule");
-        primaryStage.setMinWidth(575);
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setCharset(StandardCharsets.UTF_8);
+        bundle = ResourceBundle.getBundle("bundles/Locale", new Locale("ru"));
+        fxmlLoader.setResources(bundle);
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
+
+        Parent root = fxmlLoader.load();
+        primaryStage.setTitle(fxmlLoader.getResources().getString("smart_schedule"));
+        primaryStage.setMinWidth(820);
         primaryStage.setMinHeight(600);
         primaryStage.setWidth(975);
         primaryStage.setScene(new Scene(root));

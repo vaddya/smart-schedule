@@ -5,15 +5,15 @@
 <?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ru.vaddya.schedule.desktop.AddTaskController">
+            fx:controller="ru.vaddya.schedule.desktop.controllers.EditTaskController">
     <top>
         <VBox prefWidth="86.0" BorderPane.alignment="CENTER">
             <children>
                 <AnchorPane>
                     <children>
-                        <Label text="Предмет:" AnchorPane.leftAnchor="0.0">
+                        <Label text="%lesson_subject" AnchorPane.leftAnchor="0.0">
                         </Label>
-                        <TextField layoutX="71.0" AnchorPane.rightAnchor="0.0">
+                        <TextField fx:id="subjectField" layoutX="71.0" AnchorPane.rightAnchor="0.0">
                         </TextField>
                     </children>
                     <VBox.margin>
@@ -22,9 +22,9 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <ChoiceBox layoutX="43.0" prefWidth="150.0" AnchorPane.rightAnchor="0.0">
+                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="150.0" AnchorPane.rightAnchor="0.0">
                         </ChoiceBox>
-                        <Label text="Тип предмета:">
+                        <Label text="%lesson_type">
                         </Label>
                     </children>
                     <VBox.margin>
@@ -33,8 +33,9 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <Label text="Дедлайн:"/>
-                        <DatePicker layoutX="71.0" prefWidth="150.0" AnchorPane.rightAnchor="0.0"/>
+                        <Label text="%task_deadline"/>
+                        <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="150.0" promptText="%date"
+                                    AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
@@ -42,10 +43,11 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <TextArea prefHeight="100.0" prefWidth="150.0" wrapText="true" AnchorPane.rightAnchor="0.0"/>
-                        <Label text="Текст задания:"/>
-                        <CheckBox layoutX="-8.0" layoutY="29.0" mnemonicParsing="false" text="Выполнено"
-                                  AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0"/>
+                        <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="150.0" wrapText="true"
+                                  AnchorPane.rightAnchor="0.0"/>
+                        <Label text="%task"/>
+                        <CheckBox fx:id="doneCheckBox" layoutX="-8.0" layoutY="29.0" mnemonicParsing="false"
+                                  text="%task_complete" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
@@ -53,15 +55,15 @@
                 </AnchorPane>
                 <BorderPane>
                     <left>
-                        <Button defaultButton="true" mnemonicParsing="false" prefWidth="100.0" text="Добавить"
-                                BorderPane.alignment="CENTER"/>
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefWidth="100.0"
+                                text="%save" BorderPane.alignment="CENTER"/>
                     </left>
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
                     </padding>
                     <right>
-                        <Button cancelButton="true" minWidth="100.0" mnemonicParsing="false" text="Отмена"
-                                onAction="#closeAction" BorderPane.alignment="CENTER"/>
+                        <Button cancelButton="true" minWidth="100.0" mnemonicParsing="false" onAction="#actionClose"
+                                text="%cancel" BorderPane.alignment="CENTER"/>
                     </right>
                 </BorderPane>
             </children>

@@ -1,4 +1,4 @@
-package ru.vaddya.schedule.desktop;
+package ru.vaddya.schedule.desktop.tasks;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -7,10 +7,10 @@ import ru.vaddya.schedule.core.tasks.StudyTasks;
 import ru.vaddya.schedule.core.tasks.Task;
 
 /**
- * ru.vaddya.schedule.desktop at smart-schedule
+ * Класс-обертка для списка заданий
  *
  * @author vaddya
- * @since December 16, 2016
+ * @see StudyTasks
  */
 public class TaskList {
 
@@ -41,11 +41,19 @@ public class TaskList {
         });
     }
 
+    public void addListener(ListChangeListener<? super TaskListItem> listener) {
+        items.addListener(listener);
+    }
+
     public ObservableList<TaskListItem> getItems() {
         return items;
     }
 
     public int count() {
         return items.size();
+    }
+
+    public void update(TaskListItem item) {
+        tasks.updateTask(item.toTask());
     }
 }
