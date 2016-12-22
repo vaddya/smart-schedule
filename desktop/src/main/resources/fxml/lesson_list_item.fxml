@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <javafx.scene.layout.BorderPane layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                        minWidth="-Infinity" prefHeight="45.0" prefWidth="602.0"
+                                        AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <left>
+                <AnchorPane>
+                    <children>
+                        <Label fx:id="timeLabel" text="10:00 - 12:00" BorderPane.alignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+                    </BorderPane.margin>
+                </AnchorPane>
+            </left>
+            <center>
+                <AnchorPane>
+                    <children>
+                        <Label fx:id="subjectLabel" text="Программирование" AnchorPane.leftAnchor="10.0"
+                               BorderPane.alignment="CENTER">
+                            <padding>
+                                <Insets top="7.0"/>
+                            </padding>
+                        </Label>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </BorderPane.margin>
+                </AnchorPane>
+            </center>
+            <bottom>
+                <AnchorPane>
+                    <children>
+                        <Label fx:id="placeLabel" text="Аудитория: 9-ый учебный корпус, ауд. 309" textFill="#939393"
+                               AnchorPane.leftAnchor="0.0"/>
+                        <Label fx:id="teacherLabel" text="Преподаватель: Вылегжанина Карина Дмитриевна"
+                               textFill="#939393" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+                    </BorderPane.margin>
+                </AnchorPane>
+            </bottom>
+            <right>
+                <AnchorPane>
+                    <children>
+                        <Label fx:id="typeLabel" text="Лабораторные" BorderPane.alignment="CENTER">
+                            <font>
+                                <Font name="System Italic" size="12.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+                    </BorderPane.margin>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </AnchorPane>
+            </right>
+        </javafx.scene.layout.BorderPane>
+    </children>
+</fx:root>

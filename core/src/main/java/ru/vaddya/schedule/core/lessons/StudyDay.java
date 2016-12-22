@@ -35,9 +35,14 @@ public class StudyDay implements Iterable<Lesson> {
                     break;
                 case UPDATE:
                     UUID id = change.getLesson().getId();
-                    int index = lessons.indexOf(findLesson(id));
-                    if (index != -1) {
-                        lessons.add(index, change.getLesson());
+                    Lesson lesson = null;
+                    try {
+                        lesson = findLesson(id);
+                    } catch (NoSuchLessonException e) {
+                        e.printStackTrace();
+                    }
+                    if (lesson != null) {
+                        lessons.add(lessons.indexOf(lesson), change.getLesson());
                     }
                     break;
                 case REMOVE:

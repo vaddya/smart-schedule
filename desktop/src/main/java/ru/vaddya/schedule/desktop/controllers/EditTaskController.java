@@ -39,9 +39,15 @@ public class EditTaskController implements Initializable {
 
     private TaskListItem task;
 
+    private boolean saved = false;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         typeChoiceBox.setItems(FXCollections.observableArrayList(LessonType.values()));
+    }
+
+    public boolean isSaved() {
+        return saved;
     }
 
     public void setActiveTask(TaskListItem task) {
@@ -51,6 +57,7 @@ public class EditTaskController implements Initializable {
         datePicker.setValue(task.getDateDeadline());
         textArea.setText(task.getText());
         doneCheckBox.setSelected(task.isDone());
+        saved = false;
     }
 
     public void actionClose(ActionEvent event) {
@@ -65,6 +72,7 @@ public class EditTaskController implements Initializable {
         task.setDeadline(FULL_DATE_FORMAT.format(datePicker.getValue()));
         task.setText(textArea.getText());
         task.setDone(doneCheckBox.isSelected());
+        saved = true;
         actionClose(event);
     }
 }

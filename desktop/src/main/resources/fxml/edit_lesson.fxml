@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.vaddya.schedule.desktop.controllers.EditLessonController">
+    <top>
+        <VBox prefWidth="86.0" BorderPane.alignment="CENTER">
+            <children>
+                <AnchorPane layoutX="30.0" layoutY="30.0">
+                    <children>
+                        <Label text="%lesson_day_of_week" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
+                        <ChoiceBox fx:id="dayOfWeekChoiceBox" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <Label text="%lesson_time_start" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="timeStartField" layoutX="71.0" prefWidth="200.0"
+                                   AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane layoutX="30.0" layoutY="75.0">
+                    <children>
+                        <Label text="%lesson_time_end" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="timeEndField" layoutX="71.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <Label text="%lesson_subject" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0">
+                        </Label>
+                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
+                        </ChoiceBox>
+                        <Label text="%lesson_type" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0"
+                               AnchorPane.topAnchor="5.0">
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <Label text="%lesson_place" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0"
+                               AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="placeField" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <Label text="%lesson_teacher" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0"
+                               AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="teacherField" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <AnchorPane layoutX="30.0" layoutY="255.0">
+                    <children>
+                        <VBox alignment="CENTER" layoutX="113.0" layoutY="9.0" spacing="10.0"
+                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                              AnchorPane.topAnchor="0.0">
+                            <children>
+                                <RadioButton fx:id="once" layoutX="113.0" layoutY="9.0" mnemonicParsing="false"
+                                             text="%lesson_once">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="group"/>
+                                    </toggleGroup>
+                                </RadioButton>
+                                <RadioButton fx:id="always" layoutX="157.0" layoutY="9.0" mnemonicParsing="false"
+                                             text="%lesson_always" toggleGroup="$group"/>
+                            </children>
+                        </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <BorderPane>
+                    <left>
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefWidth="160.0"
+                                text="%save" BorderPane.alignment="CENTER"/>
+                    </left>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+                    </padding>
+                    <right>
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefWidth="160.0"
+                                text="%cancel" BorderPane.alignment="CENTER"/>
+                    </right>
+                </BorderPane>
+            </children>
+        </VBox>
+    </top>
+</BorderPane>

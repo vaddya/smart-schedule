@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="ru.vaddya.schedule.desktop.controllers.MainController">
     <children>
@@ -35,27 +36,49 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0">
                             <children>
-                                <TableView fx:id="lessonsTableView" AnchorPane.bottomAnchor="25.0"
-                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                           AnchorPane.topAnchor="75.0">
-                                    <columns>
-                                        <TableColumn prefWidth="130.0" sortable="false" text="Пн"/>
-                                        <TableColumn prefWidth="142.0" sortable="false" text="Вт"/>
-                                        <TableColumn prefWidth="150.0" sortable="false" text="Ср"/>
-                                        <TableColumn prefWidth="144.0" sortable="false" text="Чт"/>
-                                        <TableColumn prefWidth="143.0" sortable="false" text="Пт"/>
-                                        <TableColumn prefWidth="139.0" sortable="false" text="Сб"/>
-                                    </columns>
-                                </TableView>
-                                <Button fx:id="prevWeekButton" mnemonicParsing="false" prefWidth="250.0"
-                                        text="%previous_week" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-                                <Button fx:id="nextWeekButton" layoutY="50.0" mnemonicParsing="false" prefWidth="250.0"
-                                        text="%next_week" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-                                <DatePicker fx:id="weekDatePicker" prefWidth="250.0" promptText="%date"
-                                            AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="35.0"/>
-                                <Button fx:id="addLessonButton" layoutX="610.0" layoutY="35.0" mnemonicParsing="false"
-                                        prefWidth="250.0" text="%lesson_add" AnchorPane.rightAnchor="0.0"
-                                        AnchorPane.topAnchor="35.0"/>
+                                <ListView fx:id="lessonList" layoutX="82.0" layoutY="95.0" prefHeight="200.0"
+                                          prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0"/>
+                                <BorderPane prefHeight="60.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0"
+                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <left>
+                                        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                                            <children>
+                                                <Button fx:id="prevWeekButton" mnemonicParsing="false"
+                                                        onAction="#actionButtonPressed" prefWidth="250.0"
+                                                        text="%previous_week"/>
+                                                <Button fx:id="addLessonButton" layoutX="10.0" layoutY="10.0"
+                                                        mnemonicParsing="false" onAction="#actionButtonPressed"
+                                                        prefWidth="250.0" text="%lesson_add"/>
+                                            </children>
+                                        </VBox>
+                                    </left>
+                                    <right>
+                                        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                                            <children>
+                                                <Button fx:id="nextWeekButton" mnemonicParsing="false"
+                                                        onAction="#actionButtonPressed" prefWidth="250.0"
+                                                        text="%next_week"/>
+                                                <Button fx:id="removeLessonButton" mnemonicParsing="false"
+                                                        onAction="#actionButtonPressed" prefWidth="250.0"
+                                                        text="%lesson_remove"/>
+                                            </children>
+                                        </VBox>
+                                    </right>
+                                    <center>
+                                        <VBox alignment="CENTER" spacing="5.0">
+                                            <children>
+                                                <Label fx:id="currWeekLabel" text="Label" BorderPane.alignment="CENTER">
+                                                    <font>
+                                                        <Font size="18.0"/>
+                                                    </font>
+                                                </Label>
+                                                <DatePicker fx:id="weekDatePicker" onAction="#datePickerHandler"
+                                                            prefWidth="206.0" promptText="%date"/>
+                                            </children>
+                                        </VBox>
+                                    </center>
+                                </BorderPane>
                             </children>
                             <padding>
                                 <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>

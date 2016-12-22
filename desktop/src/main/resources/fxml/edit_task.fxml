@@ -3,7 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0"
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.vaddya.schedule.desktop.controllers.EditTaskController">
     <top>
@@ -11,9 +11,10 @@
             <children>
                 <AnchorPane>
                     <children>
-                        <Label text="%lesson_subject" AnchorPane.leftAnchor="0.0">
+                        <Label text="%lesson_subject" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="5.0">
                         </Label>
-                        <TextField fx:id="subjectField" layoutX="71.0" AnchorPane.rightAnchor="0.0">
+                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
                         </TextField>
                     </children>
                     <VBox.margin>
@@ -22,9 +23,10 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="150.0" AnchorPane.rightAnchor="0.0">
+                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
                         </ChoiceBox>
-                        <Label text="%lesson_type">
+                        <Label text="%lesson_type" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                               AnchorPane.topAnchor="5.0">
                         </Label>
                     </children>
                     <VBox.margin>
@@ -33,8 +35,9 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <Label text="%task_deadline"/>
-                        <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="150.0" promptText="%date"
+                        <Label text="%task_deadline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                               AnchorPane.topAnchor="5.0"/>
+                        <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="200.0" promptText="%date"
                                     AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
@@ -43,11 +46,12 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="150.0" wrapText="true"
+                        <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="200.0" wrapText="true"
                                   AnchorPane.rightAnchor="0.0"/>
-                        <Label text="%task"/>
+                        <Label text="%task" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                               AnchorPane.topAnchor="5.0"/>
                         <CheckBox fx:id="doneCheckBox" layoutX="-8.0" layoutY="29.0" mnemonicParsing="false"
-                                  text="%task_complete" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0"/>
+                                  text="%task_complete" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
@@ -55,14 +59,14 @@
                 </AnchorPane>
                 <BorderPane>
                     <left>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefWidth="100.0"
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefWidth="160.0"
                                 text="%save" BorderPane.alignment="CENTER"/>
                     </left>
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
                     </padding>
                     <right>
-                        <Button cancelButton="true" minWidth="100.0" mnemonicParsing="false" onAction="#actionClose"
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefWidth="160.0"
                                 text="%cancel" BorderPane.alignment="CENTER"/>
                     </right>
                 </BorderPane>

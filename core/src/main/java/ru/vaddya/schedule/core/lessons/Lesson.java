@@ -157,6 +157,11 @@ public class Lesson {
             return this;
         }
 
+        public Builder id(UUID val) {
+            id = val;
+            return this;
+        }
+
         public Builder startTime(String val) {
             startTime = Time.of(val);
             return this;
