@@ -35,9 +35,9 @@ public class WeekTime {
     private WeekTime(LocalDate date) {
         firstDay = date.minus(date.getDayOfWeek().ordinal(), DAYS);
         Calendar calendar = new GregorianCalendar(new Locale("ru"));
-        calendar.set(date.getYear(),
-                date.getMonthValue(),
-                date.getDayOfMonth());
+        calendar.set(firstDay.getYear(),
+                firstDay.getMonthValue(),
+                firstDay.getDayOfMonth());
         weekNumber = calendar.get(WEEK_OF_YEAR);
     }
 
@@ -52,7 +52,7 @@ public class WeekTime {
     @Override
     public String toString() {
         return firstDay.format(SHORT_DATE_FORMAT) + " - " + firstDay.plus(6, DAYS).format(SHORT_DATE_FORMAT) +
-                ", №" + weekNumber;
+                ", #" + weekNumber;
     }
 
     @Override
