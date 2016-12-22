@@ -43,4 +43,13 @@ public interface SmartSchedule {
      */
     StudyTasks getTasks();
 
+    /**
+     * Получить тип недели
+     */
+    WeekType getWeekType(WeekTime weekTime);
+
+    /**
+     * Обновить информацию о занятиях
+     */
+    void updateLessons();
 }

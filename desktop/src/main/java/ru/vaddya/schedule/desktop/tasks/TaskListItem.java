@@ -5,6 +5,7 @@ import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.core.utils.Dates;
 import ru.vaddya.schedule.desktop.Main;
+import ru.vaddya.schedule.desktop.util.TypeTranslator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class TaskListItem {
         this.progress = new SimpleStringProperty(Main.bundle.getString("task_incomplete"));
         this.deadline = new SimpleStringProperty(Dates.FULL_DATE_FORMAT.format(LocalDate.now()));
         this.subject = new SimpleStringProperty("");
-        this.type = new SimpleStringProperty(LessonType.ANOTHER.toString());
+        this.type = new SimpleStringProperty(Main.bundle.getString(LessonType.ANOTHER.toString().toLowerCase()));
         this.text = new SimpleStringProperty("");
     }
 
@@ -38,7 +39,7 @@ public class TaskListItem {
         this.progress = new SimpleStringProperty(Main.bundle.getString(task.isComplete() ? "task_complete" : "task_incomplete"));
         this.deadline = new SimpleStringProperty(Dates.FULL_DATE_FORMAT.format(task.getDeadline()));
         this.subject = new SimpleStringProperty(task.getSubject());
-        this.type = new SimpleStringProperty(task.getType().toString());
+        this.type = new SimpleStringProperty(Main.bundle.getString(task.getType().toString().toLowerCase()));
         this.text = new SimpleStringProperty(task.getTextTask());
     }
 
@@ -83,7 +84,7 @@ public class TaskListItem {
     }
 
     public void setType(LessonType type) {
-        this.type.set(type.toString());
+        this.type.set(Main.bundle.getString(type.toString().toLowerCase()));
     }
 
     public String getDeadline() {
@@ -131,7 +132,7 @@ public class TaskListItem {
                 .id(id)
                 .isComplete(progress.get().equals(Main.bundle.getString("task_complete")))
                 .subject(subject.get())
-                .type(LessonType.valueOf(type.get()))
+                .type(TypeTranslator.parseLessonType(type.get()))
                 .deadline(Dates.FULL_DATE_FORMAT.parse(deadline.get()))
                 .textTask(text.get())
                 .build();

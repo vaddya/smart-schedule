@@ -1,6 +1,5 @@
 package ru.vaddya.schedule.desktop.controllers;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import ru.vaddya.schedule.core.lessons.LessonType;
+import ru.vaddya.schedule.desktop.Main;
 import ru.vaddya.schedule.desktop.tasks.TaskListItem;
 
 import java.net.URL;
@@ -26,7 +26,7 @@ public class EditTaskController implements Initializable {
     private TextField subjectField;
 
     @FXML
-    private ChoiceBox<LessonType> typeChoiceBox;
+    private ChoiceBox<String> typeChoiceBox;
 
     @FXML
     private DatePicker datePicker;
@@ -43,7 +43,10 @@ public class EditTaskController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        typeChoiceBox.setItems(FXCollections.observableArrayList(LessonType.values()));
+        for (LessonType type : LessonType.values()) {
+            typeChoiceBox.getItems().add(Main.bundle.getString(type.toString().toLowerCase()));
+        }
+        typeChoiceBox.setValue(Main.bundle.getString(LessonType.ANOTHER.toString().toLowerCase()));
     }
 
     public boolean isSaved() {
@@ -53,7 +56,7 @@ public class EditTaskController implements Initializable {
     public void setActiveTask(TaskListItem task) {
         this.task = task;
         subjectField.setText(task.getSubject());
-        typeChoiceBox.setValue(LessonType.valueOf(task.getType()));
+        typeChoiceBox.setValue(task.getType());
         datePicker.setValue(task.getDateDeadline());
         textArea.setText(task.getText());
         doneCheckBox.setSelected(task.isDone());
@@ -68,7 +71,7 @@ public class EditTaskController implements Initializable {
 
     public void actionSave(ActionEvent event) {
         task.setSubject(subjectField.getText());
-        task.setType(typeChoiceBox.getValue().toString());
+        task.setType(typeChoiceBox.getValue());
         task.setDeadline(FULL_DATE_FORMAT.format(datePicker.getValue()));
         task.setText(textArea.getText());
         task.setDone(doneCheckBox.isSelected());

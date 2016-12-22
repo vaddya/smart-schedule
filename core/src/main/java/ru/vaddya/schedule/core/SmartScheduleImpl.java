@@ -58,9 +58,13 @@ public class SmartScheduleImpl implements SmartSchedule {
         return tasks;
     }
 
-    private WeekType getWeekType(WeekTime weekTime) {
+    public WeekType getWeekType(WeekTime weekTime) {
         return weekTime.getWeekNumber() % 2 == 1
                 ? ODD
                 : EVEN;
+    }
+
+    public void updateLessons() {
+        weeks.clear();
     }
 }

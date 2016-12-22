@@ -58,6 +58,12 @@ public class MainController implements Initializable {
 
     private Parent editLessonDialogParent;
 
+    private RemoveLessonController removeLessonController;
+
+    private Stage removeLessonDialogStage;
+
+    private Parent removeLessonDialogParent;
+
     /*
      * Tasks
      */
@@ -113,6 +119,10 @@ public class MainController implements Initializable {
         initLessonsList();
         weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
 
+        initControllers();
+    }
+
+    private void initControllers() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setCharset(StandardCharsets.UTF_8);
         fxmlLoader.setResources(Main.bundle);
@@ -123,6 +133,17 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
         editLessonController = fxmlLoader.getController();
+
+        fxmlLoader = new FXMLLoader();
+        fxmlLoader.setCharset(StandardCharsets.UTF_8);
+        fxmlLoader.setResources(Main.bundle);
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/remove_lesson.fxml"));
+        try {
+            removeLessonDialogParent = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        removeLessonController = fxmlLoader.getController();
 
         fxmlLoader = new FXMLLoader();
         fxmlLoader.setCharset(StandardCharsets.UTF_8);
@@ -152,22 +173,23 @@ public class MainController implements Initializable {
         });
         currentWeek = WeekTime.current();
         refreshLessons();
-//        new Thread(() -> {
-//            int i = 0;
-//            WeekTime current = currentWeek;
-//            while (i++ < 5) {
-//                current = WeekTime.after(current);
-//                schedule.getWeek(WeekTime.after(current));
-//            }
-//        }).start();
+        new Thread(() -> {
+            schedule.getWeek(WeekTime.before(currentWeek));
+            int i = 0;
+            WeekTime current = currentWeek;
+            while (i++ < 3) {
+                schedule.getWeek(WeekTime.after(current));
+                current = WeekTime.after(current);
+            }
+        }).start();
     }
 
     private void initTasksTable() {
         tasksTableView.setColumnResizePolicy(param -> false);
 
-        taskStatusColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.15));
-        taskSubjectColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.25));
-        taskTypeColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.1));
+        taskStatusColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.145));
+        taskSubjectColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.20));
+        taskTypeColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.15));
         taskDeadlineColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.1));
         taskTextColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.4));
 
@@ -185,9 +207,11 @@ public class MainController implements Initializable {
         tasksTableView.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2) {
                 TaskListItem task = tasksTableView.getSelectionModel().getSelectedItem();
-                editTaskController.setActiveTask(task);
-                showTaskDialog(tasksTableView.getScene().getWindow());
-                if (editTaskController.isSaved()) taskList.update(task);
+                if (task != null) {
+                    editTaskController.setActiveTask(task);
+                    showTaskDialog(tasksTableView.getScene().getWindow());
+                    if (editTaskController.isSaved()) taskList.update(task);
+                }
             }
         });
     }
@@ -240,14 +264,17 @@ public class MainController implements Initializable {
                 break;
             case "addLessonButton":
                 editLessonController.setActiveLesson(null, MONDAY);
-                showLessonDialog(tasksTableView.getScene().getWindow());
+                showLessonDialog(lessonList.getScene().getWindow());
                 parseLessonDialog();
                 refreshLessons();
                 break;
             case "removeLessonButton":
                 LessonListItem lesson = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
-                schedule.getWeek(currentWeek).getDay(lesson.getDay()).removeLesson(lesson.getLesson());
-                refreshLessons();
+                if (lesson != null) {
+                    removeLessonController.setActiveLesson(lesson.getLesson().getSubject());
+                    showRemoveLessonDialog(lessonList.getScene().getWindow());
+                    parseRemoveLessonDialog(lesson);
+                }
                 break;
             case "addTaskButton":
                 task = new TaskListItem();
@@ -257,15 +284,29 @@ public class MainController implements Initializable {
                 break;
             case "editTaskButton":
                 task = tasksTableView.getSelectionModel().getSelectedItem();
-                editTaskController.setActiveTask(task);
-                showTaskDialog(tasksTableView.getScene().getWindow());
-                taskList.update(task);
-                tasksTableView.refresh();
+                if (task != null) {
+                    editTaskController.setActiveTask(task);
+                    showTaskDialog(tasksTableView.getScene().getWindow());
+                    taskList.update(task);
+                    tasksTableView.refresh();
+                }
                 break;
             case "removeTaskButton":
                 task = tasksTableView.getSelectionModel().getSelectedItem();
                 tasksTableView.getItems().remove(task);
                 break;
+        }
+    }
+
+    private void parseRemoveLessonDialog(LessonListItem lesson) {
+        if (removeLessonController.isRemoved()) {
+            if (removeLessonController.isOnce()) {
+                schedule.getWeek(currentWeek).getDay(lesson.getDay()).removeLesson(lesson.getLesson());
+            } else {
+                schedule.getSchedule(schedule.getWeekType(currentWeek)).removeLesson(lesson.getDay(), lesson.getLesson());
+            }
+            refreshLessons();
+            schedule.updateLessons();
         }
     }
 
@@ -285,11 +326,24 @@ public class MainController implements Initializable {
                     schedule.getCurrentSchedule().updateLesson(lesson.getDayOfWeek(), lesson.getLesson());
                 }
             }
+            schedule.updateLessons();
         }
     }
 
     private void updateCountTasks() {
         tasksCountLabel.setText(Main.bundle.getString("tasks_count") + " " + taskList.count());
+    }
+
+    private void showRemoveLessonDialog(Window window) {
+        if (removeLessonDialogStage == null) {
+            removeLessonDialogStage = new Stage();
+            removeLessonDialogStage.setTitle(Main.bundle.getString("lesson_remove"));
+            removeLessonDialogStage.setResizable(false);
+            removeLessonDialogStage.setScene(new Scene(removeLessonDialogParent));
+            removeLessonDialogStage.initModality(Modality.WINDOW_MODAL);
+            removeLessonDialogStage.initOwner(window);
+        }
+        removeLessonDialogStage.showAndWait();
     }
 
     private void showLessonDialog(Window window) {

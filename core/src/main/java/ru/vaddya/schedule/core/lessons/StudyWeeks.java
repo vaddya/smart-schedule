@@ -29,4 +29,8 @@ public class StudyWeeks {
     public void swapWeekTypes() {
         weeks.forEach((k, v) -> v.swapWeekType());
     }
+
+    public void clear() {
+        weeks.clear();
+    }
 }
