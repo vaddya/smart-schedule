@@ -67,11 +67,15 @@ public class StudySchedule {
         db.updateLesson(weekType, day, lesson);
     }
 
+    public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
+        // TODO: 12/22/2016
+    }
+
     /**
      * Удалить занятие
      */
     public void removeLesson(DayOfWeek day, Lesson lesson) {
-        days.get(day).add(lesson);
+        days.get(day).remove(lesson);
         db.removeLesson(weekType, day, lesson);
     }
 

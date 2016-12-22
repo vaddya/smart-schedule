@@ -100,9 +100,14 @@ public class StudyWeek {
     }
 
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
-        days.get(from).removeLesson(lesson);
-        days.get(to).addLesson(lesson);
-        // TODO: 12/1/2016 db request
+        UUID id = lesson.getId();
+        try {
+            days.get(from).removeLesson(findLesson(id));
+            days.get(to).addLesson(lesson);
+            // TODO: 12/1/2016 db request
+        } catch (NoSuchLessonException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

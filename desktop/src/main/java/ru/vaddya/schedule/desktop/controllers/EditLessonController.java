@@ -1,6 +1,5 @@
 package ru.vaddya.schedule.desktop.controllers;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +11,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.LessonType;
+import ru.vaddya.schedule.desktop.Main;
 import ru.vaddya.schedule.desktop.lessons.CreatedLesson;
+import ru.vaddya.schedule.desktop.util.TypeTranslator;
 
 import java.net.URL;
 import java.time.DayOfWeek;
@@ -27,7 +28,7 @@ import java.util.UUID;
 public class EditLessonController implements Initializable {
 
     @FXML
-    private ChoiceBox<DayOfWeek> dayOfWeekChoiceBox;
+    private ChoiceBox<String> dayOfWeekChoiceBox;
 
     @FXML
     private TextField timeStartField;
@@ -39,7 +40,7 @@ public class EditLessonController implements Initializable {
     private TextField subjectField;
 
     @FXML
-    private ChoiceBox<LessonType> typeChoiceBox;
+    private ChoiceBox<String> typeChoiceBox;
 
     @FXML
     private TextField placeField;
@@ -64,10 +65,18 @@ public class EditLessonController implements Initializable {
 
     private boolean created;
 
+    private DayOfWeek sourceDay;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dayOfWeekChoiceBox.setItems(FXCollections.observableArrayList(DayOfWeek.values()));
-        typeChoiceBox.setItems(FXCollections.observableArrayList(LessonType.values()));
+        for (LessonType type : LessonType.values()) {
+            typeChoiceBox.getItems().add(Main.bundle.getString(type.toString().toLowerCase()));
+        }
+        typeChoiceBox.setValue(Main.bundle.getString("another"));
+        for (DayOfWeek day : DayOfWeek.values()) {
+            dayOfWeekChoiceBox.getItems().add(Main.bundle.getString(day.toString().toLowerCase()));
+        }
+        dayOfWeekChoiceBox.setValue(Main.bundle.getString("monday"));
         group.selectToggle(once);
     }
 
@@ -75,21 +84,22 @@ public class EditLessonController implements Initializable {
         if (lesson == null) {
             created = true;
             uuid = UUID.randomUUID();
-            dayOfWeekChoiceBox.setValue(DayOfWeek.MONDAY);
+            dayOfWeekChoiceBox.setValue(Main.bundle.getString(DayOfWeek.MONDAY.toString().toLowerCase()));
             timeStartField.clear();
             timeEndField.clear();
             subjectField.clear();
-            typeChoiceBox.setValue(LessonType.ANOTHER);
+            typeChoiceBox.setValue(Main.bundle.getString(LessonType.ANOTHER.toString().toLowerCase()));
             placeField.clear();
             teacherField.clear();
         } else {
+            sourceDay = day;
             created = false;
             uuid = lesson.getId();
-            dayOfWeekChoiceBox.setValue(day);
+            dayOfWeekChoiceBox.setValue(Main.bundle.getString(day.toString().toLowerCase()));
             timeStartField.setText(lesson.getStartTime().toString());
             timeEndField.setText(lesson.getEndTime().toString());
             subjectField.setText(lesson.getSubject());
-            typeChoiceBox.setValue(lesson.getType());
+            typeChoiceBox.setValue(Main.bundle.getString(lesson.getType().toString().toLowerCase()));
             placeField.setText(lesson.getPlace());
             teacherField.setText(lesson.getTeacher());
         }
@@ -108,11 +118,12 @@ public class EditLessonController implements Initializable {
                 .startTime(timeStartField.getText())
                 .endTime(timeEndField.getText())
                 .subject(subjectField.getText())
-                .type(typeChoiceBox.getValue())
+                .type(TypeTranslator.parseLessonType(typeChoiceBox.getValue()))
                 .place(placeField.getText())
                 .teacher(teacherField.getText())
                 .build();
-        createdLesson = new CreatedLesson(lesson, once.isSelected(), dayOfWeekChoiceBox.getValue());
+        createdLesson = new CreatedLesson(lesson, once.isSelected(), sourceDay,
+                TypeTranslator.parseDayOfWeek(dayOfWeekChoiceBox.getValue()));
         saved = true;
         actionClose(event);
     }

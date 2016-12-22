@@ -243,13 +243,7 @@ public class MainController implements Initializable {
     }
 
     public void actionButtonPressed(ActionEvent event) {
-        Object source = event.getSource();
-
-        if (!(source instanceof Button)) {
-            return;
-        }
-
-        Button button = (Button) source;
+        Button button = (Button) event.getSource();
         TaskListItem task;
         switch (button.getId()) {
             case "prevWeekButton":
@@ -315,18 +309,28 @@ public class MainController implements Initializable {
             CreatedLesson lesson = editLessonController.getCreatedLesson();
             if (editLessonController.isCreated()) {
                 if (lesson.isOnce()) {
-                    schedule.getCurrentWeek().getDay(lesson.getDayOfWeek()).addLesson(lesson.getLesson());
+                    schedule.getWeek(currentWeek).getDay(lesson.getSourceDay()).addLesson(lesson.getLesson());
                 } else {
-                    schedule.getCurrentSchedule().addLesson(lesson.getDayOfWeek(), lesson.getLesson());
+                    schedule.getCurrentSchedule().addLesson(lesson.getSourceDay(), lesson.getLesson());
                 }
             } else {
                 if (lesson.isOnce()) {
-                    schedule.getCurrentWeek().getDay(lesson.getDayOfWeek()).updateLesson(lesson.getLesson());
+                    if (lesson.isDayChanged()) {
+                        schedule.getWeek(currentWeek).changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
+                    } else {
+                        schedule.getWeek(currentWeek).getDay(lesson.getSourceDay()).updateLesson(lesson.getLesson());
+                    }
                 } else {
-                    schedule.getCurrentSchedule().updateLesson(lesson.getDayOfWeek(), lesson.getLesson());
+                    if (lesson.isDayChanged()) {
+                        schedule.getSchedule(schedule.getWeekType(currentWeek)).changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
+                    } else {
+                        schedule.getSchedule(schedule.getWeekType(currentWeek)).updateLesson(lesson.getSourceDay(), lesson.getLesson());
+
+                    }
                 }
             }
             schedule.updateLessons();
+
         }
     }
 

@@ -13,6 +13,7 @@ import ru.vaddya.schedule.core.utils.WeekType;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
@@ -58,7 +59,7 @@ public class OrchestrateDB implements Database {
                 .listCollection(week.toString())
                 .limit(LIMIT)
                 .get(LessonPOJO.class)
-                .get();
+                .get(30, TimeUnit.SECONDS);
         for (KvObject<LessonPOJO> obj : response) {
             LessonPOJO pojo = obj.getValue();
             Lesson lesson = LessonPOJO.parse(obj.getKey(), pojo);
@@ -74,7 +75,7 @@ public class OrchestrateDB implements Database {
                 .searchCollection(week.toString())
                 .limit(LIMIT)
                 .get(LessonPOJO.class, "day:" + day)
-                .get();
+                .get(30, TimeUnit.SECONDS);
         for (Result<LessonPOJO> result : results) {
             LessonPOJO pojo = result.getKvObject().getValue();
             Lesson lesson = LessonPOJO.parse(result.getKvObject().getKey(), pojo);
@@ -89,7 +90,7 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(week.toString(), lesson.getId().toString())
                 .put(LessonPOJO.of(day, lesson))
-                .get();
+                .get(30, TimeUnit.SECONDS);
         logger.fine("Lesson was added: " + metadata.toString());
         return true;
     }
@@ -111,7 +112,7 @@ public class OrchestrateDB implements Database {
         boolean res = client
                 .kv(week.toString(), lesson.getId().toString())
                 .delete()
-                .get();
+                .get(30, TimeUnit.SECONDS);
         if (res) {
             logger.fine("Lesson " + lesson.getSubject() + " was removed");
         } else {
@@ -128,7 +129,7 @@ public class OrchestrateDB implements Database {
                 .listCollection(CHANGES)
                 .limit(LIMIT)
                 .get(ChangedLessonPOJO.class)
-                .get();
+                .get(30, TimeUnit.SECONDS);
         for (KvObject<ChangedLessonPOJO> obj : response) {
             ChangedLessonPOJO pojo = obj.getValue();
             if (pojo.getDate().equals(Dates.FULL_DATE_FORMAT.format(date))) {
@@ -147,7 +148,7 @@ public class OrchestrateDB implements Database {
                     .listCollection(CHANGES)
                     .limit(LIMIT)
                     .get(ChangedLessonPOJO.class)
-                    .get();
+                    .get(30, TimeUnit.SECONDS);
             for (KvObject<ChangedLessonPOJO> obj : response) {
                 if (obj.getValue().getLessonId().equals(change.getLesson().getId().toString())) {
                     client.kv(CHANGES, obj.getKey()).delete();
@@ -158,7 +159,7 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(CHANGES, change.getId().toString())
                 .put(ChangedLessonPOJO.of(change))
-                .get();
+                .get(30, TimeUnit.SECONDS);
         logger.fine("Change was added: " + metadata.toString());
         return true;
     }
@@ -170,7 +171,7 @@ public class OrchestrateDB implements Database {
                 .listCollection(TASKS)
                 .limit(LIMIT)
                 .get(TaskPOJO.class)
-                .get();
+                .get(30, TimeUnit.SECONDS);
         for (KvObject<TaskPOJO> obj : response) {
             TaskPOJO pojo = obj.getValue();
             logger.fine("Task was read: " + pojo);
@@ -192,7 +193,7 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(TASKS, task.getId().toString())
                 .put(TaskPOJO.of(task))
-                .get();
+                .get(30, TimeUnit.SECONDS);
         logger.fine("Task was added: " + metadata.toString());
         return true;
     }
@@ -207,7 +208,7 @@ public class OrchestrateDB implements Database {
         boolean res = client
                 .kv(TASKS, task.getId().toString())
                 .delete()
-                .get();
+                .get(30, TimeUnit.SECONDS);
         if (res) {
             logger.fine("Task " + task.getTextTask() + " was removed");
         } else {

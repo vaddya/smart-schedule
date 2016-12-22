@@ -16,12 +16,15 @@ public class CreatedLesson {
 
     private boolean isOnce;
 
-    private DayOfWeek dayOfWeek;
+    private DayOfWeek sourceDay;
 
-    public CreatedLesson(Lesson lesson, boolean isOnce, DayOfWeek dayOfWeek) {
+    private DayOfWeek targetDay;
+
+    public CreatedLesson(Lesson lesson, boolean isOnce, DayOfWeek sourceDay, DayOfWeek targetDay) {
         this.lesson = lesson;
         this.isOnce = isOnce;
-        this.dayOfWeek = dayOfWeek;
+        this.sourceDay = sourceDay;
+        this.targetDay = targetDay;
     }
 
     public Lesson getLesson() {
@@ -32,7 +35,16 @@ public class CreatedLesson {
         return isOnce;
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
+    public DayOfWeek getSourceDay() {
+        return sourceDay;
     }
+
+    public DayOfWeek getTargetDay() {
+        return targetDay;
+    }
+
+    public boolean isDayChanged() {
+        return sourceDay != targetDay;
+    }
+
 }
