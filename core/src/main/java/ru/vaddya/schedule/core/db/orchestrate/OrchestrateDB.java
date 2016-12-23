@@ -165,6 +165,17 @@ public class OrchestrateDB implements Database {
     }
 
     @Override
+    public boolean removeAllChanges() {
+        boolean res = client.deleteCollection(CHANGES).get();
+        if (res) {
+            logger.fine("All changes was removed");
+        } else {
+            logger.warning("Changes wasn't removed");
+        }
+        return res;
+    }
+
+    @Override
     public List<Task> getTasks() {
         List<Task> list = new ArrayList<>();
         KvList<TaskPOJO> response = client

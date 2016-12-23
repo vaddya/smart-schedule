@@ -3,18 +3,14 @@ package ru.vaddya.schedule.desktop.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
@@ -23,14 +19,11 @@ import ru.vaddya.schedule.core.utils.WeekTime;
 import ru.vaddya.schedule.desktop.Main;
 import ru.vaddya.schedule.desktop.lessons.CreatedLesson;
 import ru.vaddya.schedule.desktop.lessons.LessonListItem;
-import ru.vaddya.schedule.desktop.tasks.TaskListItem;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
 
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
@@ -41,13 +34,12 @@ import static java.time.DayOfWeek.SUNDAY;
  * @author vaddya
  * @since December 22, 2016
  */
-public class LessonsController implements Initializable {
+public class LessonsController {
+
+    private MainController main;
 
     private SmartSchedule schedule;
 
-    /*
-    * Lessons
-    */
     private WeekTime currentWeek;
 
     private EditLessonController editLessonController;
@@ -64,9 +56,6 @@ public class LessonsController implements Initializable {
 
     private static final DateTimeFormatter DAY_MONTH = DateTimeFormatter.ofPattern("d MMMM", Main.bundle.getLocale());
 
-    /*
-    * FXML Lessons
-    */
     @FXML
     private Label currWeekLabel;
 
@@ -76,15 +65,12 @@ public class LessonsController implements Initializable {
     @FXML
     private ListView<Node> lessonList;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initControllers();
-    }
-
-    public void setSchedule(SmartSchedule schedule) {
+    public void init(MainController main, SmartSchedule schedule) {
+        this.main = main;
         this.schedule = schedule;
         currentWeek = WeekTime.current();
         weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
+        initControllers();
         initLessonsList();
     }
 
@@ -121,7 +107,11 @@ public class LessonsController implements Initializable {
                     Lesson lesson = item.getLesson();
                     DayOfWeek day = item.getDay();
                     editLessonController.setActiveLesson(lesson, day);
-                    showLessonDialog(lessonList.getScene().getWindow());
+                    editLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
+                            editLessonDialogStage,
+                            editLessonDialogParent,
+                            Main.bundle.getString("lesson_edit")
+                    );
                     parseLessonDialog();
                 }
             }
@@ -141,7 +131,6 @@ public class LessonsController implements Initializable {
 
     public void actionButtonPressed(ActionEvent event) {
         Button button = (Button) event.getSource();
-        TaskListItem task;
         switch (button.getId()) {
             case "prevWeekButton":
                 currentWeek = WeekTime.before(currentWeek);
@@ -155,15 +144,25 @@ public class LessonsController implements Initializable {
                 break;
             case "addLessonButton":
                 editLessonController.setActiveLesson(null, MONDAY);
-                showLessonDialog(lessonList.getScene().getWindow());
+                editLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
+                        editLessonDialogStage,
+                        editLessonDialogParent,
+                        Main.bundle.getString("lesson_add")
+                );
                 parseLessonDialog();
                 refreshLessons();
                 break;
             case "removeLessonButton":
                 LessonListItem lesson = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
-                if (lesson != null) {
+                if (lesson == null) {
+                    main.setToStatusBar(Main.bundle.getString("lesson_select_remove"), 5);
+                } else {
                     removeLessonController.setActiveLesson(lesson.getLesson().getSubject());
-                    showRemoveLessonDialog(lessonList.getScene().getWindow());
+                    removeLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
+                            removeLessonDialogStage,
+                            removeLessonDialogParent,
+                            Main.bundle.getString("lesson_remove")
+                    );
                     parseRemoveLessonDialog(lesson);
                 }
                 break;
@@ -234,32 +233,7 @@ public class LessonsController implements Initializable {
                 }
             }
             schedule.updateLessons();
-
+            refreshLessons();
         }
     }
-
-    private void showRemoveLessonDialog(Window window) {
-        if (removeLessonDialogStage == null) {
-            removeLessonDialogStage = new Stage();
-            removeLessonDialogStage.setTitle(Main.bundle.getString("lesson_remove"));
-            removeLessonDialogStage.setResizable(false);
-            removeLessonDialogStage.setScene(new Scene(removeLessonDialogParent));
-            removeLessonDialogStage.initModality(Modality.WINDOW_MODAL);
-            removeLessonDialogStage.initOwner(window);
-        }
-        removeLessonDialogStage.showAndWait();
-    }
-
-    private void showLessonDialog(Window window) {
-        if (editLessonDialogStage == null) {
-            editLessonDialogStage = new Stage();
-            editLessonDialogStage.setTitle(Main.bundle.getString("lesson_add"));
-            editLessonDialogStage.setResizable(false);
-            editLessonDialogStage.setScene(new Scene(editLessonDialogParent));
-            editLessonDialogStage.initModality(Modality.WINDOW_MODAL);
-            editLessonDialogStage.initOwner(window);
-        }
-        editLessonDialogStage.showAndWait();
-    }
-
 }

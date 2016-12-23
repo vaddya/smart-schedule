@@ -36,6 +36,8 @@ public class TypeTranslator {
                     return EXAM;
                 case "Другое":
                     return ANOTHER;
+                default:
+                    return ANOTHER;
             }
         }
         return LessonType.valueOf(type.toUpperCase());
@@ -58,6 +60,8 @@ public class TypeTranslator {
                     return SATURDAY;
                 case "Воскресенье":
                     return SUNDAY;
+                default:
+                    return MONDAY;
             }
         }
         return DayOfWeek.valueOf(day.toUpperCase());

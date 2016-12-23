@@ -45,6 +45,8 @@ public interface Database {
 
     boolean addChange(ChangedLesson lesson);
 
+    boolean removeAllChanges();
+
 
     List<Task> getTasks();
 

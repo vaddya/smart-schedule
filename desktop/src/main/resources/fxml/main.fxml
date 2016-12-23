@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.StatusBar?>
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="ru.vaddya.schedule.desktop.controllers.MainController">
     <children>
@@ -19,12 +19,13 @@
                 <Menu mnemonicParsing="false" text="Изменить">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Добавить занятие"/>
+                        <MenuItem mnemonicParsing="false" text="Удалить все изменения"/>
                         <MenuItem mnemonicParsing="false" text="Настройки…"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Помощь">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Smart Schedule"/>
+                        <MenuItem mnemonicParsing="false" text="%smart_schedule"/>
                     </items>
                 </Menu>
             </menus>
@@ -33,52 +34,16 @@
             <tabs>
                 <Tab text="%schedule">
                     <content>
-                        <fx:include fx:id="lessonsTab" source="lessons_tab.fxml"/>
-                        <!--<fx:include source="lessons_tab.fxml"/>-->
+                        <fx:include fx:id="lessons" source="lessons.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="%tasks">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <HBox spacing="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <Button fx:id="addTaskButton" mnemonicParsing="false"
-                                                onAction="#actionButtonPressed" prefWidth="200.0" text="%task_add"/>
-                                        <Button fx:id="editTaskButton" mnemonicParsing="false"
-                                                onAction="#actionButtonPressed" prefWidth="200.0" text="%task_edit"/>
-                                        <Button fx:id="removeTaskButton" layoutX="230.0" layoutY="10.0"
-                                                mnemonicParsing="false" onAction="#actionButtonPressed"
-                                                prefWidth="200.0" text="%task_remove"/>
-                                    </children>
-                                </HBox>
-                                <TableView fx:id="tasksTableView" AnchorPane.bottomAnchor="0.0"
-                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                           AnchorPane.topAnchor="40.0">
-                                    <columns>
-                                        <TableColumn fx:id="taskStatusColumn" editable="false" prefWidth="102.0"
-                                                     text="%task_progress"/>
-                                        <TableColumn fx:id="taskSubjectColumn" editable="false" prefWidth="217.0"
-                                                     text="%lesson_subject"/>
-                                        <TableColumn fx:id="taskTypeColumn" editable="false" prefWidth="92.0"
-                                                     style="fx-text-align: center;" text="%lesson_type"/>
-                                        <TableColumn fx:id="taskDeadlineColumn" editable="false" prefWidth="126.0"
-                                                     text="%task_deadline"/>
-                                        <TableColumn fx:id="taskTextColumn" editable="false" prefWidth="312.0"
-                                                     text="%task"/>
-                                    </columns>
-                                </TableView>
-                                <Label fx:id="tasksCountLabel" layoutX="58.0" layoutY="29.0" text="Всего заданий: 0"
-                                       AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="5.0">
-                                </Label>
-                            </children>
-                            <padding>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
-                            </padding>
-                        </AnchorPane>
+                        <fx:include fx:id="tasks" source="tasks.fxml"/>
                     </content>
                 </Tab>
             </tabs>
         </TabPane>
+        <StatusBar fx:id="statusBar"/>
     </children>
 </VBox>

@@ -1,6 +1,5 @@
 package ru.vaddya.schedule.core.db;
 
-import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.lessons.ChangedLesson;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.tasks.Task;
@@ -69,6 +68,11 @@ public class FakeDB implements Database {
 
     @Override
     public boolean addChange(ChangedLesson lesson) {
+        return true;
+    }
+
+    @Override
+    public boolean removeAllChanges() {
         return true;
     }
 
