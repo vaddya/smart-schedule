@@ -35,9 +35,6 @@ public class TasksController {
     private Parent editTaskDialogParent;
 
     @FXML
-    private Label tasksCountLabel;
-
-    @FXML
     private ListView<Node> taskList;
 
     public void init(MainController main, SmartSchedule schedule) {
@@ -50,7 +47,7 @@ public class TasksController {
     private void initControllers() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setCharset(StandardCharsets.UTF_8);
-        fxmlLoader.setResources(Main.bundle);
+        fxmlLoader.setResources(Main.getBundle());
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/edit_task.fxml"));
         try {
             editTaskDialogParent = fxmlLoader.load();
@@ -70,7 +67,7 @@ public class TasksController {
                         taskList.getScene().getWindow(),
                         editTaskDialogStage,
                         editTaskDialogParent,
-                        Main.bundle.getString("task_edit")
+                        Main.getBundle().getString("task_edit")
                 );
                 parseDialog();
             }
@@ -80,16 +77,17 @@ public class TasksController {
 
     private void refreshTasks() {
         taskList.getItems().clear();
-        Label label = new Label(String.format("%s (%s: %d)",
-                Main.bundle.getString("tasks"),
-                Main.bundle.getString("tasks_count"),
-                taskList.getItems().size())
-        );
+        Label label = new Label();
         label.setDisable(true);
         taskList.getItems().add(label);
         for (Task task : schedule.getTasks()) {
-            taskList.getItems().add(new TaskListItem(task));
+            taskList.getItems().add(new TaskListItem(task, this));
         }
+        label.setText(String.format("%s (%s %d)",
+                Main.getBundle().getString("tasks"),
+                Main.getBundle().getString("tasks_count"),
+                taskList.getItems().size())
+        );
     }
 
     public void actionButtonPressed(ActionEvent event) {
@@ -102,21 +100,21 @@ public class TasksController {
                         taskList.getScene().getWindow(),
                         editTaskDialogStage,
                         editTaskDialogParent,
-                        Main.bundle.getString("task_add")
+                        Main.getBundle().getString("task_add")
                 );
                 parseDialog();
                 break;
             case "editTaskButton":
                 task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
                 if (task == null) {
-                    main.setToStatusBar(Main.bundle.getString("task_select_edit"), 5);
+                    main.setToStatusBar(Main.getBundle().getString("task_select_edit"), 5);
                 } else {
                     editTaskController.setActiveTask(task.getTask(), main.getSubjectSuggestions());
                     editTaskDialogStage = main.showDialog(
                             taskList.getScene().getWindow(),
                             editTaskDialogStage,
                             editTaskDialogParent,
-                            Main.bundle.getString("task_edit")
+                            Main.getBundle().getString("task_edit")
                     );
                     parseDialog();
                 }
@@ -124,13 +122,18 @@ public class TasksController {
             case "removeTaskButton":
                 task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
                 if (task == null) {
-                    main.setToStatusBar(Main.bundle.getString("task_select_remove"), 5);
+                    main.setToStatusBar(Main.getBundle().getString("task_select_remove"), 5);
                 } else {
                     taskList.getItems().remove(task);
                     schedule.getTasks().removeTask(task.getTask());
                 }
                 break;
         }
+    }
+
+    public void updateTask(Task task) {
+        schedule.getTasks().updateTask(task);
+        refreshTasks();
     }
 
     private void parseDialog() {

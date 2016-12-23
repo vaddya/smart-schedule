@@ -41,6 +41,7 @@ public class OrchestrateDB implements Database {
     private static final String CHANGES = "CHANGES";
 
     private static final int LIMIT = 100;
+    private static final long TIMEOUT = 30;
 
     private OrchestrateDB() {
     }
@@ -59,7 +60,7 @@ public class OrchestrateDB implements Database {
                 .listCollection(week.toString())
                 .limit(LIMIT)
                 .get(LessonPOJO.class)
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         for (KvObject<LessonPOJO> obj : response) {
             LessonPOJO pojo = obj.getValue();
             Lesson lesson = LessonPOJO.parse(obj.getKey(), pojo);
@@ -75,7 +76,7 @@ public class OrchestrateDB implements Database {
                 .searchCollection(week.toString())
                 .limit(LIMIT)
                 .get(LessonPOJO.class, "day:" + day)
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         for (Result<LessonPOJO> result : results) {
             LessonPOJO pojo = result.getKvObject().getValue();
             Lesson lesson = LessonPOJO.parse(result.getKvObject().getKey(), pojo);
@@ -90,7 +91,7 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(week.toString(), lesson.getId().toString())
                 .put(LessonPOJO.of(day, lesson))
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         logger.fine("Lesson was added: " + metadata.toString());
         return true;
     }
@@ -112,7 +113,7 @@ public class OrchestrateDB implements Database {
         boolean res = client
                 .kv(week.toString(), lesson.getId().toString())
                 .delete()
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         if (res) {
             logger.fine("Lesson " + lesson.getSubject() + " was removed");
         } else {
@@ -129,7 +130,7 @@ public class OrchestrateDB implements Database {
                 .listCollection(CHANGES)
                 .limit(LIMIT)
                 .get(ChangedLessonPOJO.class)
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         for (KvObject<ChangedLessonPOJO> obj : response) {
             ChangedLessonPOJO pojo = obj.getValue();
             if (pojo.getDate().equals(Dates.FULL_DATE_FORMAT.format(date))) {
@@ -148,7 +149,7 @@ public class OrchestrateDB implements Database {
                     .listCollection(CHANGES)
                     .limit(LIMIT)
                     .get(ChangedLessonPOJO.class)
-                    .get(30, TimeUnit.SECONDS);
+                    .get(TIMEOUT, TimeUnit.SECONDS);
             for (KvObject<ChangedLessonPOJO> obj : response) {
                 if (obj.getValue().getLessonId().equals(change.getLesson().getId().toString())) {
                     client.kv(CHANGES, obj.getKey()).delete();
@@ -159,9 +160,23 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(CHANGES, change.getId().toString())
                 .put(ChangedLessonPOJO.of(change))
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         logger.fine("Change was added: " + metadata.toString());
         return true;
+    }
+
+    @Override
+    public boolean removeChange(ChangedLesson lesson) {
+        boolean res = client
+                .kv(CHANGES, lesson.getId().toString())
+                .delete()
+                .get(TIMEOUT, TimeUnit.SECONDS);
+        if (res) {
+            logger.fine("Change " + lesson.getChanges() + " " + lesson.getLesson().getSubject() + " was removed");
+        } else {
+            logger.warning("Change " + lesson.getChanges() + " " + lesson.getLesson().getSubject() + " wasn't removed");
+        }
+        return res;
     }
 
     @Override
@@ -182,7 +197,7 @@ public class OrchestrateDB implements Database {
                 .listCollection(TASKS)
                 .limit(LIMIT)
                 .get(TaskPOJO.class)
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         for (KvObject<TaskPOJO> obj : response) {
             TaskPOJO pojo = obj.getValue();
             logger.fine("Task was read: " + pojo);
@@ -204,7 +219,7 @@ public class OrchestrateDB implements Database {
         KvMetadata metadata = client
                 .kv(TASKS, task.getId().toString())
                 .put(TaskPOJO.of(task))
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         logger.fine("Task was added: " + metadata.toString());
         return true;
     }
@@ -219,7 +234,7 @@ public class OrchestrateDB implements Database {
         boolean res = client
                 .kv(TASKS, task.getId().toString())
                 .delete()
-                .get(30, TimeUnit.SECONDS);
+                .get(TIMEOUT, TimeUnit.SECONDS);
         if (res) {
             logger.fine("Task " + task.getTextTask() + " was removed");
         } else {

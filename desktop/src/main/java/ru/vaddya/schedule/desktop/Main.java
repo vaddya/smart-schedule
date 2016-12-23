@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.nio.charset.StandardCharsets;
@@ -21,7 +22,17 @@ public class Main extends Application {
         launch(args);
     }
 
-    public static ResourceBundle bundle;
+    private static ResourceBundle bundle;
+
+    private static Image icon;
+
+    public static ResourceBundle getBundle() {
+        return bundle;
+    }
+
+    public static Image getIcon() {
+        return icon;
+    }
 
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -32,7 +43,9 @@ public class Main extends Application {
 
         Parent root = fxmlLoader.load();
         primaryStage.setTitle(fxmlLoader.getResources().getString("smart_schedule"));
-        primaryStage.setMinWidth(820);
+        icon = new Image(getClass().getClassLoader().getResourceAsStream("icon.png"));
+        primaryStage.getIcons().add(icon);
+        primaryStage.setMinWidth(850);
         primaryStage.setMinHeight(600);
         primaryStage.setWidth(975);
         primaryStage.setHeight(800);

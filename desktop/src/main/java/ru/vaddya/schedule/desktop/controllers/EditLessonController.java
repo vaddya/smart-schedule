@@ -49,13 +49,13 @@ public class EditLessonController implements Initializable {
     private TextField teacherField;
 
     @FXML
-    private RadioButton once;
+    private RadioButton onceRadioButton;
 
     @FXML
-    private RadioButton always;
+    private RadioButton alwaysRadioButton;
 
     @FXML
-    private ToggleGroup group;
+    private ToggleGroup toggleGroup;
 
     private UUID uuid;
 
@@ -70,36 +70,34 @@ public class EditLessonController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (LessonType type : LessonType.values()) {
-            typeChoiceBox.getItems().add(Main.bundle.getString(type.toString().toLowerCase()));
+            typeChoiceBox.getItems().add(Main.getBundle().getString(type.toString().toLowerCase()));
         }
-        typeChoiceBox.setValue(Main.bundle.getString("another"));
         for (DayOfWeek day : DayOfWeek.values()) {
-            dayOfWeekChoiceBox.getItems().add(Main.bundle.getString(day.toString().toLowerCase()));
+            dayOfWeekChoiceBox.getItems().add(Main.getBundle().getString(day.toString().toLowerCase()));
         }
-        dayOfWeekChoiceBox.setValue(Main.bundle.getString("monday"));
-        group.selectToggle(once);
+        toggleGroup.selectToggle(onceRadioButton);
     }
 
     public void setActiveLesson(Lesson lesson, DayOfWeek day) {
         if (lesson == null) {
             created = true;
             uuid = UUID.randomUUID();
-            dayOfWeekChoiceBox.setValue(Main.bundle.getString(DayOfWeek.MONDAY.toString().toLowerCase()));
+            dayOfWeekChoiceBox.setValue(Main.getBundle().getString("monday"));
             timeStartField.clear();
             timeEndField.clear();
             subjectField.clear();
-            typeChoiceBox.setValue(Main.bundle.getString(LessonType.ANOTHER.toString().toLowerCase()));
+            typeChoiceBox.setValue(Main.getBundle().getString("another"));
             placeField.clear();
             teacherField.clear();
         } else {
             sourceDay = day;
             created = false;
             uuid = lesson.getId();
-            dayOfWeekChoiceBox.setValue(Main.bundle.getString(day.toString().toLowerCase()));
+            dayOfWeekChoiceBox.setValue(Main.getBundle().getString(day.toString().toLowerCase()));
             timeStartField.setText(lesson.getStartTime().toString());
             timeEndField.setText(lesson.getEndTime().toString());
             subjectField.setText(lesson.getSubject());
-            typeChoiceBox.setValue(Main.bundle.getString(lesson.getType().toString().toLowerCase()));
+            typeChoiceBox.setValue(Main.getBundle().getString(lesson.getType().toString().toLowerCase()));
             placeField.setText(lesson.getPlace());
             teacherField.setText(lesson.getTeacher());
         }
@@ -123,7 +121,7 @@ public class EditLessonController implements Initializable {
                 .place(placeField.getText())
                 .teacher(teacherField.getText())
                 .build();
-        createdLesson = new CreatedLesson(lesson, once.isSelected(), sourceDay,
+        createdLesson = new CreatedLesson(lesson, onceRadioButton.isSelected(), sourceDay,
                 TypeTranslator.parseDayOfWeek(dayOfWeekChoiceBox.getValue()));
         actionClose(event);
     }

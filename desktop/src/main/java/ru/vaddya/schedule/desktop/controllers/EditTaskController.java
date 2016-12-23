@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.controlsfx.control.textfield.TextFields;
 import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.core.tasks.Task;
@@ -14,7 +15,9 @@ import ru.vaddya.schedule.desktop.util.TypeTranslator;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -50,11 +53,27 @@ public class EditTaskController implements Initializable {
 
     private boolean created;
 
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("d MMMM YYYY", Main.getBundle().getLocale());
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (LessonType type : LessonType.values()) {
-            typeChoiceBox.getItems().add(Main.bundle.getString(type.toString().toLowerCase()));
+            typeChoiceBox.getItems().add(Main.getBundle().getString(type.toString().toLowerCase()));
         }
+        datePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
+        datePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
+        datePicker.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate object) {
+                return DATE_FORMATTER.format(object);
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                return LocalDate.parse(string, DATE_FORMATTER);
+            }
+        });
     }
 
     public void setActiveTask(Task task, List<String> suggestions) {
@@ -62,7 +81,7 @@ public class EditTaskController implements Initializable {
             created = true;
             uuid = UUID.randomUUID();
             subjectField.clear();
-            typeChoiceBox.setValue(Main.bundle.getString(ANOTHER.toString().toLowerCase()));
+            typeChoiceBox.setValue(Main.getBundle().getString(ANOTHER.toString().toLowerCase()));
             datePicker.setValue(LocalDate.now());
             textArea.clear();
             doneCheckBox.setSelected(false);
@@ -70,7 +89,7 @@ public class EditTaskController implements Initializable {
             created = false;
             uuid = task.getId();
             subjectField.setText(task.getSubject());
-            typeChoiceBox.setValue(Main.bundle.getString(task.getType().toString().toLowerCase()));
+            typeChoiceBox.setValue(Main.getBundle().getString(task.getType().toString().toLowerCase()));
             datePicker.setValue(task.getDeadline());
             textArea.setText(task.getTextTask());
             doneCheckBox.setSelected(task.isComplete());

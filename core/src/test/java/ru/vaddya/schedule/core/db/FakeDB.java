@@ -18,7 +18,6 @@ import java.util.Map;
  * @author vaddya
  */
 
-// FakeDB это ведь для тестов? Лучше этот класс переместить к тестам
 public class FakeDB implements Database {
 
     private static final Database db = new FakeDB();
@@ -29,7 +28,6 @@ public class FakeDB implements Database {
     public static Database getConnection() {
         return db;
     }
-
 
     @Override
     public Map<DayOfWeek, List<Lesson>> getLessons(WeekType week) {
@@ -68,6 +66,11 @@ public class FakeDB implements Database {
 
     @Override
     public boolean addChange(ChangedLesson lesson) {
+        return true;
+    }
+
+    @Override
+    public boolean removeChange(ChangedLesson lesson) {
         return true;
     }
 

@@ -14,16 +14,17 @@
                         <Label text="%lesson_subject" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
                                AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="5.0">
                         </Label>
-                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
+                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0">
                         </TextField>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane>
                     <children>
-                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
+                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0">
                         </ChoiceBox>
                         <Label text="%lesson_type" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
                                AnchorPane.topAnchor="5.0">
@@ -33,22 +34,24 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane>
                     <children>
                         <Label text="%task_deadline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
                                AnchorPane.topAnchor="5.0"/>
-                        <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="200.0" promptText="%date"
+                        <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="220.0" promptText="%date"
                                     AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane>
                     <children>
-                        <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="200.0" wrapText="true"
+                        <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="220.0" wrapText="true"
                                   AnchorPane.rightAnchor="0.0"/>
-                        <Label text="%task" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                        <Label text="%task_text" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
                                AnchorPane.topAnchor="5.0"/>
                         <CheckBox fx:id="doneCheckBox" layoutX="-8.0" layoutY="29.0" mnemonicParsing="false"
                                   text="%task_complete" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"/>

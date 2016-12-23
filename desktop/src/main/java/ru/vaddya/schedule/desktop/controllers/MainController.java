@@ -12,6 +12,7 @@ import org.controlsfx.control.StatusBar;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.SmartScheduleImpl;
 import ru.vaddya.schedule.core.lessons.Lesson;
+import ru.vaddya.schedule.desktop.Main;
 
 import java.net.URL;
 import java.util.List;
@@ -83,6 +84,7 @@ public class MainController implements Initializable {
             stage.initOwner(owner);
         }
         stage.setTitle(title);
+        stage.getIcons().add(Main.getIcon());
         statusBar.setText(title);
         stage.showAndWait();
         statusBar.setText("");

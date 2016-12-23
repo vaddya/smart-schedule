@@ -9,7 +9,7 @@
     <top>
         <VBox alignment="CENTER" prefWidth="86.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="are_you_sure" alignment="CENTER" prefWidth="350.0" text="%are_you_sure_remove_lesson"
+                <Label fx:id="areYouSureLabel" alignment="CENTER" prefWidth="350.0" text="%are_you_sure_remove_lesson"
                        textAlignment="RIGHT">
                     <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>

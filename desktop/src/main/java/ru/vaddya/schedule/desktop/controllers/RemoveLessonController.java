@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import ru.vaddya.schedule.desktop.Main;
 
@@ -22,7 +21,7 @@ import java.util.ResourceBundle;
 public class RemoveLessonController implements Initializable {
 
     @FXML
-    private Label are_you_sure;
+    private Label areYouSureLabel;
 
     @FXML
     private RadioButton once;
@@ -39,14 +38,14 @@ public class RemoveLessonController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        are_you_sure.setTextAlignment(TextAlignment.CENTER);
+//        areYouSureLabel.setTextAlignment(TextAlignment.CENTER);
         isOnce = true;
         removed = false;
         group.selectToggle(once);
     }
 
     public void setActiveLesson(String subject) {
-        are_you_sure.setText(Main.bundle.getString("are_you_sure_remove_lesson") + "\n" + subject + "?");
+        areYouSureLabel.setText(Main.getBundle().getString("are_you_sure_remove_lesson") + "\n" + subject + "?");
         isOnce = true;
         removed = false;
         group.selectToggle(once);

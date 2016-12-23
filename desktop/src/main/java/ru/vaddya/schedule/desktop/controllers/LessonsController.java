@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.core.lessons.StudyWeek;
@@ -23,7 +24,9 @@ import ru.vaddya.schedule.desktop.lessons.LessonListItem;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
@@ -53,7 +56,8 @@ public class LessonsController {
 
     private Parent removeLessonDialogParent;
 
-    private static final DateTimeFormatter DAY_MONTH = DateTimeFormatter.ofPattern("d MMMM", Main.bundle.getLocale());
+    private static final DateTimeFormatter WEEK_FORMATTER =
+            DateTimeFormatter.ofPattern("d MMMM", Main.getBundle().getLocale());
 
     @FXML
     private Label currWeekLabel;
@@ -69,6 +73,21 @@ public class LessonsController {
         this.schedule = schedule;
         currentWeek = WeekTime.current();
         weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
+        weekDatePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
+        weekDatePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
+        weekDatePicker.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate object) {
+                WeekTime weekTime = WeekTime.of(object);
+                return weekTime.getDateOf(MONDAY).format(WEEK_FORMATTER) + " - " +
+                        weekTime.getDateOf(SUNDAY).format(WEEK_FORMATTER);
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                return LocalDate.parse(string, WEEK_FORMATTER);
+            }
+        });
         initControllers();
         initLessonsList();
     }
@@ -76,7 +95,7 @@ public class LessonsController {
     private void initControllers() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setCharset(StandardCharsets.UTF_8);
-        fxmlLoader.setResources(Main.bundle);
+        fxmlLoader.setResources(Main.getBundle());
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/edit_lesson.fxml"));
         try {
             editLessonDialogParent = fxmlLoader.load();
@@ -87,7 +106,7 @@ public class LessonsController {
 
         fxmlLoader = new FXMLLoader();
         fxmlLoader.setCharset(StandardCharsets.UTF_8);
-        fxmlLoader.setResources(Main.bundle);
+        fxmlLoader.setResources(Main.getBundle());
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/remove_lesson.fxml"));
         try {
             removeLessonDialogParent = fxmlLoader.load();
@@ -109,7 +128,7 @@ public class LessonsController {
                     editLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
                             editLessonDialogStage,
                             editLessonDialogParent,
-                            Main.bundle.getString("lesson_edit")
+                            Main.getBundle().getString("lesson_edit")
                     );
                     parseLessonDialog();
                 }
@@ -146,7 +165,7 @@ public class LessonsController {
                 editLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
                         editLessonDialogStage,
                         editLessonDialogParent,
-                        Main.bundle.getString("lesson_add")
+                        Main.getBundle().getString("lesson_add")
                 );
                 parseLessonDialog();
                 refreshLessons();
@@ -154,13 +173,13 @@ public class LessonsController {
             case "removeLessonButton":
                 LessonListItem lesson = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
                 if (lesson == null) {
-                    main.setToStatusBar(Main.bundle.getString("lesson_select_remove"), 5);
+                    main.setToStatusBar(Main.getBundle().getString("lesson_select_remove"), 5);
                 } else {
                     removeLessonController.setActiveLesson(lesson.getLesson().getSubject());
                     removeLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
                             removeLessonDialogStage,
                             removeLessonDialogParent,
-                            Main.bundle.getString("lesson_remove")
+                            Main.getBundle().getString("lesson_remove")
                     );
                     parseRemoveLessonDialog(lesson);
                 }
@@ -174,11 +193,12 @@ public class LessonsController {
     }
 
     private void refreshLessons() {
-        String currWeek = String.format("%s - %s (%s)",
-                currentWeek.getDateOf(MONDAY).format(DAY_MONTH),
-                currentWeek.getDateOf(SUNDAY).format(DAY_MONTH),
-                Main.bundle.getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase())
-        );
+//        String currWeek = String.format("%s - %s (%s)",
+//                currentWeek.getDateOf(MONDAY).format(WEEK_FORMATTER),
+//                currentWeek.getDateOf(SUNDAY).format(WEEK_FORMATTER),
+//                Main.getBundle().getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase())
+//        );
+        String currWeek = Main.getBundle().getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase());
         currWeekLabel.setText(currWeek);
         currWeekLabel.setTextAlignment(TextAlignment.CENTER);
         lessonList.getItems().clear();
@@ -187,7 +207,7 @@ public class LessonsController {
             if (week.getDay(day).isEmpty()) {
                 continue;
             }
-            Label label = new Label(Main.bundle.getString(day.toString().toLowerCase()) + " (" +
+            Label label = new Label(Main.getBundle().getString(day.toString().toLowerCase()) + " (" +
                     Dates.FULL_DATE_FORMAT.format(currentWeek.getDateOf(day)) + ")");
             label.setDisable(true);
             lessonList.getItems().add(label);
@@ -204,8 +224,8 @@ public class LessonsController {
             } else {
                 schedule.getSchedule(schedule.getWeekType(currentWeek)).removeLesson(lesson.getDay(), lesson.getLesson());
             }
-            refreshLessons();
             schedule.updateLessons();
+            refreshLessons();
         }
     }
 

@@ -4,100 +4,109 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.vaddya.schedule.desktop.controllers.EditLessonController">
     <top>
         <VBox prefWidth="86.0" BorderPane.alignment="CENTER">
             <children>
                 <AnchorPane layoutX="30.0" layoutY="30.0">
                     <children>
-                        <Label text="%lesson_day_of_week" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
-                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
-                        <ChoiceBox fx:id="dayOfWeekChoiceBox" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                        <Label labelFor="$dayOfWeekChoiceBox" text="%lesson_day_of_week" textAlignment="RIGHT"
+                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
+                        <ChoiceBox fx:id="dayOfWeekChoiceBox" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane>
                     <children>
-                        <Label text="%lesson_time_start" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
-                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
-                        <TextField fx:id="timeStartField" layoutX="71.0" prefWidth="200.0"
+                        <Label labelFor="$timeStartField" text="%lesson_time_start" textAlignment="RIGHT"
+                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="timeStartField" layoutX="71.0" prefWidth="220.0"
                                    AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane layoutX="30.0" layoutY="75.0">
                     <children>
-                        <Label text="%lesson_time_end" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                        <Label labelFor="$timeEndField" text="%lesson_time_end" textAlignment="RIGHT"
+                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="timeEndField" layoutX="71.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <Separator prefWidth="200.0"/>
+                <AnchorPane>
+                    <children>
+                        <Label labelFor="$subjectField" text="%lesson_subject" textAlignment="RIGHT"
+                               AnchorPane.leftAnchor="0.0"
                                AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0"/>
-                        <TextField fx:id="timeEndField" layoutX="71.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane>
                     <children>
-                        <Label text="%lesson_subject" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
-                               AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="5.0">
-                        </Label>
-                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
-                        </TextField>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <AnchorPane>
-                    <children>
-                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
-                        </ChoiceBox>
-                        <Label text="%lesson_type" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0"
-                               AnchorPane.topAnchor="5.0">
-                        </Label>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <AnchorPane>
-                    <children>
-                        <Label text="%lesson_place" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0"
+                        <Label labelFor="$typeChoiceBox" text="%lesson_type" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0"
                                AnchorPane.topAnchor="5.0"/>
-                        <TextField fx:id="placeField" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane>
                     <children>
-                        <Label text="%lesson_teacher" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="210.0"
+                        <Label labelFor="$placeField" text="%lesson_place" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0"
                                AnchorPane.topAnchor="5.0"/>
-                        <TextField fx:id="teacherField" prefWidth="200.0" AnchorPane.rightAnchor="0.0"/>
+                        <TextField fx:id="placeField" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
                     </children>
                     <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </VBox.margin>
                 </AnchorPane>
+                <Separator prefWidth="200.0"/>
+                <AnchorPane>
+                    <children>
+                        <Label labelFor="$teacherField" text="%lesson_teacher" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="210.0"
+                               AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="teacherField" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                    </VBox.margin>
+                </AnchorPane>
+                <Separator prefWidth="200.0"/>
                 <AnchorPane layoutX="30.0" layoutY="255.0">
                     <children>
                         <VBox alignment="CENTER" layoutX="113.0" layoutY="9.0" spacing="10.0"
                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                               AnchorPane.topAnchor="0.0">
                             <children>
-                                <RadioButton fx:id="once" layoutX="113.0" layoutY="9.0" mnemonicParsing="false"
-                                             text="%lesson_once">
+                                <RadioButton fx:id="onceRadioButton" layoutX="113.0" layoutY="9.0"
+                                             mnemonicParsing="false"
+                                             text="%lesson_once" toggleGroup="$toggleGroup">
                                     <toggleGroup>
-                                        <ToggleGroup fx:id="group"/>
+                                        <ToggleGroup fx:id="toggleGroup"/>
                                     </toggleGroup>
                                 </RadioButton>
-                                <RadioButton fx:id="always" layoutX="157.0" layoutY="9.0" mnemonicParsing="false"
-                                             text="%lesson_always" toggleGroup="$group"/>
+                                <RadioButton fx:id="alwaysRadioButton" layoutX="157.0" layoutY="9.0"
+                                             mnemonicParsing="false"
+                                             text="%lesson_always" toggleGroup="$toggleGroup"/>
                             </children>
                         </VBox>
                     </children>

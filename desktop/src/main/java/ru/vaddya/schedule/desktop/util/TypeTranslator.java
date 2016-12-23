@@ -4,66 +4,25 @@ import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.desktop.Main;
 
 import java.time.DayOfWeek;
-import java.util.Locale;
-
-import static java.time.DayOfWeek.*;
-import static ru.vaddya.schedule.core.lessons.LessonType.*;
 
 /**
- * ru.vaddya.schedule.desktop.util at smart-schedule
+ * Вспомогательный класс для перевода перечислений
  *
  * @author vaddya
- * @since December 22, 2016
  */
 public class TypeTranslator {
 
-    public static LessonType parseLessonType(String type) {
-        if (Main.bundle.getLocale().equals(new Locale("ru"))) {
-            switch (type) {
-                case "Лекции":
-                    return LECTURE;
-                case "Упраженния":
-                    return PRACTICE;
-                case "Семинар":
-                    return SEMINAR;
-                case "Лабораторные":
-                    return LAB;
-                case "Контрольная работа":
-                    return TEST;
-                case "Консультации":
-                    return CONSULTATION;
-                case "Экзамен":
-                    return EXAM;
-                case "Другое":
-                    return ANOTHER;
-                default:
-                    return ANOTHER;
-            }
+    public static LessonType parseLessonType(String string) {
+        for (LessonType type : LessonType.values()) {
+            if (Main.getBundle().getString(type.toString().toLowerCase()).equals(string)) return type;
         }
-        return LessonType.valueOf(type.toUpperCase());
+        return LessonType.ANOTHER;
     }
 
-    public static DayOfWeek parseDayOfWeek(String day) {
-        if (Main.bundle.getLocale().equals(new Locale("ru"))) {
-            switch (day) {
-                case "Понедельник":
-                    return MONDAY;
-                case "Вторник":
-                    return TUESDAY;
-                case "Среда":
-                    return WEDNESDAY;
-                case "Четверг":
-                    return THURSDAY;
-                case "Пятница":
-                    return FRIDAY;
-                case "Суббота":
-                    return SATURDAY;
-                case "Воскресенье":
-                    return SUNDAY;
-                default:
-                    return MONDAY;
-            }
+    public static DayOfWeek parseDayOfWeek(String string) {
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if (Main.getBundle().getString(day.toString().toLowerCase()).equals(string)) return day;
         }
-        return DayOfWeek.valueOf(day.toUpperCase());
+        return DayOfWeek.MONDAY;
     }
 }

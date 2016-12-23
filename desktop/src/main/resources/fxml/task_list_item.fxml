@@ -24,8 +24,12 @@
             <center>
                 <AnchorPane>
                     <children>
-                        <Label fx:id="taskTextLabel" text="Доделать курсовой проект" AnchorPane.leftAnchor="0.0"
-                               AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER"/>
+                        <Label fx:id="taskTextLabel" maxWidth="400.0" text="Доделать курсовой проект"
+                               AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
                     </children>
                     <BorderPane.margin>
                         <Insets right="5.0" top="5.0"/>

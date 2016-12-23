@@ -35,18 +35,19 @@ public class StudyDay implements Iterable<Lesson> {
                     break;
                 case UPDATE:
                     UUID id = change.getLesson().getId();
-                    Lesson lesson = null;
                     try {
-                        lesson = findLesson(id);
-                    } catch (NoSuchLessonException e) {
-                        e.printStackTrace();
-                    }
-                    if (lesson != null) {
+                        Lesson lesson = findLesson(id);
                         lessons.add(lessons.indexOf(lesson), change.getLesson());
+                    } catch (NoSuchLessonException e) {
+                        db.removeChange(change);
+                        e.printStackTrace();
                     }
                     break;
                 case REMOVE:
-                    lessons.remove(change.getLesson());
+                    boolean removed = lessons.remove(change.getLesson());
+                    if (!removed) {
+                        db.removeChange(change);
+                    }
                     break;
             }
         }

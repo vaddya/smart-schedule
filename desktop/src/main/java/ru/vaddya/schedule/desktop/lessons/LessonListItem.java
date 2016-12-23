@@ -46,12 +46,15 @@ public class LessonListItem extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         this.lesson = lesson;
         this.day = day;
+        initComponents(lesson);
+    }
+
+    private void initComponents(Lesson lesson) {
         timeLabel.setText(lesson.getStartTime().toString() + " - " + lesson.getEndTime().toString());
         subjectLabel.setText(lesson.getSubject());
-        typeLabel.setText(Main.bundle.getString(lesson.getType().toString().toLowerCase()));
+        typeLabel.setText(Main.getBundle().getString(lesson.getType().toString().toLowerCase()));
         placeLabel.setText(lesson.getPlace());
         teacherLabel.setText(lesson.getTeacher());
     }
