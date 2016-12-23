@@ -9,11 +9,10 @@ import javafx.stage.Stage;
 import ru.vaddya.schedule.core.lessons.LessonType;
 import ru.vaddya.schedule.desktop.Main;
 import ru.vaddya.schedule.desktop.tasks.TaskListItem;
+import ru.vaddya.schedule.desktop.util.TypeTranslator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 
 /**
  * Контроллер для диалога изменения заданий
@@ -55,11 +54,11 @@ public class EditTaskController implements Initializable {
 
     public void setActiveTask(TaskListItem task) {
         this.task = task;
-        subjectField.setText(task.getSubject());
-        typeChoiceBox.setValue(task.getType());
-        datePicker.setValue(task.getDateDeadline());
-        textArea.setText(task.getText());
-        doneCheckBox.setSelected(task.isDone());
+        subjectField.setText(task.getTask().getSubject());
+        typeChoiceBox.setValue(Main.bundle.getString(task.getTask().getType().toString().toLowerCase()));
+        datePicker.setValue(task.getTask().getDeadline());
+        textArea.setText(task.getTask().getTextTask());
+        doneCheckBox.setSelected(task.getTask().isComplete());
         saved = false;
     }
 
@@ -70,11 +69,11 @@ public class EditTaskController implements Initializable {
     }
 
     public void actionSave(ActionEvent event) {
-        task.setSubject(subjectField.getText());
-        task.setType(typeChoiceBox.getValue());
-        task.setDeadline(FULL_DATE_FORMAT.format(datePicker.getValue()));
-        task.setText(textArea.getText());
-        task.setDone(doneCheckBox.isSelected());
+        task.getTask().setSubject(subjectField.getText());
+        task.getTask().setType(TypeTranslator.parseLessonType(typeChoiceBox.getValue()));
+        task.getTask().setDeadline(datePicker.getValue());
+        task.getTask().setTextTask(textArea.getText());
+        task.getTask().setComplete(doneCheckBox.isSelected());
         saved = true;
         actionClose(event);
     }

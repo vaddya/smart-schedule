@@ -1,18 +1,18 @@
 package ru.vaddya.schedule.desktop.controllers;
 
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import ru.vaddya.schedule.core.SmartSchedule;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.desktop.Main;
-import ru.vaddya.schedule.desktop.tasks.TaskList;
 import ru.vaddya.schedule.desktop.tasks.TaskListItem;
 
 import java.io.IOException;
@@ -30,8 +30,6 @@ public class TasksController {
 
     private SmartSchedule schedule;
 
-    private TaskList taskList;
-
     private EditTaskController editTaskController;
 
     private Stage editTaskDialogStage;
@@ -42,28 +40,13 @@ public class TasksController {
     private Label tasksCountLabel;
 
     @FXML
-    private TableView<TaskListItem> tasksTableView;
-
-    @FXML
-    private TableColumn<TaskListItem, String> taskStatusColumn;
-
-    @FXML
-    private TableColumn<TaskListItem, String> taskSubjectColumn;
-
-    @FXML
-    private TableColumn<TaskListItem, String> taskTypeColumn;
-
-    @FXML
-    private TableColumn<TaskListItem, String> taskDeadlineColumn;
-
-    @FXML
-    private TableColumn<TaskListItem, String> taskTextColumn;
+    private ListView<Node> taskList;
 
     public void init(MainController main, SmartSchedule schedule) {
         this.main = main;
         this.schedule = schedule;
         initControllers();
-        initTasksTable();
+        initLessonsList();
     }
 
     private void initControllers() {
@@ -79,40 +62,36 @@ public class TasksController {
         editTaskController = fxmlLoader.getController();
     }
 
-    private void initTasksTable() {
-        tasksTableView.setColumnResizePolicy(param -> false);
 
-        taskStatusColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.145));
-        taskSubjectColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.20));
-        taskTypeColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.15));
-        taskDeadlineColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.1));
-        taskTextColumn.prefWidthProperty().bind(tasksTableView.widthProperty().multiply(0.4));
-
-        taskStatusColumn.setCellValueFactory(new PropertyValueFactory<>("progress"));
-        taskSubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
-        taskTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        taskDeadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
-        taskTextColumn.setCellValueFactory(new PropertyValueFactory<>("text"));
-
-        taskList = new TaskList(schedule.getTasks());
-        taskList.addListener(c -> updateCountTasks());
-        tasksTableView.setItems(taskList.getItems());
-        updateCountTasks();
-
-        tasksTableView.setOnMouseClicked(event -> {
+    private void initLessonsList() {
+        taskList.setFocusTraversable(false);
+        taskList.getItems().addListener((ListChangeListener<Node>) c -> updateCountTasks());
+        taskList.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2) {
-                TaskListItem task = tasksTableView.getSelectionModel().getSelectedItem();
-                if (task != null) {
-                    editTaskController.setActiveTask(task);
-                    editTaskDialogStage = main.showDialog(tasksTableView.getScene().getWindow(),
-                            editTaskDialogStage,
-                            editTaskDialogParent,
-                            Main.bundle.getString("task_edit")
-                    );
-                    if (editTaskController.isSaved()) taskList.update(task);
-                }
+                TaskListItem task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
+                editTaskController.setActiveTask(task);
+                editTaskDialogStage = main.showDialog(taskList.getScene().getWindow(),
+                        editTaskDialogStage,
+                        editTaskDialogParent,
+                        Main.bundle.getString("task_edit")
+                );
+                schedule.getTasks().updateTask(task.getTask());
+                taskList.refresh();
+                refreshTasks();
             }
         });
+        refreshTasks();
+    }
+
+    private void refreshTasks() {
+        taskList.getItems().clear();
+        Label label = new Label();
+        label.setDisable(true);
+        taskList.getItems().add(label);
+        for (Task task : schedule.getTasks()) {
+            taskList.getItems().add(new TaskListItem(task));
+        }
+        label.setText("Задания (" + Main.bundle.getString("tasks_count") + " " + taskList.getItems().size() + ")");
     }
 
     public void actionButtonPressed(ActionEvent event) {
@@ -120,45 +99,46 @@ public class TasksController {
         TaskListItem task;
         switch (button.getId()) {
             case "addTaskButton":
-                task = new TaskListItem();
-                editTaskController.setActiveTask(task);
-                editTaskDialogStage = main.showDialog(tasksTableView.getScene().getWindow(),
-                        editTaskDialogStage,
-                        editTaskDialogParent,
-                        Main.bundle.getString("task_add")
-                );
-                if (editTaskController.isSaved()) {
-                    tasksTableView.getItems().add(task);
-                }
-                break;
+//                task = new TaskListItem();
+//                editTaskController.setActiveTask(task);
+//                editTaskDialogStage = main.showDialog(tasksTableView.getScene().getWindow(),
+//                        editTaskDialogStage,
+//                        editTaskDialogParent,
+//                        Main.bundle.getString("task_add")
+//                );
+//                if (editTaskController.isSaved()) {
+//                    tasksTableView.getItems().add(task);
+//                }
+//                break;
             case "editTaskButton":
-                task = tasksTableView.getSelectionModel().getSelectedItem();
+                task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
                 if (task == null) {
                     main.setToStatusBar(Main.bundle.getString("task_select_edit"), 5);
                 } else {
                     editTaskController.setActiveTask(task);
-                    editTaskDialogStage = main.showDialog(tasksTableView.getScene().getWindow(),
+                    editTaskDialogStage = main.showDialog(taskList.getScene().getWindow(),
                             editTaskDialogStage,
                             editTaskDialogParent,
                             Main.bundle.getString("task_edit")
                     );
-                    taskList.update(task);
-                    tasksTableView.refresh();
+                    schedule.getTasks().updateTask(task.getTask());
+                    taskList.refresh();
+                    refreshTasks();
                 }
                 break;
             case "removeTaskButton":
-                task = tasksTableView.getSelectionModel().getSelectedItem();
-                if (task == null) {
-                    main.setToStatusBar(Main.bundle.getString("task_select_remove"), 5);
-                } else {
-                    task = tasksTableView.getSelectionModel().getSelectedItem();
-                }
-                tasksTableView.getItems().remove(task);
-                break;
+//                task = tasksTableView.getSelectionModel().getSelectedItem();
+//                if (task == null) {
+//                    main.setToStatusBar(Main.bundle.getString("task_select_remove"), 5);
+//                } else {
+//                    task = tasksTableView.getSelectionModel().getSelectedItem();
+//                }
+//                tasksTableView.getItems().remove(task);
+//                break;
         }
     }
 
     private void updateCountTasks() {
-        tasksCountLabel.setText(Main.bundle.getString("tasks_count") + " " + taskList.count());
+        tasksCountLabel.setText("");
     }
 }
