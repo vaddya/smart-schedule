@@ -29,10 +29,9 @@ import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
 /**
- * ru.vaddya.schedule.desktop.controllers at smart-schedule
+ * Контроллер для списка занятий
  *
  * @author vaddya
- * @since December 22, 2016
  */
 public class LessonsController {
 
@@ -175,8 +174,11 @@ public class LessonsController {
     }
 
     private void refreshLessons() {
-        String currWeek = currentWeek.getDateOf(MONDAY).format(DAY_MONTH) + " - " + currentWeek.getDateOf(SUNDAY).format(DAY_MONTH) +
-                " (" + Main.bundle.getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase()) + ")";
+        String currWeek = String.format("%s - %s (%s)",
+                currentWeek.getDateOf(MONDAY).format(DAY_MONTH),
+                currentWeek.getDateOf(SUNDAY).format(DAY_MONTH),
+                Main.bundle.getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase())
+        );
         currWeekLabel.setText(currWeek);
         currWeekLabel.setTextAlignment(TextAlignment.CENTER);
         lessonList.getItems().clear();

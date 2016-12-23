@@ -11,11 +11,14 @@ import javafx.stage.Window;
 import org.controlsfx.control.StatusBar;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.SmartScheduleImpl;
+import ru.vaddya.schedule.core.lessons.Lesson;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 /**
  * Контроллер для главного окна
@@ -40,6 +43,17 @@ public class MainController implements Initializable {
         schedule = new SmartScheduleImpl();
         lessonsController.init(this, schedule);
         tasksController.init(this, schedule);
+    }
+
+    public List<String> getSubjectSuggestions() {
+        return schedule.getCurrentWeek()
+                .getAllDays()
+                .entrySet()
+                .stream()
+                .flatMap(entrySet -> entrySet.getValue().getLessons().stream())
+                .map(Lesson::getSubject)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public StatusBar getStatusBar() {

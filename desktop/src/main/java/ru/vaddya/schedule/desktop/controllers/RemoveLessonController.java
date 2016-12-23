@@ -15,10 +15,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * ru.vaddya.schedule.desktop.controllers at smart-schedule
+ * Контроллер для диалога удаления занятия
  *
  * @author vaddya
- * @since December 22, 2016
  */
 public class RemoveLessonController implements Initializable {
 

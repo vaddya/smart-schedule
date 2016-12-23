@@ -17,14 +17,15 @@ public class StudyTasks implements Iterable<Task> {
 
     private static final Database db = Database.getConnection();
 
-    private static final Comparator<Task> DATE_ORDER = Comparator.comparing(Task::getDeadline);
+    private static final Comparator<Task> COMPLETE_DATE_ORDER =
+            Comparator.comparing(Task::isComplete).thenComparing(Task::getDeadline);
 
     private final List<Task> tasks;
 
     public StudyTasks() {
         tasks = db.getTasks()
                 .stream()
-                .sorted(DATE_ORDER)
+                .sorted(COMPLETE_DATE_ORDER)
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +48,7 @@ public class StudyTasks implements Iterable<Task> {
      */
     public void addTask(Task task) {
         tasks.add(task);
-        tasks.sort(DATE_ORDER);
+        tasks.sort(COMPLETE_DATE_ORDER);
         db.addTask(task);
     }
 
@@ -96,7 +97,7 @@ public class StudyTasks implements Iterable<Task> {
     public void updateTask(Task task) {
         Task upd = findTask(task.getId());
         tasks.set(tasks.indexOf(upd), task);
-        tasks.sort(DATE_ORDER);
+        tasks.sort(COMPLETE_DATE_ORDER);
         db.updateTask(task);
     }
 

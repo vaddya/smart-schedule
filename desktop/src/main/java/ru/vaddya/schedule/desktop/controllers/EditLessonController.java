@@ -113,6 +113,7 @@ public class EditLessonController implements Initializable {
     }
 
     public void actionSave(ActionEvent event) {
+        saved = true;
         Lesson lesson = new Lesson.Builder()
                 .id(uuid)
                 .startTime(timeStartField.getText())
@@ -124,7 +125,6 @@ public class EditLessonController implements Initializable {
                 .build();
         createdLesson = new CreatedLesson(lesson, once.isSelected(), sourceDay,
                 TypeTranslator.parseDayOfWeek(dayOfWeekChoiceBox.getValue()));
-        saved = true;
         actionClose(event);
     }
 

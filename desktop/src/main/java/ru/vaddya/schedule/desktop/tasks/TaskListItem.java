@@ -11,11 +11,12 @@ import ru.vaddya.schedule.desktop.Main;
 
 import java.io.IOException;
 
+import static ru.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
+
 /**
- * ru.vaddya.schedule.desktop.tasks at smart-schedule
+ * Вид для отображения задания в списке
  *
  * @author vaddya
- * @since December 23, 2016
  */
 public class TaskListItem extends AnchorPane {
 
@@ -30,6 +31,9 @@ public class TaskListItem extends AnchorPane {
 
     @FXML
     private Label deadlineLabel;
+
+    @FXML
+    private Label timeLeftLabel;
 
     @FXML
     private Label typeLabel;
@@ -48,10 +52,23 @@ public class TaskListItem extends AnchorPane {
         }
 
         this.task = task;
+
+        long daysUntil = Dates.daysUntil(task.getDeadline());
+
+        String timeLeft;
+        if (daysUntil == 0) {
+            timeLeft = Main.bundle.getString("task_time_today");
+        } else if (daysUntil < 0) {
+            timeLeft = -daysUntil + " " + Main.bundle.getString("task_time_days_ago");
+        } else {
+            timeLeft = Main.bundle.getString("task_time_in") + " " + daysUntil + " " +
+                    Main.bundle.getString("task_time_days");
+        }
         isDoneCheckBox.setSelected(task.isComplete());
         taskTextLabel.setText(task.getTextTask());
         subjectLabel.setText(task.getSubject());
-        deadlineLabel.setText(Dates.FULL_DATE_FORMAT.format(task.getDeadline()));
+        deadlineLabel.setText(FULL_DATE_FORMAT.format(task.getDeadline()));
+        timeLeftLabel.setText(timeLeft);
         typeLabel.setText(Main.bundle.getString(task.getType().toString().toLowerCase()));
     }
 

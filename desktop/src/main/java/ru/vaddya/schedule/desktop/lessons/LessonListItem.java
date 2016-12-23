@@ -11,10 +11,9 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 
 /**
- * ru.vaddya.schedule.desktop.lessons at smart-schedule
+ * Вид для отображения занятия в списке
  *
  * @author vaddya
- * @since December 22, 2016
  */
 public class LessonListItem extends AnchorPane {
 

@@ -6,13 +6,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 import ru.vaddya.schedule.core.lessons.LessonType;
+import ru.vaddya.schedule.core.tasks.Task;
 import ru.vaddya.schedule.desktop.Main;
-import ru.vaddya.schedule.desktop.tasks.TaskListItem;
 import ru.vaddya.schedule.desktop.util.TypeTranslator;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
+
+import static ru.vaddya.schedule.core.lessons.LessonType.ANOTHER;
 
 /**
  * Контроллер для диалога изменения заданий
@@ -36,30 +42,41 @@ public class EditTaskController implements Initializable {
     @FXML
     private CheckBox doneCheckBox;
 
-    private TaskListItem task;
+    private UUID uuid;
 
-    private boolean saved = false;
+    private Task task;
+
+    private boolean saved;
+
+    private boolean created;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (LessonType type : LessonType.values()) {
             typeChoiceBox.getItems().add(Main.bundle.getString(type.toString().toLowerCase()));
         }
-        typeChoiceBox.setValue(Main.bundle.getString(LessonType.ANOTHER.toString().toLowerCase()));
     }
 
-    public boolean isSaved() {
-        return saved;
-    }
-
-    public void setActiveTask(TaskListItem task) {
-        this.task = task;
-        subjectField.setText(task.getTask().getSubject());
-        typeChoiceBox.setValue(Main.bundle.getString(task.getTask().getType().toString().toLowerCase()));
-        datePicker.setValue(task.getTask().getDeadline());
-        textArea.setText(task.getTask().getTextTask());
-        doneCheckBox.setSelected(task.getTask().isComplete());
+    public void setActiveTask(Task task, List<String> suggestions) {
+        if (task == null) {
+            created = true;
+            uuid = UUID.randomUUID();
+            subjectField.clear();
+            typeChoiceBox.setValue(Main.bundle.getString(ANOTHER.toString().toLowerCase()));
+            datePicker.setValue(LocalDate.now());
+            textArea.clear();
+            doneCheckBox.setSelected(false);
+        } else {
+            created = false;
+            uuid = task.getId();
+            subjectField.setText(task.getSubject());
+            typeChoiceBox.setValue(Main.bundle.getString(task.getType().toString().toLowerCase()));
+            datePicker.setValue(task.getDeadline());
+            textArea.setText(task.getTextTask());
+            doneCheckBox.setSelected(task.isComplete());
+        }
         saved = false;
+        TextFields.bindAutoCompletion(subjectField, suggestions);
     }
 
     public void actionClose(ActionEvent event) {
@@ -69,12 +86,27 @@ public class EditTaskController implements Initializable {
     }
 
     public void actionSave(ActionEvent event) {
-        task.getTask().setSubject(subjectField.getText());
-        task.getTask().setType(TypeTranslator.parseLessonType(typeChoiceBox.getValue()));
-        task.getTask().setDeadline(datePicker.getValue());
-        task.getTask().setTextTask(textArea.getText());
-        task.getTask().setComplete(doneCheckBox.isSelected());
         saved = true;
+        task = new Task.Builder()
+                .id(uuid)
+                .subject(subjectField.getText())
+                .type(TypeTranslator.parseLessonType(typeChoiceBox.getValue()))
+                .deadline(datePicker.getValue())
+                .textTask(textArea.getText())
+                .isComplete(doneCheckBox.isSelected())
+                .build();
         actionClose(event);
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public boolean isCreated() {
+        return created;
+    }
+
+    public Task getTask() {
+        return task;
     }
 }

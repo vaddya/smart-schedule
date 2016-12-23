@@ -1,6 +1,5 @@
 package ru.vaddya.schedule.desktop.controllers;
 
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,10 +18,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * ru.vaddya.schedule.desktop.controllers at smart-schedule
+ * Контроллер для списка заданий
  *
  * @author vaddya
- * @since December 23, 2016
  */
 public class TasksController {
 
@@ -62,22 +60,19 @@ public class TasksController {
         editTaskController = fxmlLoader.getController();
     }
 
-
     private void initLessonsList() {
         taskList.setFocusTraversable(false);
-        taskList.getItems().addListener((ListChangeListener<Node>) c -> updateCountTasks());
         taskList.setOnMouseClicked(event -> {
             if (event.getClickCount() >= 2) {
                 TaskListItem task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
-                editTaskController.setActiveTask(task);
-                editTaskDialogStage = main.showDialog(taskList.getScene().getWindow(),
+                editTaskController.setActiveTask(task.getTask(), main.getSubjectSuggestions());
+                editTaskDialogStage = main.showDialog(
+                        taskList.getScene().getWindow(),
                         editTaskDialogStage,
                         editTaskDialogParent,
                         Main.bundle.getString("task_edit")
                 );
-                schedule.getTasks().updateTask(task.getTask());
-                taskList.refresh();
-                refreshTasks();
+                parseDialog();
             }
         });
         refreshTasks();
@@ -85,13 +80,16 @@ public class TasksController {
 
     private void refreshTasks() {
         taskList.getItems().clear();
-        Label label = new Label();
+        Label label = new Label(String.format("%s (%s: %d)",
+                Main.bundle.getString("tasks"),
+                Main.bundle.getString("tasks_count"),
+                taskList.getItems().size())
+        );
         label.setDisable(true);
         taskList.getItems().add(label);
         for (Task task : schedule.getTasks()) {
             taskList.getItems().add(new TaskListItem(task));
         }
-        label.setText("Задания (" + Main.bundle.getString("tasks_count") + " " + taskList.getItems().size() + ")");
     }
 
     public void actionButtonPressed(ActionEvent event) {
@@ -99,46 +97,51 @@ public class TasksController {
         TaskListItem task;
         switch (button.getId()) {
             case "addTaskButton":
-//                task = new TaskListItem();
-//                editTaskController.setActiveTask(task);
-//                editTaskDialogStage = main.showDialog(tasksTableView.getScene().getWindow(),
-//                        editTaskDialogStage,
-//                        editTaskDialogParent,
-//                        Main.bundle.getString("task_add")
-//                );
-//                if (editTaskController.isSaved()) {
-//                    tasksTableView.getItems().add(task);
-//                }
-//                break;
+                editTaskController.setActiveTask(null, main.getSubjectSuggestions());
+                editTaskDialogStage = main.showDialog(
+                        taskList.getScene().getWindow(),
+                        editTaskDialogStage,
+                        editTaskDialogParent,
+                        Main.bundle.getString("task_add")
+                );
+                parseDialog();
+                break;
             case "editTaskButton":
                 task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
                 if (task == null) {
                     main.setToStatusBar(Main.bundle.getString("task_select_edit"), 5);
                 } else {
-                    editTaskController.setActiveTask(task);
-                    editTaskDialogStage = main.showDialog(taskList.getScene().getWindow(),
+                    editTaskController.setActiveTask(task.getTask(), main.getSubjectSuggestions());
+                    editTaskDialogStage = main.showDialog(
+                            taskList.getScene().getWindow(),
                             editTaskDialogStage,
                             editTaskDialogParent,
                             Main.bundle.getString("task_edit")
                     );
-                    schedule.getTasks().updateTask(task.getTask());
-                    taskList.refresh();
-                    refreshTasks();
+                    parseDialog();
                 }
                 break;
             case "removeTaskButton":
-//                task = tasksTableView.getSelectionModel().getSelectedItem();
-//                if (task == null) {
-//                    main.setToStatusBar(Main.bundle.getString("task_select_remove"), 5);
-//                } else {
-//                    task = tasksTableView.getSelectionModel().getSelectedItem();
-//                }
-//                tasksTableView.getItems().remove(task);
-//                break;
+                task = (TaskListItem) taskList.getSelectionModel().getSelectedItem();
+                if (task == null) {
+                    main.setToStatusBar(Main.bundle.getString("task_select_remove"), 5);
+                } else {
+                    taskList.getItems().remove(task);
+                    schedule.getTasks().removeTask(task.getTask());
+                }
+                break;
         }
     }
 
-    private void updateCountTasks() {
-        tasksCountLabel.setText("");
+    private void parseDialog() {
+        if (editTaskController.isSaved()) {
+            if (editTaskController.isCreated()) {
+                schedule.getTasks().addTask(editTaskController.getTask());
+            } else {
+                schedule.getTasks().updateTask(editTaskController.getTask());
+            }
+            taskList.refresh();
+            refreshTasks();
+        }
     }
 }

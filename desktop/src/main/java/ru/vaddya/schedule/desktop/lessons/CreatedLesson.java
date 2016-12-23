@@ -5,10 +5,9 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import java.time.DayOfWeek;
 
 /**
- * ru.vaddya.schedule.desktop.lessons at smart-schedule
+ * Класс для хранения созданного занятия
  *
  * @author vaddya
- * @since December 22, 2016
  */
 public class CreatedLesson {
 
