@@ -5,9 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import ru.vaddya.schedule.core.SmartSchedule;
 import ru.vaddya.schedule.core.tasks.Task;
@@ -16,6 +14,8 @@ import ru.vaddya.schedule.desktop.tasks.TaskListItem;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 
 /**
  * Контроллер для списка заданий
@@ -121,10 +121,22 @@ public class TasksController {
                 if (task == null) {
                     main.setToStatusBar(Main.getBundle().getString("task_select_remove"), 5);
                 } else {
-                    taskList.getItems().remove(task);
-                    schedule.getTasks().removeTask(task.getTask());
+                    Alert alert = new Alert(CONFIRMATION);
+                    alert.setTitle(Main.getBundle().getString("task_remove"));
+                    alert.setHeaderText(null);
+                    String content = String.format("%s: \n\"%s\"?",
+                            Main.getBundle().getString("are_you_sure_remove_task"),
+                            task.getTask().getTextTask()
+                    );
+                    alert.setContentText(content);
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stage.getIcons().add(Main.getIcon());
+                    if (alert.showAndWait().get() == ButtonType.OK) {
+                        taskList.getItems().remove(task);
+                        schedule.getTasks().removeTask(task.getTask());
+                    }
+                    break;
                 }
-                break;
         }
     }
 

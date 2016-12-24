@@ -175,7 +175,7 @@ public class LessonsController {
                 if (lesson == null) {
                     main.setToStatusBar(Main.getBundle().getString("lesson_select_remove"), 5);
                 } else {
-                    removeLessonController.setActiveLesson(lesson.getLesson().getSubject());
+                    removeLessonController.setSubject(lesson.getLesson().getSubject());
                     removeLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
                             removeLessonDialogStage,
                             removeLessonDialogParent,

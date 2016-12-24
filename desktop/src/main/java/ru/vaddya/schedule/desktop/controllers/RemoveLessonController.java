@@ -38,14 +38,17 @@ public class RemoveLessonController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        areYouSureLabel.setTextAlignment(TextAlignment.CENTER);
         isOnce = true;
         removed = false;
         group.selectToggle(once);
     }
 
-    public void setActiveLesson(String subject) {
-        areYouSureLabel.setText(Main.getBundle().getString("are_you_sure_remove_lesson") + "\n" + subject + "?");
+    public void setSubject(String subject) {
+        String content = String.format("%s:\n\"%s\"",
+                Main.getBundle().getString("are_you_sure_remove_lesson"),
+                subject
+        );
+        areYouSureLabel.setText(content);
         isOnce = true;
         removed = false;
         group.selectToggle(once);
