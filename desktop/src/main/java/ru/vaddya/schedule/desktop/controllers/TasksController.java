@@ -78,16 +78,13 @@ public class TasksController {
     private void refreshTasks() {
         taskList.getItems().clear();
         Label label = new Label();
+        label.getStyleClass().add("title");
         label.setDisable(true);
         taskList.getItems().add(label);
         for (Task task : schedule.getTasks()) {
             taskList.getItems().add(new TaskListItem(task, this));
         }
-        label.setText(String.format("%s (%s %d)",
-                Main.getBundle().getString("tasks"),
-                Main.getBundle().getString("tasks_count"),
-                taskList.getItems().size())
-        );
+        label.setText(Main.getBundle().getString("tasks_count") + " " + taskList.getItems().size());
     }
 
     public void actionButtonPressed(ActionEvent event) {

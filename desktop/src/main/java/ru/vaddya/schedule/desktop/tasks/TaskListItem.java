@@ -55,14 +55,14 @@ public class TaskListItem extends AnchorPane {
         }
         this.task = task;
         this.controller = controller;
-        initComponents(task);
+        initComponents();
     }
 
-    private void initComponents(Task task) {
+    private void initComponents() {
         long daysUntil = Dates.daysUntil(task.getDeadline());
         String timeLeft;
         if (daysUntil == 0) {
-            timeLeft = Main.getBundle().getString("task_time_today");
+            timeLeft = Main.getBundle().getString("time_today");
         } else if (daysUntil < 0) {
             timeLeft = -daysUntil + " " + Main.getBundle().getString("task_time_days_ago");
         } else {
@@ -74,7 +74,15 @@ public class TaskListItem extends AnchorPane {
             task.setComplete(isDoneCheckBox.isSelected());
             controller.updateTask(task);
         });
+        if (task.isComplete()) {
+            isDoneCheckBox.getStyleClass().add("complete");
+        } else if (task.isOverdue()) {
+            isDoneCheckBox.getStyleClass().add("overdue");
+        }
         taskTextLabel.setText(task.getTextTask());
+        if (task.isComplete()) {
+            taskTextLabel.getStyleClass().add("complete");
+        }
         subjectLabel.setText(task.getSubject());
         deadlineLabel.setText(FULL_DATE_FORMAT.format(task.getDeadline()));
         timeLeftLabel.setText("(" + timeLeft + ")");

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -15,6 +16,8 @@ import ru.vaddya.schedule.core.lessons.Lesson;
 import ru.vaddya.schedule.desktop.Main;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -39,11 +42,16 @@ public class MainController implements Initializable {
     @FXML
     private StatusBar statusBar;
 
+    @FXML
+    private Menu currDateMenu;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         schedule = new SmartScheduleImpl();
         lessonsController.init(this, schedule);
         tasksController.init(this, schedule);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM YYYY", Main.getBundle().getLocale());
+        currDateMenu.setText(Main.getBundle().getString("today") + " " + LocalDate.now().format(formatter));
     }
 
     public List<String> getSubjectSuggestions() {

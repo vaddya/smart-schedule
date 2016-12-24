@@ -1,0 +1,19 @@
+.complete .box {
+    -fx-background-color: lightgreen;
+}
+
+.overdue .box {
+    -fx-background-color: lightcoral;
+}
+
+.complete .text {
+    -fx-strikethrough: true;
+}
+
+.title {
+    -fx-opacity: 1.0;
+}
+
+#currDateMenu {
+    -fx-opacity: 1.0;
+}

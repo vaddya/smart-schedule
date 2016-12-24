@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.vaddya.schedule.desktop.controllers.LessonsController">
@@ -15,9 +16,21 @@
                 <VBox spacing="10.0" BorderPane.alignment="CENTER">
                     <children>
                         <Button fx:id="prevWeekButton" mnemonicParsing="false" onAction="#actionButtonPressed"
-                                prefWidth="250.0" text="%previous_week"/>
+                                prefWidth="250.0" text="%previous_week">
+                            <graphic>
+                                <ImageView fitHeight="10" fitWidth="10">
+                                    <Image url="@../img/previous.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
                         <Button fx:id="addLessonButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
-                                onAction="#actionButtonPressed" prefWidth="250.0" text="%lesson_add"/>
+                                onAction="#actionButtonPressed" prefWidth="250.0" text="%lesson_add">
+                            <graphic>
+                                <ImageView fitHeight="10" fitWidth="10">
+                                    <Image url="@../img/add.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
                     </children>
                 </VBox>
             </left>
@@ -25,9 +38,21 @@
                 <VBox spacing="10.0" BorderPane.alignment="CENTER">
                     <children>
                         <Button fx:id="nextWeekButton" mnemonicParsing="false" onAction="#actionButtonPressed"
-                                prefWidth="250.0" text="%next_week"/>
+                                prefWidth="250.0" text="%next_week" contentDisplay="RIGHT">
+                            <graphic>
+                                <ImageView fitHeight="10" fitWidth="10">
+                                    <Image url="@../img/next.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
                         <Button fx:id="removeLessonButton" mnemonicParsing="false" onAction="#actionButtonPressed"
-                                prefWidth="250.0" text="%lesson_remove"/>
+                                prefWidth="250.0" text="%lesson_remove" contentDisplay="RIGHT">
+                            <graphic>
+                                <ImageView fitHeight="10" fitWidth="10">
+                                    <Image url="@../img/remove.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
                     </children>
                 </VBox>
             </right>
@@ -35,7 +60,7 @@
                 <VBox alignment="CENTER" spacing="5.0">
                     <children>
                         <DatePicker fx:id="weekDatePicker" onAction="#datePickerHandler" prefWidth="220.0"
-                                    promptText="%date" showWeekNumbers="true"/>
+                                    promptText="%date"/>
                         <Label fx:id="currWeekLabel" text="Label" BorderPane.alignment="CENTER"/>
                     </children>
                 </VBox>

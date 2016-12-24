@@ -78,14 +78,17 @@ public class Task {
         isComplete = complete;
     }
 
+    public boolean isOverdue() {
+        return !Dates.isAfter(deadline);
+    }
+
     /**
-     * ☑ Tue 29.11 (done!) | Subject [LessonType]: Task
+     * (+) Tue 29.11 (done!) | Subject [LessonType]: Task
      */
     @Override
     public String toString() {
         long daysUntil = Dates.daysUntil(deadline);
         return String.format("%s %s, %s | %s [%s]: %s",
-//                isComplete ? "☑" : "☐",
                 isComplete ? "(+)" : "(-)",
                 BRIEF_DATE_FORMAT.format(deadline),
                 (daysUntil >= 0

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.StatusBar?>
-<VBox prefHeight="800.0" prefWidth="975.0" minHeight="600.0" minWidth="820.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="ru.vaddya.schedule.desktop.controllers.MainController">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ru.vaddya.schedule.desktop.controllers.MainController"
+      stylesheets="@../css/styles.css">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -21,24 +23,35 @@
                     <items>
                         <MenuItem mnemonicParsing="false" text="Добавить занятие"/>
                         <MenuItem mnemonicParsing="false" text="Удалить все изменения"/>
-                        <MenuItem mnemonicParsing="false" text="Настройки…"/>
+                        <MenuItem mnemonicParsing="false" disable="true" text="Настройки…"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Помощь">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="%smart_schedule"/>
+                        <MenuItem mnemonicParsing="false" text="О программе"/>
                     </items>
                 </Menu>
+                <Menu fx:id="currDateMenu" mnemonicParsing="false" disable="true"/>
             </menus>
         </MenuBar>
         <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
-                <Tab text="%schedule">
+                <Tab text="%schedule" closable="true">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@../img/lessons.png"/>
+                        </ImageView>
+                    </graphic>
                     <content>
                         <fx:include fx:id="lessons" source="lessons.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="%tasks">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@../img/tasks.png"/>
+                        </ImageView>
+                    </graphic>
                     <content>
                         <fx:include fx:id="tasks" source="tasks.fxml"/>
                     </content>

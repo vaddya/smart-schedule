@@ -209,6 +209,10 @@ public class LessonsController {
             }
             Label label = new Label(Main.getBundle().getString(day.toString().toLowerCase()) + " (" +
                     Dates.FULL_DATE_FORMAT.format(currentWeek.getDateOf(day)) + ")");
+            label.getStyleClass().add("title");
+            if (currentWeek.getDateOf(day).equals(LocalDate.now())) {
+                label.setText(label.getText() + " (" + Main.getBundle().getString("time_today") + ")");
+            }
             label.setDisable(true);
             lessonList.getItems().add(label);
             for (Lesson lesson : week.getDay(day).getLessons()) {

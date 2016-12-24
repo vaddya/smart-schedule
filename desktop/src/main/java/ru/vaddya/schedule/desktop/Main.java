@@ -43,12 +43,12 @@ public class Main extends Application {
 
         Parent root = fxmlLoader.load();
         primaryStage.setTitle(fxmlLoader.getResources().getString("smart_schedule"));
-        icon = new Image(getClass().getClassLoader().getResourceAsStream("icon.png"));
+        icon = new Image(getClass().getClassLoader().getResourceAsStream("img/icon.png"));
         primaryStage.getIcons().add(icon);
         primaryStage.setMinWidth(850);
         primaryStage.setMinHeight(600);
-        primaryStage.setWidth(975);
-        primaryStage.setHeight(800);
+        primaryStage.setWidth(850);
+        primaryStage.setHeight(700);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
