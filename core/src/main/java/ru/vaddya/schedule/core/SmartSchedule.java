@@ -7,14 +7,14 @@ import ru.vaddya.schedule.core.utils.WeekTime;
 import ru.vaddya.schedule.core.utils.WeekType;
 
 /**
- * Интерфейс приложения Smart StudySchedule
+ * Интерфейс приложения Smart Schedule
  *
  * @author vaddya
  */
 public interface SmartSchedule {
 
     /**
-     * Получить расписание на текующую неделю
+     * Получить расписание на текущую неделю
      */
     StudySchedule getCurrentSchedule();
 
@@ -29,12 +29,12 @@ public interface SmartSchedule {
     void swapSchedules();
 
     /**
-     * Получить текущую учебную неделю, содержашаю учебные дни
+     * Получить текущую учебную неделю, содержащую учебные дни
      */
     StudyWeek getCurrentWeek();
 
     /**
-     * Получить заданную учебную неделю, содержашаю учебные дни
+     * Получить заданную учебную неделю, содержащую учебные дни
      */
     StudyWeek getWeek(WeekTime weekTime);
 

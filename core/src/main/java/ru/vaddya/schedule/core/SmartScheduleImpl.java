@@ -12,7 +12,7 @@ import static ru.vaddya.schedule.core.utils.WeekType.EVEN;
 import static ru.vaddya.schedule.core.utils.WeekType.ODD;
 
 /**
- * Реализация интерфейса приложения Smart StudySchedule
+ * Реализация интерфейса приложения Smart Schedule
  *
  * @author vaddya
  * @see SmartSchedule

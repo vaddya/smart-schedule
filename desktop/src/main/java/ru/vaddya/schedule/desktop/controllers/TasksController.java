@@ -124,7 +124,7 @@ public class TasksController {
                     Alert alert = new Alert(CONFIRMATION);
                     alert.setTitle(Main.getBundle().getString("task_remove"));
                     alert.setHeaderText(null);
-                    String content = String.format("%s: \n\"%s\"?",
+                    String content = String.format("%s: %n\"%s\"?",
                             Main.getBundle().getString("are_you_sure_remove_task"),
                             task.getTask().getTextTask()
                     );

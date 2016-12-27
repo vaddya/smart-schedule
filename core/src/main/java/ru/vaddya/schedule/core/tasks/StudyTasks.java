@@ -17,17 +17,18 @@ public class StudyTasks implements Iterable<Task> {
 
     private static final Database db = Database.getConnection();
 
+    private static final Comparator<Task> DATE_ORDER =
+            (t1, t2) -> t1.isComplete()
+                    ? -t1.getDeadline().compareTo(t2.getDeadline())
+                    : t1.getDeadline().compareTo(t2.getDeadline());
+
     private static final Comparator<Task> COMPLETE_DATE_ORDER =
-            Comparator.comparing(Task::isComplete).thenComparing(Task::getDeadline);
+            Comparator.comparing(Task::isComplete).thenComparing(DATE_ORDER);
 
-    private final List<Task> tasks;
-
-    public StudyTasks() {
-        tasks = db.getTasks()
-                .stream()
-                .sorted(COMPLETE_DATE_ORDER)
-                .collect(Collectors.toList());
-    }
+    private final List<Task> tasks = db.getTasks()
+            .stream()
+            .sorted(COMPLETE_DATE_ORDER)
+            .collect(Collectors.toList());
 
     /**
      * Проверить пуст ли список заданий

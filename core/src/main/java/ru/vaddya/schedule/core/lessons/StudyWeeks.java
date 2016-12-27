@@ -10,6 +10,7 @@ import java.util.Map;
  * Класс для хранения учебных недель
  *
  * @author vaddya
+ * @see StudyWeek
  */
 public class StudyWeeks {
 

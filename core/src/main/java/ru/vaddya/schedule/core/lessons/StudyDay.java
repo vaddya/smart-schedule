@@ -24,6 +24,9 @@ public class StudyDay implements Iterable<Lesson> {
 
     private final LocalDate date;
 
+    /**
+     * Конструктор, получающий список занятий и дату
+     */
     public StudyDay(List<Lesson> lessons, LocalDate date) {
         this.lessons = lessons;
         this.lessons.sort(TIME_ORDER);

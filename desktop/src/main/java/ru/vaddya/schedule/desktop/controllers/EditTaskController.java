@@ -16,6 +16,7 @@ import ru.vaddya.schedule.desktop.util.TypeTranslator;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -53,8 +54,8 @@ public class EditTaskController implements Initializable {
 
     private boolean created;
 
-    private static final DateTimeFormatter DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("d MMMM YYYY", Main.getBundle().getLocale());
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getBundle().getLocale());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,12 +67,12 @@ public class EditTaskController implements Initializable {
         datePicker.setConverter(new StringConverter<LocalDate>() {
             @Override
             public String toString(LocalDate object) {
-                return DATE_FORMATTER.format(object);
+                return FORMATTER.format(object);
             }
 
             @Override
             public LocalDate fromString(String string) {
-                return LocalDate.parse(string, DATE_FORMATTER);
+                return LocalDate.parse(string, FORMATTER);
             }
         });
     }

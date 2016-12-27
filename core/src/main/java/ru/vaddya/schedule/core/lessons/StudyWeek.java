@@ -1,5 +1,6 @@
 package ru.vaddya.schedule.core.lessons;
 
+import ru.vaddya.schedule.core.db.Database;
 import ru.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import ru.vaddya.schedule.core.schedule.StudySchedule;
 import ru.vaddya.schedule.core.utils.WeekTime;
@@ -11,6 +12,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static ru.vaddya.schedule.core.lessons.LessonChanges.ADD;
+import static ru.vaddya.schedule.core.lessons.LessonChanges.REMOVE;
 import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
 
 /**
@@ -20,6 +23,8 @@ import static ru.vaddya.schedule.core.utils.Dates.SHORT_DATE_FORMAT;
  * @see StudyDay
  */
 public class StudyWeek {
+
+    private static final Database db = Database.getConnection();
 
     private final WeekTime weekTime;
 
@@ -99,12 +104,18 @@ public class StudyWeek {
         return new EnumMap<>(days);
     }
 
+    /**
+     * Изменить день занятия на данной неделе
+     */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         UUID id = lesson.getId();
         try {
             days.get(from).removeLesson(findLesson(id));
             days.get(to).addLesson(lesson);
-            // TODO: 12/1/2016 db request
+            ChangedLesson remove = new ChangedLesson(REMOVE, weekTime.getDateOf(from), lesson);
+            ChangedLesson add = new ChangedLesson(ADD, weekTime.getDateOf(to), lesson);
+            db.addChange(remove);
+            db.addChange(add);
         } catch (NoSuchLessonException e) {
             e.printStackTrace();
         }

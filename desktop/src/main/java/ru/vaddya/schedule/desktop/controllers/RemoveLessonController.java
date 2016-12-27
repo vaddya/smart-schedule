@@ -44,7 +44,7 @@ public class RemoveLessonController implements Initializable {
     }
 
     public void setSubject(String subject) {
-        String content = String.format("%s:\n\"%s\"",
+        String content = String.format("%s:%n\"%s\"",
                 Main.getBundle().getString("are_you_sure_remove_lesson"),
                 subject
         );
