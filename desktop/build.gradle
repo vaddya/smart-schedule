@@ -4,3 +4,14 @@ dependencies {
     compile project(':core')
     compile 'org.controlsfx:controlsfx:8.40.12'
 }
+
+
+jar {
+    baseName = 'SmartSchedule'
+    manifest {
+        attributes("Main-Class": 'ru.vaddya.schedule.desktop.Main')
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
