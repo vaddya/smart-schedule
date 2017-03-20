@@ -9,7 +9,7 @@ dependencies {
 jar {
     baseName = 'SmartSchedule'
     manifest {
-        attributes("Main-Class": 'ru.vaddya.schedule.desktop.Main')
+        attributes("Main-Class": 'Main')
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

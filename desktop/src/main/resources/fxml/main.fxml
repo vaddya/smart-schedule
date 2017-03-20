@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.StatusBar?>
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="ru.vaddya.schedule.desktop.controllers.MainController"
+      fx:controller="com.vaddya.schedule.desktop.controllers.MainController"
       stylesheets="@../css/styles.css">
     <children>
         <MenuBar VBox.vgrow="NEVER">
