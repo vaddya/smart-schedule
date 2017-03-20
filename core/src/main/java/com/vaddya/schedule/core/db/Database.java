@@ -25,7 +25,7 @@ public interface Database {
 // интерфейс для этого дайКоннекшн в модуле ядра, а реализация в модуле БД,
 // и там и делается выбор нужной бд
     static Database getConnection() {
-        return null;
+        return FakeDB.getConnection();
     }
 
 
