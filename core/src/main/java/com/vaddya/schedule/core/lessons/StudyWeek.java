@@ -1,11 +1,11 @@
 package com.vaddya.schedule.core.lessons;
 
-import com.vaddya.schedule.core.db.Database;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;

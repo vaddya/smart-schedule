@@ -1,10 +1,10 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.db.FakeDB;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.FakeDB;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,13 +1,13 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.db.FakeDB;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.FakeDB;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

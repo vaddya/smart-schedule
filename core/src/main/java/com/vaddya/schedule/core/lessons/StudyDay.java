@@ -1,7 +1,7 @@
 package com.vaddya.schedule.core.lessons;
 
-import com.vaddya.schedule.core.db.Database;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
+import com.vaddya.schedule.database.Database;
 
 import java.time.LocalDate;
 import java.util.*;

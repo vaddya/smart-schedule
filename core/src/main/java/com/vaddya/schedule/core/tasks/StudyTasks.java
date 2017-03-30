@@ -1,8 +1,8 @@
 package com.vaddya.schedule.core.tasks;
 
-import com.vaddya.schedule.core.db.Database;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.utils.Dates;
+import com.vaddya.schedule.database.Database;
 
 import java.util.*;
 import java.util.stream.Collectors;

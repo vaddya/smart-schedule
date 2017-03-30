@@ -1,4 +1,4 @@
-package com.vaddya.schedule.core.db.mongo;
+package com.vaddya.schedule.database.mongo;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;

@@ -1,8 +1,8 @@
 package com.vaddya.schedule.core.schedule;
 
-import com.vaddya.schedule.core.db.Database;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;

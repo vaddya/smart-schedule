@@ -1,24 +1,17 @@
-package com.vaddya.schedule.core.db;
+package com.vaddya.schedule.database;
 
-import com.vaddya.schedule.core.lessons.ChangedLesson;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.LessonChanges;
-import com.vaddya.schedule.core.utils.Dates;
 
-import java.time.LocalDate;
-import java.util.UUID;
+import java.time.DayOfWeek;
 
 /**
- * Plain Old Java Object для класса ChangedLesson
+ * Plain Old Java Object для класса Lesson
  *
  * @author vaddya
- * @since November 30, 2016
  */
-public class ChangedLessonPOJO {
+public class LessonPOJO {
 
-    private String changes;
-    private String date;
-    private String lessonId;
+    private String day;
     private String startTime;
     private String endTime;
     private String subject;
@@ -26,13 +19,11 @@ public class ChangedLessonPOJO {
     private String place;
     private String teacher;
 
-    public ChangedLessonPOJO() {
+    public LessonPOJO() {
     }
 
-    public ChangedLessonPOJO(String changes, String date, String lessonId, String startTime, String endTime, String subject, String type, String place, String teacher) {
-        this.changes = changes;
-        this.date = date;
-        this.lessonId = lessonId;
+    public LessonPOJO(String day, String startTime, String endTime, String subject, String type, String place, String teacher) {
+        this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;
@@ -41,28 +32,12 @@ public class ChangedLessonPOJO {
         this.teacher = teacher;
     }
 
-    public String getChanges() {
-        return changes;
+    public String getDay() {
+        return day;
     }
 
-    public void setChanges(String changes) {
-        this.changes = changes;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(String lessonId) {
-        this.lessonId = lessonId;
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getStartTime() {
@@ -113,12 +88,9 @@ public class ChangedLessonPOJO {
         this.teacher = teacher;
     }
 
-    public static ChangedLessonPOJO of(ChangedLesson changedLesson) {
-        Lesson lesson = changedLesson.getLesson();
-        return new ChangedLessonPOJO(
-                changedLesson.getChanges().toString(),
-                Dates.FULL_DATE_FORMAT.format(changedLesson.getDate()),
-                lesson.getId().toString(),
+    public static LessonPOJO of(DayOfWeek day, Lesson lesson) {
+        return new LessonPOJO(
+                day.toString(),
                 lesson.getStartTime().toString(),
                 lesson.getEndTime().toString(),
                 lesson.getSubject(),
@@ -128,9 +100,9 @@ public class ChangedLessonPOJO {
         );
     }
 
-    public static ChangedLesson parse(String key, ChangedLessonPOJO pojo) {
-        Lesson lesson = new Lesson.Builder()
-                .id(pojo.getLessonId())
+    public static Lesson parse(String key, LessonPOJO pojo) {
+        return new Lesson.Builder()
+                .id(key)
                 .startTime(pojo.getStartTime())
                 .endTime(pojo.getEndTime())
                 .subject(pojo.getSubject())
@@ -138,20 +110,12 @@ public class ChangedLessonPOJO {
                 .place(pojo.getPlace())
                 .teacher(pojo.getTeacher())
                 .build();
-        return new ChangedLesson(
-                UUID.fromString(key),
-                LessonChanges.valueOf(pojo.getChanges()),
-                LocalDate.from(Dates.FULL_DATE_FORMAT.parse(pojo.getDate())),
-                lesson
-        );
     }
 
     @Override
     public String toString() {
-        return "ChangedLessonPOJO{" +
-                "changes='" + changes + '\'' +
-                ", date='" + date + '\'' +
-                ", lessonId='" + lessonId + '\'' +
+        return "LessonPOJO{" +
+                "day='" + day + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", subject='" + subject + '\'' +

@@ -1,7 +1,5 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.db.FakeDB;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
@@ -10,6 +8,8 @@ import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.FakeDB;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

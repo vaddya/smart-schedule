@@ -1,3 +1,3 @@
 include 'core', 'cli', 'desktop'
-
+include 'database'
 

@@ -1,4 +1,4 @@
-package com.vaddya.schedule.core.db;
+package com.vaddya.schedule.database;
 
 import com.vaddya.schedule.core.lessons.ChangedLesson;
 import com.vaddya.schedule.core.lessons.Lesson;
