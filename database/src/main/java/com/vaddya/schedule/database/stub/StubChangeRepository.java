@@ -21,17 +21,17 @@ public class StubChangeRepository implements ChangeRepository {
     }
 
     @Override
-    public boolean insert(ChangedLesson lesson) {
-        return false;
+    public void insert(ChangedLesson lesson) {
+
     }
 
     @Override
-    public boolean delete(ChangedLesson lesson) {
-        return false;
+    public void delete(ChangedLesson lesson) {
+
     }
 
     @Override
-    public boolean deleteAll() {
-        return false;
+    public void deleteAll() {
+
     }
 }

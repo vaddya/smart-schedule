@@ -15,10 +15,10 @@ public interface ChangeRepository {
 
     List<ChangedLesson> findByDate(LocalDate date);
 
-    boolean insert(ChangedLesson lesson);
+    void insert(ChangedLesson lesson);
 
-    boolean delete(ChangedLesson lesson);
+    void delete(ChangedLesson lesson);
 
-    boolean deleteAll();
+    void deleteAll();
 
 }
