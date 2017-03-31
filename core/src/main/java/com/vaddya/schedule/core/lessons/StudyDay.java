@@ -1,7 +1,7 @@
 package com.vaddya.schedule.core.lessons;
 
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.DatabaseDeprecated;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class StudyDay implements Iterable<Lesson> {
 
-    private static final Database db = Database.getConnection();
+    private static final DatabaseDeprecated db = DatabaseDeprecated.getConnection();
 
     private static final Comparator<Lesson> TIME_ORDER = Comparator.comparing(Lesson::getStartTime);
 

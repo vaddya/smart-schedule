@@ -5,7 +5,7 @@ import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.DatabaseDeprecated;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;
@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class StudyWeek {
 
-    private static final Database db = Database.getConnection();
+    private static final DatabaseDeprecated db = DatabaseDeprecated.getConnection();
 
     private final WeekTime weekTime;
 

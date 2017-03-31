@@ -2,7 +2,7 @@ package com.vaddya.schedule.core.tasks;
 
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.utils.Dates;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.TaskRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
  */
 public class StudyTasks implements Iterable<Task> {
 
-    private static final Database db = Database.getConnection();
-
     private static final Comparator<Task> DATE_ORDER =
             (t1, t2) -> t1.isComplete()
                     ? -t1.getDeadline().compareTo(t2.getDeadline())
@@ -25,10 +23,18 @@ public class StudyTasks implements Iterable<Task> {
     private static final Comparator<Task> COMPLETE_DATE_ORDER =
             Comparator.comparing(Task::isComplete).thenComparing(DATE_ORDER);
 
-    private final List<Task> tasks = db.getTasks()
-            .stream()
-            .sorted(COMPLETE_DATE_ORDER)
-            .collect(Collectors.toList());
+
+    private final TaskRepository repository;
+
+    private final List<Task> tasks;
+
+    public StudyTasks(TaskRepository repository) {
+        this.repository = repository;
+        this.tasks = repository.findAllTasks()
+                .stream()
+                .sorted(COMPLETE_DATE_ORDER)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Проверить пуст ли список заданий
@@ -50,7 +56,7 @@ public class StudyTasks implements Iterable<Task> {
     public void addTask(Task task) {
         tasks.add(task);
         tasks.sort(COMPLETE_DATE_ORDER);
-        db.addTask(task);
+        repository.addTask(task);
     }
 
     /**
@@ -99,14 +105,14 @@ public class StudyTasks implements Iterable<Task> {
         Task upd = findTask(task.getId());
         tasks.set(tasks.indexOf(upd), task);
         tasks.sort(COMPLETE_DATE_ORDER);
-        db.updateTask(task);
+        repository.updateTask(task);
     }
 
     /**
      * Удалить задание
      */
     public void removeTask(Task task) {
-        db.removeTask(task);
+        repository.removeTask(task);
         tasks.remove(task);
     }
 
@@ -115,7 +121,7 @@ public class StudyTasks implements Iterable<Task> {
      */
     public void removeAllTasks() {
         for (Task task : tasks) {
-            db.removeTask(task);
+            repository.removeTask(task);
         }
         tasks.clear();
     }

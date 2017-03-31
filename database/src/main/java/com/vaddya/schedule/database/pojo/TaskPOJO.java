@@ -1,4 +1,4 @@
-package com.vaddya.schedule.database;
+package com.vaddya.schedule.database.pojo;
 
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.Dates;

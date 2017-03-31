@@ -8,7 +8,7 @@ import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.DatabaseDeprecated;
 import com.vaddya.schedule.database.FakeDB;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * @author vaddya
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Database.class)
+@PrepareForTest(DatabaseDeprecated.class)
 public class StudyWeekTest {
 
     private StudyWeek week;
@@ -37,8 +37,8 @@ public class StudyWeekTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(Database.class);
-        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
+        PowerMockito.mockStatic(DatabaseDeprecated.class);
+        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
 
         week = new StudyWeek(WeekTime.of("25.11.2016"), new StudySchedule(WeekType.ODD));
         lesson = new Lesson.Builder()

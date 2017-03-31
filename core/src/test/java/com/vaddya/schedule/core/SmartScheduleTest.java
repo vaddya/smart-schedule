@@ -6,7 +6,7 @@ import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.DatabaseDeprecated;
 import com.vaddya.schedule.database.FakeDB;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotEquals;
 //TODO: Были ведь раньше интеграционные тесты тоже? Куда делись?
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Database.class)
+@PrepareForTest(DatabaseDeprecated.class)
 public class SmartScheduleTest {
 
     private SmartSchedule model;
@@ -41,8 +41,8 @@ public class SmartScheduleTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(Database.class);
-        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
+        PowerMockito.mockStatic(DatabaseDeprecated.class);
+        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
 
         model = new SmartScheduleImpl();
         lesson = new Lesson.Builder()

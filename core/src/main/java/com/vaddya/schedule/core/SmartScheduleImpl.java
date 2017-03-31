@@ -7,6 +7,8 @@ import com.vaddya.schedule.core.schedule.StudySchedules;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.mongo.MongoDatabase;
 
 /**
  * Реализация интерфейса приложения Smart Schedule
@@ -16,7 +18,9 @@ import com.vaddya.schedule.core.utils.WeekType;
  */
 public class SmartScheduleImpl implements SmartSchedule {
 
-    private final StudyTasks tasks = new StudyTasks();
+    private final Database database = new MongoDatabase("mongodb://localhost");
+
+    private final StudyTasks tasks = new StudyTasks(database.getTaskRepository());
 
     private final StudyWeeks weeks = new StudyWeeks();
 

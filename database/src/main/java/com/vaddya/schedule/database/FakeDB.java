@@ -18,14 +18,14 @@ import java.util.Map;
  * @author vaddya
  */
 
-public class FakeDB implements Database {
+public class FakeDB implements DatabaseDeprecated {
 
-    private static final Database db = new FakeDB();
+    private static final DatabaseDeprecated db = new FakeDB();
 
     private FakeDB() {
     }
 
-    public static Database getConnection() {
+    public static DatabaseDeprecated getConnection() {
         return db;
     }
 

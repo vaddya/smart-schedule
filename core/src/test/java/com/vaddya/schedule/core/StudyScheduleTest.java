@@ -3,7 +3,7 @@ package com.vaddya.schedule.core;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.schedule.StudySchedule;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.DatabaseDeprecated;
 import com.vaddya.schedule.database.FakeDB;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * @author vaddya
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Database.class)
+@PrepareForTest(DatabaseDeprecated.class)
 public class StudyScheduleTest {
 
     private StudySchedule schedule;
@@ -32,8 +32,8 @@ public class StudyScheduleTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(Database.class);
-        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
+        PowerMockito.mockStatic(DatabaseDeprecated.class);
+        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
 
         schedule = new StudySchedule(ODD);
         lesson1 = new Lesson.Builder()

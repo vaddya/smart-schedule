@@ -2,7 +2,7 @@ package com.vaddya.schedule.core.schedule;
 
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.DatabaseDeprecated;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class StudySchedule {
 
-    private static final Database db = Database.getConnection();
+    private static final DatabaseDeprecated db = DatabaseDeprecated.getConnection();
 
     private WeekType weekType;
 
