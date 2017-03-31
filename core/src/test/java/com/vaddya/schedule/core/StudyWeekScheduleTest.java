@@ -3,14 +3,10 @@ package com.vaddya.schedule.core;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.schedule.StudySchedule;
-import com.vaddya.schedule.database.DatabaseDeprecated;
-import com.vaddya.schedule.database.FakeDB;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.stub.StubDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static com.vaddya.schedule.core.utils.WeekType.EVEN;
 import static com.vaddya.schedule.core.utils.WeekType.ODD;
@@ -22,9 +18,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author vaddya
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(DatabaseDeprecated.class)
-public class StudyScheduleTest {
+public class StudyWeekScheduleTest {
 
     private StudySchedule schedule;
     private Lesson lesson1;
@@ -32,10 +26,8 @@ public class StudyScheduleTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(DatabaseDeprecated.class);
-        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
-
-        schedule = new StudySchedule(ODD);
+        Database stub = new StubDatabase();
+        schedule = new StudySchedule(ODD, stub.getLessonRepository());
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

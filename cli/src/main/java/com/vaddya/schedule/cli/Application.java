@@ -9,6 +9,7 @@ import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.WeekTime;
+import com.vaddya.schedule.database.mongo.MongoDatabase;
 
 import java.io.PrintStream;
 import java.time.DayOfWeek;
@@ -26,7 +27,7 @@ import static com.vaddya.schedule.core.utils.WeekType.ODD;
  */
 public class Application {
 
-    private final SmartSchedule model = new SmartScheduleImpl();
+    private final SmartSchedule model = new SmartScheduleImpl(new MongoDatabase("mongodb://localhost"));
     private final StudyWeek week = model.getCurrentWeek();
     private final StudyTasks tasks = model.getTasks();
     private final Scanner in = new Scanner(System.in, "UTF-8");
@@ -117,13 +118,13 @@ public class Application {
 
     public void printHelp() {
         out.println("Usage of Smart StudySchedule: ");
-        out.println("\t>> model - print model");
+        out.println("\t>> schedule - print schedule");
         out.println("\t>> tasks - print all tasks");
         out.println("\t>> active - print active tasks");
         out.println("\t>> completed - print completed tasks");
         out.println("\t>> overdue - print overdue tasks");
-        out.println("\t>> add lesson - add lesson to the model");
-        out.println("\t>> add task - add task to the task list");
+        out.println("\t>> insert lesson - insert lesson to the model");
+        out.println("\t>> insert task - insert task to the task list");
         out.println("\t>> done - mark the task completed");
         out.println("\t>> undone - mark the task uncompleted");
         out.println("\t>> remove lesson - remove lesson from the model");

@@ -1,6 +1,7 @@
 package com.vaddya.schedule.core.schedule;
 
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.LessonRepository;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -18,10 +19,10 @@ public class StudySchedules {
 
     private final Map<WeekType, StudySchedule> schedules;
 
-    public StudySchedules() {
+    public StudySchedules(LessonRepository repository) {
         schedules = new EnumMap<WeekType, StudySchedule>(WeekType.class) {{
-            put(ODD, new StudySchedule(ODD));
-            put(EVEN, new StudySchedule(EVEN));
+            put(ODD, new StudySchedule(ODD, repository));
+            put(EVEN, new StudySchedule(EVEN, repository));
         }};
     }
 

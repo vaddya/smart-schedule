@@ -3,6 +3,7 @@ package com.vaddya.schedule.desktop.controllers;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.database.mongo.MongoDatabase;
 import com.vaddya.schedule.desktop.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -32,7 +33,8 @@ import java.util.stream.Collectors;
  */
 public class MainController implements Initializable {
 
-    private SmartSchedule schedule;
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getBundle().getLocale());
 
     @FXML
     private LessonsController lessonsController;
@@ -46,13 +48,11 @@ public class MainController implements Initializable {
     @FXML
     private Menu currDateMenu;
 
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getBundle().getLocale());
-    ;
+    private SmartSchedule schedule;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        schedule = new SmartScheduleImpl();
+        schedule = new SmartScheduleImpl(new MongoDatabase("mongodb://localhost"));
         lessonsController.init(this, schedule);
         tasksController.init(this, schedule);
         currDateMenu.setText(Main.getBundle().getString("today") + " " + LocalDate.now().format(FORMATTER));

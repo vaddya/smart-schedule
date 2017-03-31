@@ -13,14 +13,14 @@ import java.util.UUID;
  */
 public interface TaskRepository {
 
-    Task findTask(UUID id);
+    Task findById(UUID id);
 
-    List<Task> findAllTasks();
+    List<Task> findAll();
 
-    void addTask(Task task);
+    void insert(Task task);
 
-    void updateTask(Task task);
+    void save(Task task);
 
-    void removeTask(Task task);
+    void delete(Task task);
 
 }

@@ -5,7 +5,7 @@ import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.DatabaseDeprecated;
+import com.vaddya.schedule.database.ChangeRepository;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;
@@ -21,24 +21,26 @@ import java.util.UUID;
  */
 public class StudyWeek {
 
-    private static final DatabaseDeprecated db = DatabaseDeprecated.getConnection();
-
     private final WeekTime weekTime;
 
     private WeekType weekType;
 
-    private final Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
+    private final Map<DayOfWeek, StudyDay> days;
+
+    private final ChangeRepository repository;
 
     /**
      * Конструктор, получающий недельный период времени и расписание
      */
-    public StudyWeek(WeekTime weekTime, StudySchedule schedule) {
+    public StudyWeek(WeekTime weekTime, StudySchedule schedule, ChangeRepository repository) {
         this.weekTime = weekTime;
         this.weekType = schedule.getWeekType();
+        this.days = new EnumMap<>(DayOfWeek.class);
         for (DayOfWeek day : DayOfWeek.values()) {
-            StudyDay studyDay = new StudyDay(schedule.getLessons(day), weekTime.getDateOf(day));
+            StudyDay studyDay = new StudyDay(schedule.getLessons(day), weekTime.getDateOf(day), repository);
             days.put(day, studyDay);
         }
+        this.repository = repository;
     }
 
     /**
@@ -109,10 +111,10 @@ public class StudyWeek {
         try {
             days.get(from).removeLesson(findLesson(id));
             days.get(to).addLesson(lesson);
-            ChangedLesson remove = new ChangedLesson(LessonChanges.REMOVE, weekTime.getDateOf(from), lesson);
-            ChangedLesson add = new ChangedLesson(LessonChanges.ADD, weekTime.getDateOf(to), lesson);
-            db.addChange(remove);
-            db.addChange(add);
+            ChangedLesson remove = new ChangedLesson(LessonChange.REMOVE, weekTime.getDateOf(from), lesson);
+            ChangedLesson add = new ChangedLesson(LessonChange.ADD, weekTime.getDateOf(to), lesson);
+            repository.insert(remove);
+            repository.insert(add);
         } catch (NoSuchLessonException e) {
             e.printStackTrace();
         }

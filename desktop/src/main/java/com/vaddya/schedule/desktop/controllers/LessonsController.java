@@ -38,6 +38,15 @@ import static java.time.DayOfWeek.SUNDAY;
  */
 public class LessonsController {
 
+    @FXML
+    private Label currWeekLabel;
+
+    @FXML
+    private DatePicker weekDatePicker;
+
+    @FXML
+    private ListView<Node> lessonList;
+
     private MainController main;
 
     private SmartSchedule schedule;
@@ -58,15 +67,6 @@ public class LessonsController {
 
     private static final DateTimeFormatter WEEK_FORMATTER =
             DateTimeFormatter.ofPattern("d MMMM", Main.getBundle().getLocale());
-
-    @FXML
-    private Label currWeekLabel;
-
-    @FXML
-    private DatePicker weekDatePicker;
-
-    @FXML
-    private ListView<Node> lessonList;
 
     public void init(MainController main, SmartSchedule schedule) {
         this.main = main;
@@ -136,15 +136,6 @@ public class LessonsController {
         });
         currentWeek = WeekTime.current();
         refreshLessons();
-//        new Thread(() -> {
-//            schedule.getWeek(WeekTime.before(currentWeek));
-//            int i = 0;
-//            WeekTime current = currentWeek;
-//            while (i++ < 3) {
-//                schedule.getWeek(WeekTime.after(current));
-//                current = WeekTime.after(current);
-//            }
-//        }).start();
     }
 
     public void actionButtonPressed(ActionEvent event) {
@@ -193,11 +184,6 @@ public class LessonsController {
     }
 
     private void refreshLessons() {
-//        String currWeek = String.format("%s - %s (%s)",
-//                currentWeek.getDateOf(MONDAY).format(WEEK_FORMATTER),
-//                currentWeek.getDateOf(SUNDAY).format(WEEK_FORMATTER),
-//                Main.getBundle().getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase())
-//        );
         String currWeek = Main.getBundle().getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase());
         currWeekLabel.setText(currWeek);
         currWeekLabel.setTextAlignment(TextAlignment.CENTER);
@@ -224,9 +210,11 @@ public class LessonsController {
     private void parseRemoveLessonDialog(LessonListItem lesson) {
         if (removeLessonController.isRemoved()) {
             if (removeLessonController.isOnce()) {
-                schedule.getWeek(currentWeek).getDay(lesson.getDay()).removeLesson(lesson.getLesson());
+                schedule.getWeek(currentWeek).getDay(lesson.getDay())
+                        .removeLesson(lesson.getLesson());
             } else {
-                schedule.getSchedule(schedule.getWeekType(currentWeek)).removeLesson(lesson.getDay(), lesson.getLesson());
+                schedule.getSchedule(schedule.getWeekType(currentWeek))
+                        .removeLesson(lesson.getDay(), lesson.getLesson());
             }
             schedule.updateLessons();
             refreshLessons();
@@ -238,22 +226,28 @@ public class LessonsController {
             CreatedLesson lesson = editLessonController.getCreatedLesson();
             if (editLessonController.isCreated()) {
                 if (lesson.isOnce()) {
-                    schedule.getWeek(currentWeek).getDay(lesson.getSourceDay()).addLesson(lesson.getLesson());
+                    schedule.getWeek(currentWeek).getDay(lesson.getSourceDay())
+                            .addLesson(lesson.getLesson());
                 } else {
-                    schedule.getCurrentSchedule().addLesson(lesson.getSourceDay(), lesson.getLesson());
+                    schedule.getCurrentSchedule()
+                            .addLesson(lesson.getTargetDay(), lesson.getLesson());
                 }
             } else {
                 if (lesson.isOnce()) {
                     if (lesson.isDayChanged()) {
-                        schedule.getWeek(currentWeek).changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
+                        schedule.getWeek(currentWeek)
+                                .changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
                     } else {
-                        schedule.getWeek(currentWeek).getDay(lesson.getSourceDay()).updateLesson(lesson.getLesson());
+                        schedule.getWeek(currentWeek).getDay(lesson.getSourceDay())
+                                .updateLesson(lesson.getLesson());
                     }
                 } else {
                     if (lesson.isDayChanged()) {
-                        schedule.getSchedule(schedule.getWeekType(currentWeek)).changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
+                        schedule.getSchedule(schedule.getWeekType(currentWeek))
+                                .changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
                     } else {
-                        schedule.getSchedule(schedule.getWeekType(currentWeek)).updateLesson(lesson.getSourceDay(), lesson.getLesson());
+                        schedule.getSchedule(schedule.getWeekType(currentWeek))
+                                .updateLesson(lesson.getSourceDay(), lesson.getLesson());
 
                     }
                 }

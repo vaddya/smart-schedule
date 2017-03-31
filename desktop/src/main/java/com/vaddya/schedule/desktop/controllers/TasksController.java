@@ -24,6 +24,9 @@ import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
  */
 public class TasksController {
 
+    @FXML
+    private ListView<Node> taskList;
+
     private MainController main;
 
     private SmartSchedule schedule;
@@ -33,9 +36,6 @@ public class TasksController {
     private Stage editTaskDialogStage;
 
     private Parent editTaskDialogParent;
-
-    @FXML
-    private ListView<Node> taskList;
 
     public void init(MainController main, SmartSchedule schedule) {
         this.main = main;

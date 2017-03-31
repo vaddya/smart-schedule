@@ -2,9 +2,12 @@ package com.vaddya.schedule.database.mongo;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.vaddya.schedule.database.ChangeRepository;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.LessonRepository;
 import com.vaddya.schedule.database.TaskRepository;
+import org.bson.Document;
 
 /**
  * com.vaddya.schedule.database.mongo at smart-schedule
@@ -14,7 +17,10 @@ import com.vaddya.schedule.database.TaskRepository;
  */
 public class MongoDatabase implements Database {
 
-    private static final String DATABASE_NAME = "smart-schedule";
+    private static final String DB = "smart-schedule";
+    private static final String TASKS = "tasks";
+    private static final String LESSONS = "lessons";
+    private static final String CHANGES = "changes";
 
     private final MongoClient client;
 
@@ -24,11 +30,19 @@ public class MongoDatabase implements Database {
 
     @Override
     public TaskRepository getTaskRepository() {
-        return new MongoTaskRepository(client.getDatabase(DATABASE_NAME));
+        MongoCollection<Document> collection = client.getDatabase(DB).getCollection(TASKS);
+        return new MongoTaskRepository(collection);
     }
 
     @Override
     public LessonRepository getLessonRepository() {
-        return new MongoLessonRepository();
+        MongoCollection<Document> collection = client.getDatabase(DB).getCollection(LESSONS);
+        return new MongoLessonRepository(collection);
+    }
+
+    @Override
+    public ChangeRepository getChangesRepository() {
+        MongoCollection<Document> collection = client.getDatabase(DB).getCollection(CHANGES);
+        return new MongoChangesRepository(collection);
     }
 }

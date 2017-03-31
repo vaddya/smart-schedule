@@ -68,11 +68,11 @@ public class WeekTime {
     }
 
     public static WeekTime current() {
-        return WeekTime.of(LocalDate.now());
+        return of(LocalDate.now());
     }
 
     public static WeekTime next() {
-        return WeekTime.after(WeekTime.current());
+        return after(current());
     }
 
     public static WeekTime before(WeekTime current) {

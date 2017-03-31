@@ -7,19 +7,16 @@ import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.WeekTime;
-import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.DatabaseDeprecated;
-import com.vaddya.schedule.database.FakeDB;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.stub.StubDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static com.vaddya.schedule.core.utils.WeekType.EVEN;
+import static com.vaddya.schedule.core.utils.WeekType.ODD;
 import static java.time.DayOfWeek.*;
 import static org.junit.Assert.*;
 
@@ -28,8 +25,6 @@ import static org.junit.Assert.*;
  *
  * @author vaddya
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(DatabaseDeprecated.class)
 public class StudyWeekTest {
 
     private StudyWeek week;
@@ -37,10 +32,9 @@ public class StudyWeekTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(DatabaseDeprecated.class);
-        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
-
-        week = new StudyWeek(WeekTime.of("25.11.2016"), new StudySchedule(WeekType.ODD));
+        Database stub = new StubDatabase();
+        StudySchedule schedule = new StudySchedule(ODD, stub.getLessonRepository());
+        week = new StudyWeek(WeekTime.of("25.11.2016"), schedule, stub.getChangesRepository());
         lesson = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")
@@ -67,9 +61,9 @@ public class StudyWeekTest {
 
     @Test
     public void testWeekType() throws Exception {
-        assertEquals(WeekType.ODD, week.getWeekType());
-        week.setWeekType(WeekType.EVEN);
-        assertEquals(WeekType.EVEN, week.getWeekType());
+        assertEquals(ODD, week.getWeekType());
+        week.setWeekType(EVEN);
+        assertEquals(EVEN, week.getWeekType());
     }
 
     @Test

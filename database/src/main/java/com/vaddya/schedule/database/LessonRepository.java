@@ -6,6 +6,7 @@ import com.vaddya.schedule.core.utils.WeekType;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * com.vaddya.schedule.database at smart-schedule
@@ -15,14 +16,16 @@ import java.util.Map;
  */
 public interface LessonRepository {
 
-    Map<DayOfWeek, List<Lesson>> getLessons(WeekType week);
+    Lesson findById(UUID id);
 
-    void addLesson(WeekType week, DayOfWeek day, Lesson lesson);
+    List<Lesson> findAllByWeekAndDay(WeekType week, DayOfWeek day);
 
-    void updateLesson(WeekType week, DayOfWeek day, Lesson lesson);
+    Map<DayOfWeek, List<Lesson>> findAll(WeekType week);
 
-    void changeLessonDay(WeekType week, DayOfWeek from, DayOfWeek to, Lesson lesson);
+    void insert(WeekType week, DayOfWeek day, Lesson lesson);
 
-    void removeLesson(WeekType week, DayOfWeek day, Lesson lesson);
+    void save(WeekType week, DayOfWeek day, Lesson lesson);
+
+    void delete(Lesson lesson);
 
 }

@@ -2,6 +2,7 @@ package com.vaddya.schedule.core.lessons;
 
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.WeekTime;
+import com.vaddya.schedule.database.ChangeRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +21,9 @@ public class StudyWeeks {
         weeks = new HashMap<>();
     }
 
-    public StudyWeek get(WeekTime weekTime, StudySchedule schedule) {
+    public StudyWeek get(WeekTime weekTime, StudySchedule schedule, ChangeRepository repository) {
         if (!weeks.containsKey(weekTime)) {
-            weeks.put(weekTime, new StudyWeek(weekTime, schedule));
+            weeks.put(weekTime, new StudyWeek(weekTime, schedule, repository));
         }
         return weeks.get(weekTime);
     }

@@ -1,7 +1,7 @@
 package com.vaddya.schedule.core.lessons;
 
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
-import com.vaddya.schedule.database.DatabaseDeprecated;
+import com.vaddya.schedule.database.ChangeRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,9 +14,9 @@ import java.util.*;
  */
 public class StudyDay implements Iterable<Lesson> {
 
-    private static final DatabaseDeprecated db = DatabaseDeprecated.getConnection();
-
     private static final Comparator<Lesson> TIME_ORDER = Comparator.comparing(Lesson::getStartTime);
+
+    private final ChangeRepository repository;
 
     private final List<Lesson> lessons;
 
@@ -25,11 +25,12 @@ public class StudyDay implements Iterable<Lesson> {
     /**
      * Конструктор, получающий список занятий и дату
      */
-    public StudyDay(List<Lesson> lessons, LocalDate date) {
+    public StudyDay(List<Lesson> lessons, LocalDate date, ChangeRepository repository) {
         this.lessons = lessons;
         this.lessons.sort(TIME_ORDER);
         this.date = date;
-        for (ChangedLesson change : db.getChanges(date)) {
+        this.repository = repository;
+        for (ChangedLesson change : repository.findByDate(date)) {
             switch (change.getChanges()) {
                 case ADD:
                     lessons.add(change.getLesson());
@@ -40,14 +41,14 @@ public class StudyDay implements Iterable<Lesson> {
                         Lesson lesson = findLesson(id);
                         lessons.add(lessons.indexOf(lesson), change.getLesson());
                     } catch (NoSuchLessonException e) {
-                        db.removeChange(change);
+                        repository.delete(change);
                         e.printStackTrace();
                     }
                     break;
                 case REMOVE:
                     boolean removed = lessons.remove(change.getLesson());
                     if (!removed) {
-                        db.removeChange(change);
+                        repository.delete(change);
                     }
                     break;
             }
@@ -81,7 +82,7 @@ public class StudyDay implements Iterable<Lesson> {
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);
         lessons.sort(TIME_ORDER);
-        db.addChange(new ChangedLesson(LessonChanges.ADD, date, lesson));
+        repository.insert(new ChangedLesson(LessonChange.ADD, date, lesson));
     }
 
     /**
@@ -137,7 +138,7 @@ public class StudyDay implements Iterable<Lesson> {
         Lesson prev = findLesson(lesson.getId());
         lessons.set(lessons.indexOf(prev), lesson);
         lessons.sort(TIME_ORDER);
-        db.addChange(new ChangedLesson(LessonChanges.UPDATE, date, lesson));
+        repository.insert(new ChangedLesson(LessonChange.UPDATE, date, lesson));
     }
 
     /**
@@ -146,7 +147,7 @@ public class StudyDay implements Iterable<Lesson> {
     public void removeLesson(Lesson lesson) {
         if (lessons.remove(lesson)) {
             lessons.sort(TIME_ORDER);
-            db.addChange(new ChangedLesson(LessonChanges.REMOVE, date, lesson));
+            repository.insert(new ChangedLesson(LessonChange.REMOVE, date, lesson));
         }
     }
 
@@ -155,7 +156,7 @@ public class StudyDay implements Iterable<Lesson> {
      */
     public void removeAllLessons() {
         for (Lesson lesson : lessons) {
-            db.addChange(new ChangedLesson(LessonChanges.REMOVE, date, lesson));
+            repository.insert(new ChangedLesson(LessonChange.REMOVE, date, lesson));
         }
         lessons.clear();
     }

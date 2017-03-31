@@ -8,7 +8,6 @@ import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.Database;
-import com.vaddya.schedule.database.mongo.MongoDatabase;
 
 /**
  * Реализация интерфейса приложения Smart Schedule
@@ -18,18 +17,22 @@ import com.vaddya.schedule.database.mongo.MongoDatabase;
  */
 public class SmartScheduleImpl implements SmartSchedule {
 
-    private final Database database = new MongoDatabase("mongodb://localhost");
+    private final Database database;
 
-    private final StudyTasks tasks = new StudyTasks(database.getTaskRepository());
+    private final StudyTasks tasks;
 
-    private final StudyWeeks weeks = new StudyWeeks();
+    private final StudySchedules schedules;
 
-    private final StudySchedules schedules = new StudySchedules();
+    private final StudyWeeks weeks;
 
     private WeekType currentWeek;
 
-    public SmartScheduleImpl() {
-        currentWeek = getWeekType(WeekTime.current());
+    public SmartScheduleImpl(Database database) {
+        this.database = database;
+        this.tasks = new StudyTasks(database.getTaskRepository());
+        this.schedules = new StudySchedules(database.getLessonRepository());
+        this.weeks = new StudyWeeks();
+        this.currentWeek = getWeekType(WeekTime.current());
     }
 
     public void swapSchedules() {
@@ -39,12 +42,12 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public StudyWeek getCurrentWeek() {
-        return weeks.get(WeekTime.current(), schedules.get(currentWeek));
+        return weeks.get(WeekTime.current(), schedules.get(currentWeek), database.getChangesRepository());
     }
 
     public StudyWeek getWeek(WeekTime weekTime) {
         WeekType weekType = getWeekType(weekTime);
-        return weeks.get(weekTime, schedules.get(weekType));
+        return weeks.get(weekTime, schedules.get(weekType), database.getChangesRepository());
     }
 
     public StudySchedule getCurrentSchedule() {

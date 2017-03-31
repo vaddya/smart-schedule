@@ -4,19 +4,16 @@ import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.lessons.StudyDay;
-import com.vaddya.schedule.database.DatabaseDeprecated;
-import com.vaddya.schedule.database.FakeDB;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.stub.StubDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static java.time.LocalDate.of;
 import static org.junit.Assert.*;
 
 /**
@@ -25,8 +22,6 @@ import static org.junit.Assert.*;
  * @author vaddya
  * @since December 01, 2016
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(DatabaseDeprecated.class)
 public class StudyDayTest {
 
     private StudyDay day;
@@ -35,10 +30,8 @@ public class StudyDayTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(DatabaseDeprecated.class);
-        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
-
-        day = new StudyDay(new ArrayList<>(), LocalDate.of(2016, 12, 1));
+        Database stub = new StubDatabase();
+        day = new StudyDay(new ArrayList<>(), of(2016, 12, 1), stub.getChangesRepository());
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")
@@ -84,7 +77,7 @@ public class StudyDayTest {
 
     @Test
     public void testDate() throws Exception {
-        LocalDate mon = LocalDate.of(2016, 12, 1);
+        LocalDate mon = of(2016, 12, 1);
         assertEquals(mon, day.getDate());
     }
 

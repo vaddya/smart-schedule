@@ -1,22 +1,21 @@
 package com.vaddya.schedule.core.schedule;
 
+import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.WeekType;
-import com.vaddya.schedule.database.DatabaseDeprecated;
+import com.vaddya.schedule.database.LessonRepository;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Класс для представления расписания
+ * Класс для представления расписания на неделю
  *
  * @author vaddya
  */
 public class StudySchedule {
 
-    private static final DatabaseDeprecated db = DatabaseDeprecated.getConnection();
+    private final LessonRepository repository;
 
     private WeekType weekType;
 
@@ -25,9 +24,10 @@ public class StudySchedule {
     /**
      * Конструктор, принимающий тип недели
      */
-    public StudySchedule(WeekType weekType) {
+    public StudySchedule(WeekType weekType, LessonRepository repository) {
         this.weekType = weekType;
-        this.days = db.getLessons(weekType);
+        this.repository = repository;
+        this.days = repository.findAll(weekType);
     }
 
     /**
@@ -49,7 +49,20 @@ public class StudySchedule {
      */
     public void addLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).add(lesson);
-        db.addLesson(weekType, day, lesson);
+        repository.insert(weekType, day, lesson);
+    }
+
+    /**
+     * Найти занятие по ID
+     */
+    public Lesson findLesson(UUID id) {
+        Optional<Lesson> result = days.entrySet().stream()
+                .map(Map.Entry::getValue).flatMap(Collection::stream)
+                .filter(lesson -> lesson.getId().equals(id)).findFirst();
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new NoSuchLessonException("No lesson with ID: " + id);
     }
 
     /**
@@ -64,11 +77,16 @@ public class StudySchedule {
      */
     public void updateLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).add(lesson);
-        db.updateLesson(weekType, day, lesson);
+        repository.save(weekType, day, lesson);
     }
 
+    /**
+     * Изменить день занятия
+     */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
-        // TODO: 12/22/2016
+        days.get(from).remove(lesson);
+        days.get(to).add(lesson);
+        repository.save(weekType, to, lesson);
     }
 
     /**
@@ -76,7 +94,7 @@ public class StudySchedule {
      */
     public void removeLesson(DayOfWeek day, Lesson lesson) {
         days.get(day).remove(lesson);
-        db.removeLesson(weekType, day, lesson);
+        repository.delete(lesson);
     }
 
     /**
@@ -84,7 +102,7 @@ public class StudySchedule {
      */
     public List<Lesson> getLessons(DayOfWeek day) {
         List<Lesson> clone = new ArrayList<>();
-        days.get(day).forEach(clone::add);
+        clone.addAll(days.get(day));
         return clone;
     }
 

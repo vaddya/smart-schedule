@@ -2,7 +2,6 @@ package com.vaddya.schedule.database.mongo;
 
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.TaskRepository;
 import org.bson.Document;
@@ -21,16 +20,14 @@ import static com.mongodb.client.model.Filters.eq;
  */
 public class MongoTaskRepository implements TaskRepository {
 
-    private static final String COLLECTION_NAME = "tasks";
-
     private final MongoCollection<Document> collection;
 
-    public MongoTaskRepository(MongoDatabase database) {
-        collection = database.getCollection(COLLECTION_NAME);
+    public MongoTaskRepository(MongoCollection<Document> collection) {
+        this.collection = collection;
     }
 
     @Override
-    public Task findTask(UUID id) {
+    public Task findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
         if (document != null) {
             return parseTask(document);
@@ -39,7 +36,7 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllTasks() {
+    public List<Task> findAll() {
         List<Document> documents = collection.find().into(new ArrayList<>());
         List<Task> tasks = new ArrayList<>();
         documents.forEach(d -> tasks.add(parseTask(d)));
@@ -47,27 +44,30 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void addTask(Task task) {
-        String json = new Gson().toJson(task);
-        json = json.replace("id", "_id");
-        Document document = Document.parse(json);
+    public void insert(Task task) {
+        Document document = fromTask(task);
         collection.insertOne(document);
     }
 
     @Override
-    public void updateTask(Task task) {
-        String json = new Gson().toJson(task);
-        json = json.replace("id", "_id");
-        Document document = Document.parse(json);
+    public void save(Task task) {
+        Document document = fromTask(task);
         collection.replaceOne(eq("_id", task.getId().toString()), document);
     }
 
     @Override
-    public void removeTask(Task task) {
+    public void delete(Task task) {
         collection.deleteOne(eq("_id", task.getId().toString()));
     }
 
+    private Document fromTask(Task task) {
+        String json = new Gson().toJson(task);
+        json = json.replace("id", "_id");
+        return Document.parse(json);
+    }
+
     private Task parseTask(Document document) {
+        document.put("id", document.remove("_id"));
         return new Gson().fromJson(document.toJson(), Task.class);
     }
 }

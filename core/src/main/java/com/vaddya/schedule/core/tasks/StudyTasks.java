@@ -23,14 +23,13 @@ public class StudyTasks implements Iterable<Task> {
     private static final Comparator<Task> COMPLETE_DATE_ORDER =
             Comparator.comparing(Task::isComplete).thenComparing(DATE_ORDER);
 
-
     private final TaskRepository repository;
 
     private final List<Task> tasks;
 
     public StudyTasks(TaskRepository repository) {
         this.repository = repository;
-        this.tasks = repository.findAllTasks()
+        this.tasks = repository.findAll()
                 .stream()
                 .sorted(COMPLETE_DATE_ORDER)
                 .collect(Collectors.toList());
@@ -56,7 +55,7 @@ public class StudyTasks implements Iterable<Task> {
     public void addTask(Task task) {
         tasks.add(task);
         tasks.sort(COMPLETE_DATE_ORDER);
-        repository.addTask(task);
+        repository.insert(task);
     }
 
     /**
@@ -105,14 +104,14 @@ public class StudyTasks implements Iterable<Task> {
         Task upd = findTask(task.getId());
         tasks.set(tasks.indexOf(upd), task);
         tasks.sort(COMPLETE_DATE_ORDER);
-        repository.updateTask(task);
+        repository.save(task);
     }
 
     /**
      * Удалить задание
      */
     public void removeTask(Task task) {
-        repository.removeTask(task);
+        repository.delete(task);
         tasks.remove(task);
     }
 
@@ -121,7 +120,7 @@ public class StudyTasks implements Iterable<Task> {
      */
     public void removeAllTasks() {
         for (Task task : tasks) {
-            repository.removeTask(task);
+            repository.delete(task);
         }
         tasks.clear();
     }

@@ -13,20 +13,20 @@ public class ChangedLesson {
 
     private final UUID id;
 
-    private final LessonChanges changes;
+    private final LessonChange changes;
 
     private final LocalDate date;
 
     private final Lesson lesson;
 
-    public ChangedLesson(UUID id, LessonChanges changes, LocalDate date, Lesson lesson) {
+    public ChangedLesson(UUID id, LessonChange changes, LocalDate date, Lesson lesson) {
         this.id = id;
         this.changes = changes;
         this.date = date;
         this.lesson = lesson;
     }
 
-    public ChangedLesson(LessonChanges changes, LocalDate date, Lesson lesson) {
+    public ChangedLesson(LessonChange changes, LocalDate date, Lesson lesson) {
         this.id = UUID.randomUUID();
         this.changes = changes;
         this.date = date;
@@ -37,7 +37,7 @@ public class ChangedLesson {
         return id;
     }
 
-    public LessonChanges getChanges() {
+    public LessonChange getChanges() {
         return changes;
     }
 
