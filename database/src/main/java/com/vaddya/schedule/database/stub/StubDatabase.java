@@ -24,7 +24,7 @@ public class StubDatabase implements Database {
     }
 
     @Override
-    public ChangeRepository getChangesRepository() {
+    public ChangeRepository getChangeRepository() {
         return new StubChangeRepository();
     }
 }

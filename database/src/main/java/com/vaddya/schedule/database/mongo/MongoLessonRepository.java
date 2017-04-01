@@ -13,6 +13,7 @@ import java.util.*;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static java.util.stream.Collectors.toList;
 
 /**
  * com.vaddya.schedule.database.mongo at smart-schedule
@@ -38,19 +39,21 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     @Override
-    public List<Lesson> findAllByWeekAndDay(WeekType week, DayOfWeek day) {
-        Bson filter = and(eq("week", week.toString()), eq("day", day.toString()));
-        List<Document> documents = collection.find(filter).into(new ArrayList<>());
-        List<Lesson> lessons = new ArrayList<>();
-        documents.forEach(d -> lessons.add(parseLesson(d)));
-        return lessons;
+    public List<Lesson> findAll(WeekType week, DayOfWeek day) {
+        Bson filter = and(eq("week", week.toString()),
+                eq("day", day.toString()));
+        return collection.find(filter)
+                .into(new ArrayList<>())
+                .stream()
+                .map(this::parseLesson)
+                .collect(toList());
     }
 
     @Override
     public Map<DayOfWeek, List<Lesson>> findAll(WeekType week) {
         Map<DayOfWeek, List<Lesson>> map = new EnumMap<>(DayOfWeek.class);
         for (DayOfWeek day : DayOfWeek.values()) {
-            map.put(day, findAllByWeekAndDay(week, day));
+            map.put(day, findAll(week, day));
         }
         return map;
     }
@@ -72,6 +75,11 @@ public class MongoLessonRepository implements LessonRepository {
     @Override
     public void delete(Lesson lesson) {
         collection.deleteOne(eq("_id", lesson.getId().toString()));
+    }
+
+    @Override
+    public void deleteAll() {
+        collection.drop();
     }
 
     private Document fromLesson(Lesson lesson) {

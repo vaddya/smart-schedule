@@ -38,9 +38,6 @@ public class SmartScheduleTest {
 
     @Before
     public void setUp() {
-//        PowerMockito.mockStatic(DatabaseDeprecated.class);
-//        PowerMockito.when(DatabaseDeprecated.getConnection()).thenReturn(FakeDB.getConnection());
-
         Database stub = new StubDatabase();
         smartSchedule = new SmartScheduleImpl(stub);
         lesson = new Lesson.Builder()

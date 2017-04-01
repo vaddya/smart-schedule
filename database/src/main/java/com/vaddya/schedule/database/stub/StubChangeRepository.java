@@ -6,6 +6,7 @@ import com.vaddya.schedule.database.ChangeRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * com.vaddya.schedule.database.stub at smart-schedule
@@ -16,7 +17,12 @@ import java.util.List;
 public class StubChangeRepository implements ChangeRepository {
 
     @Override
-    public List<ChangedLesson> findByDate(LocalDate date) {
+    public ChangedLesson findById(UUID id) {
+        return null;
+    }
+
+    @Override
+    public List<ChangedLesson> findAll(LocalDate date) {
         return new ArrayList<>();
     }
 

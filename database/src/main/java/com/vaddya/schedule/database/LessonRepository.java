@@ -18,7 +18,7 @@ public interface LessonRepository {
 
     Lesson findById(UUID id);
 
-    List<Lesson> findAllByWeekAndDay(WeekType week, DayOfWeek day);
+    List<Lesson> findAll(WeekType week, DayOfWeek day);
 
     Map<DayOfWeek, List<Lesson>> findAll(WeekType week);
 
@@ -27,5 +27,7 @@ public interface LessonRepository {
     void save(WeekType week, DayOfWeek day, Lesson lesson);
 
     void delete(Lesson lesson);
+
+    void deleteAll();
 
 }

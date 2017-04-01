@@ -34,7 +34,7 @@ public class StudyWeekTest {
     public void setUp() {
         Database stub = new StubDatabase();
         StudySchedule schedule = new StudySchedule(ODD, stub.getLessonRepository());
-        week = new StudyWeek(WeekTime.of("25.11.2016"), schedule, stub.getChangesRepository());
+        week = new StudyWeek(WeekTime.of("25.11.2016"), schedule, stub.getChangeRepository());
         lesson = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

@@ -12,6 +12,6 @@ public interface Database {
 
     LessonRepository getLessonRepository();
 
-    ChangeRepository getChangesRepository();
+    ChangeRepository getChangeRepository();
 
 }

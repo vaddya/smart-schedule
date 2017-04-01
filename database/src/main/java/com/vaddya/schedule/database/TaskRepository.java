@@ -23,4 +23,6 @@ public interface TaskRepository {
 
     void delete(Task task);
 
+    void deleteAll();
+
 }

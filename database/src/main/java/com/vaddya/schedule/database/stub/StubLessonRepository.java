@@ -21,7 +21,7 @@ public class StubLessonRepository implements LessonRepository {
     }
 
     @Override
-    public List<Lesson> findAllByWeekAndDay(WeekType week, DayOfWeek day) {
+    public List<Lesson> findAll(WeekType week, DayOfWeek day) {
         return new ArrayList<>();
     }
 
@@ -46,6 +46,11 @@ public class StubLessonRepository implements LessonRepository {
 
     @Override
     public void delete(Lesson lesson) {
+
+    }
+
+    @Override
+    public void deleteAll() {
 
     }
 }

@@ -41,7 +41,7 @@ public class MongoDatabase implements Database {
     }
 
     @Override
-    public ChangeRepository getChangesRepository() {
+    public ChangeRepository getChangeRepository() {
         MongoCollection<Document> collection = client.getDatabase(DB).getCollection(CHANGES);
         return new MongoChangesRepository(collection);
     }

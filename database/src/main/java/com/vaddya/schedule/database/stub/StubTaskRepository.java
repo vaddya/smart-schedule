@@ -39,4 +39,9 @@ public class StubTaskRepository implements TaskRepository {
     public void delete(Task task) {
 
     }
+
+    @Override
+    public void deleteAll() {
+
+    }
 }

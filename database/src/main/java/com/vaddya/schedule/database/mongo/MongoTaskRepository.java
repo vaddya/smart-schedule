@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
+import static java.util.stream.Collectors.toList;
 
 /**
  * com.vaddya.schedule.database at smart-schedule
@@ -37,10 +38,11 @@ public class MongoTaskRepository implements TaskRepository {
 
     @Override
     public List<Task> findAll() {
-        List<Document> documents = collection.find().into(new ArrayList<>());
-        List<Task> tasks = new ArrayList<>();
-        documents.forEach(d -> tasks.add(parseTask(d)));
-        return tasks;
+        return collection.find()
+                .into(new ArrayList<>())
+                .stream()
+                .map(this::parseTask)
+                .collect(toList());
     }
 
     @Override
@@ -58,6 +60,11 @@ public class MongoTaskRepository implements TaskRepository {
     @Override
     public void delete(Task task) {
         collection.deleteOne(eq("_id", task.getId().toString()));
+    }
+
+    @Override
+    public void deleteAll() {
+        collection.drop();
     }
 
     private Document fromTask(Task task) {

@@ -30,8 +30,8 @@ public class StudyDay implements Iterable<Lesson> {
         this.lessons.sort(TIME_ORDER);
         this.date = date;
         this.repository = repository;
-        for (ChangedLesson change : repository.findByDate(date)) {
-            switch (change.getChanges()) {
+        for (ChangedLesson change : repository.findAll(date)) {
+            switch (change.getChange()) {
                 case ADD:
                     lessons.add(change.getLesson());
                     break;
@@ -39,7 +39,8 @@ public class StudyDay implements Iterable<Lesson> {
                     UUID id = change.getLesson().getId();
                     try {
                         Lesson lesson = findLesson(id);
-                        lessons.add(lessons.indexOf(lesson), change.getLesson());
+                        lessons.remove(lesson);
+                        lessons.add(change.getLesson());
                     } catch (NoSuchLessonException e) {
                         repository.delete(change);
                         e.printStackTrace();

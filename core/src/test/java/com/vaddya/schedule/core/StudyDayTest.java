@@ -31,7 +31,7 @@ public class StudyDayTest {
     @Before
     public void setUp() {
         Database stub = new StubDatabase();
-        day = new StudyDay(new ArrayList<>(), of(2016, 12, 1), stub.getChangesRepository());
+        day = new StudyDay(new ArrayList<>(), of(2016, 12, 1), stub.getChangeRepository());
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

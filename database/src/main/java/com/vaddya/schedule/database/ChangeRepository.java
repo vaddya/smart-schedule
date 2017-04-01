@@ -4,6 +4,7 @@ import com.vaddya.schedule.core.lessons.ChangedLesson;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * com.vaddya.schedule.database at smart-schedule
@@ -13,7 +14,9 @@ import java.util.List;
  */
 public interface ChangeRepository {
 
-    List<ChangedLesson> findByDate(LocalDate date);
+    ChangedLesson findById(UUID id);
+
+    List<ChangedLesson> findAll(LocalDate date);
 
     void insert(ChangedLesson lesson);
 
