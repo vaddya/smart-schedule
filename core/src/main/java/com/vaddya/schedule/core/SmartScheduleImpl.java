@@ -42,12 +42,14 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public StudyWeek getCurrentWeek() {
-        return weeks.get(WeekTime.current(), schedules.get(currentWeek), database.getChangeRepository());
+        return weeks.get(WeekTime.current(), schedules.get(currentWeek),
+                database.getLessonRepository(), database.getChangeRepository());
     }
 
     public StudyWeek getWeek(WeekTime weekTime) {
         WeekType weekType = getWeekType(weekTime);
-        return weeks.get(weekTime, schedules.get(weekType), database.getChangeRepository());
+        return weeks.get(weekTime, schedules.get(weekType),
+                database.getLessonRepository(), database.getChangeRepository());
     }
 
     public StudySchedule getCurrentSchedule() {

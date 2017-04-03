@@ -30,12 +30,9 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     @Override
-    public Lesson findById(UUID id) {
+    public Optional<Lesson> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
-        if (document != null) {
-            return parseLesson(document);
-        }
-        return null;
+        return Optional.ofNullable(parseLesson(document));
     }
 
     @Override
@@ -73,7 +70,7 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     @Override
-    public void delete(Lesson lesson) {
+    public void delete(WeekType week, DayOfWeek day, Lesson lesson) {
         collection.deleteOne(eq("_id", lesson.getId().toString()));
     }
 
@@ -89,6 +86,9 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     private Lesson parseLesson(Document document) {
+        if (document == null) {
+            return null;
+        }
         document.put("id", document.remove("_id"));
         return new Gson().fromJson(document.toJson(), Lesson.class);
     }

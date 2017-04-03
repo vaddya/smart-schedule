@@ -2,7 +2,7 @@ package com.vaddya.schedule.database.mongo;
 
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
-import com.vaddya.schedule.core.lessons.ChangedLesson;
+import com.vaddya.schedule.core.lessons.Change;
 import com.vaddya.schedule.database.ChangeRepository;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -10,6 +10,7 @@ import org.bson.conversions.Bson;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.and;
@@ -31,16 +32,13 @@ public class MongoChangesRepository implements ChangeRepository {
     }
 
     @Override
-    public ChangedLesson findById(UUID id) {
+    public Optional<Change> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
-        if (document != null) {
-            return parseChangedLesson(document);
-        }
-        return null;
+        return Optional.ofNullable(parseChangedLesson(document));
     }
 
     @Override
-    public List<ChangedLesson> findAll(LocalDate date) {
+    public List<Change> findAll(LocalDate date) {
         Bson filter = and(eq("date.year", date.getYear()),
                 eq("date.month", date.getMonthValue()),
                 eq("date.day", date.getDayOfMonth()));
@@ -52,13 +50,13 @@ public class MongoChangesRepository implements ChangeRepository {
     }
 
     @Override
-    public void insert(ChangedLesson lesson) {
+    public void insert(Change lesson) {
         Document document = fromChangedLesson(lesson);
         collection.insertOne(document);
     }
 
     @Override
-    public void delete(ChangedLesson lesson) {
+    public void delete(Change lesson) {
         collection.deleteOne(eq("_id", lesson.getId().toString()));
     }
 
@@ -67,14 +65,27 @@ public class MongoChangesRepository implements ChangeRepository {
         collection.drop();
     }
 
-    private Document fromChangedLesson(ChangedLesson lesson) {
+    @Override
+    public boolean isEmpty() {
+        return collection.count() != 0;
+    }
+
+    @Override
+    public long size() {
+        return collection.count();
+    }
+
+    private Document fromChangedLesson(Change lesson) {
         String json = new Gson().toJson(lesson);
         json = json.replaceFirst("id", "_id");
         return Document.parse(json);
     }
 
-    private ChangedLesson parseChangedLesson(Document document) {
+    private Change parseChangedLesson(Document document) {
+        if (document == null) {
+            return null;
+        }
         document.put("id", document.remove("_id"));
-        return new Gson().fromJson(document.toJson(), ChangedLesson.class);
+        return new Gson().fromJson(document.toJson(), Change.class);
     }
 }

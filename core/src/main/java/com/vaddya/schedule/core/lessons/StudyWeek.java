@@ -1,17 +1,17 @@
 package com.vaddya.schedule.core.lessons;
 
-import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
-import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.ChangeRepository;
+import com.vaddya.schedule.database.LessonRepository;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+
+import static com.vaddya.schedule.core.lessons.ChangeType.ADD;
+import static com.vaddya.schedule.core.lessons.ChangeType.REMOVE;
 
 /**
  * Класс для представления учебной недели (списка учебных дней)
@@ -27,20 +27,20 @@ public class StudyWeek {
 
     private final Map<DayOfWeek, StudyDay> days;
 
-    private final ChangeRepository repository;
+    private final ChangeRepository changes;
 
     /**
      * Конструктор, получающий недельный период времени и расписание
      */
-    public StudyWeek(WeekTime weekTime, StudySchedule schedule, ChangeRepository repository) {
+    public StudyWeek(WeekTime weekTime, WeekType weekType, LessonRepository lessons, ChangeRepository changes) {
         this.weekTime = weekTime;
-        this.weekType = schedule.getWeekType();
+        this.weekType = weekType;
+        this.changes = changes;
         this.days = new EnumMap<>(DayOfWeek.class);
         for (DayOfWeek day : DayOfWeek.values()) {
-            StudyDay studyDay = new StudyDay(schedule.getLessons(day), weekTime.getDateOf(day), repository);
+            StudyDay studyDay = new StudyDay(weekTime.getDateOf(day), weekType, lessons, changes);
             days.put(day, studyDay);
         }
-        this.repository = repository;
     }
 
     /**
@@ -72,23 +72,6 @@ public class StudyWeek {
     }
 
     /**
-     * Найти занятие по ID
-     *
-     * @throws NoSuchLessonException если указан несуществующий ID
-     */
-    public Lesson findLesson(UUID id) {
-        Optional<Lesson> res = days.entrySet().stream()
-                .flatMap(entrySet -> entrySet.getValue().getLessons().stream())
-                .filter(lesson -> lesson.getId().equals(id))
-                .findFirst();
-        if (res.isPresent()) {
-            return res.get();
-        } else {
-            throw new NoSuchLessonException("Wrong lesson ID: " + id);
-        }
-    }
-
-    /**
      * Получить учебный день
      */
     public StudyDay getDay(DayOfWeek day) {
@@ -107,17 +90,10 @@ public class StudyWeek {
      * Изменить день занятия на данной неделе
      */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
-        UUID id = lesson.getId();
-        try {
-            days.get(from).removeLesson(findLesson(id));
-            days.get(to).addLesson(lesson);
-            ChangedLesson remove = new ChangedLesson(LessonChange.REMOVE, weekTime.getDateOf(from), lesson);
-            ChangedLesson add = new ChangedLesson(LessonChange.ADD, weekTime.getDateOf(to), lesson);
-            repository.insert(remove);
-            repository.insert(add);
-        } catch (NoSuchLessonException e) {
-            e.printStackTrace();
-        }
+        Change remove = new Change(REMOVE, weekTime.getDateOf(from), lesson);
+        Change add = new Change(ADD, weekTime.getDateOf(to), lesson);
+        changes.insert(remove);
+        changes.insert(add);
     }
 
     /**
@@ -126,8 +102,7 @@ public class StudyWeek {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(
-                String.format("Week Type: %s (%s)%n", weekType, weekTime)
-        );
+                String.format("Week Type: %s (%s)%n", weekType, weekTime));
         days.entrySet()
                 .stream()
                 .filter(entry -> !entry.getValue().isEmpty())

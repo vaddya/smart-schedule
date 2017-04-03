@@ -1,4 +1,4 @@
-package com.vaddya.schedule.database.stub;
+package com.vaddya.schedule.database.memory;
 
 import com.vaddya.schedule.database.ChangeRepository;
 import com.vaddya.schedule.database.Database;
@@ -6,25 +6,25 @@ import com.vaddya.schedule.database.LessonRepository;
 import com.vaddya.schedule.database.TaskRepository;
 
 /**
- * com.vaddya.schedule.database.stub at smart-schedule
+ * com.vaddya.schedule.database.memory at smart-schedule
  *
  * @author vaddya
  * @since March 31, 2017
  */
-public class StubDatabase implements Database {
+public class MemoryDatabase implements Database {
 
     @Override
     public TaskRepository getTaskRepository() {
-        return new StubTaskRepository();
+        return new MemoryTaskRepository();
     }
 
     @Override
     public LessonRepository getLessonRepository() {
-        return new StubLessonRepository();
+        return new MemoryLessonRepository();
     }
 
     @Override
     public ChangeRepository getChangeRepository() {
-        return new StubChangeRepository();
+        return new MemoryChangeRepository();
     }
 }

@@ -67,6 +67,16 @@ public class MongoTaskRepository implements TaskRepository {
         collection.drop();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return collection.count() != 0;
+    }
+
+    @Override
+    public long size() {
+        return collection.count();
+    }
+
     private Document fromTask(Task task) {
         String json = new Gson().toJson(task);
         json = json.replace("id", "_id");

@@ -5,7 +5,7 @@ package com.vaddya.schedule.core.lessons;
  *
  * @author vaddya
  */
-public enum LessonChange {
+public enum ChangeType {
 
     /**
      * Дополнительный урок

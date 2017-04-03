@@ -9,24 +9,24 @@ import java.util.UUID;
  *
  * @author vaddya
  */
-public class ChangedLesson {
+public class Change {
 
     private final UUID id;
 
-    private final LessonChange change;
+    private final ChangeType change;
 
     private final LocalDate date;
 
     private final Lesson lesson;
 
-    public ChangedLesson(UUID id, LessonChange change, LocalDate date, Lesson lesson) {
+    public Change(UUID id, ChangeType change, LocalDate date, Lesson lesson) {
         this.id = id;
         this.change = change;
         this.date = date;
         this.lesson = lesson;
     }
 
-    public ChangedLesson(LessonChange change, LocalDate date, Lesson lesson) {
+    public Change(ChangeType change, LocalDate date, Lesson lesson) {
         this(UUID.randomUUID(), change, date, lesson);
     }
 
@@ -34,7 +34,7 @@ public class ChangedLesson {
         return id;
     }
 
-    public LessonChange getChange() {
+    public ChangeType getChange() {
         return change;
     }
 

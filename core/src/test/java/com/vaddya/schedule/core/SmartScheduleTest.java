@@ -6,7 +6,7 @@ import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.Database;
-import com.vaddya.schedule.database.stub.StubDatabase;
+import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,8 +38,8 @@ public class SmartScheduleTest {
 
     @Before
     public void setUp() {
-        Database stub = new StubDatabase();
-        smartSchedule = new SmartScheduleImpl(stub);
+        Database database = new MemoryDatabase();
+        smartSchedule = new SmartScheduleImpl(database);
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")
@@ -65,13 +65,7 @@ public class SmartScheduleTest {
         day.addLesson(lesson);
         assertEquals(1, day.getNumberOfLessons());
         assertEquals("Programming", day.findLesson(lesson.getId()).getSubject());
-    }
-
-    @Test
-    public void removeLessonTest() throws Exception {
-        day.addLesson(lesson);
-        assertEquals(1, day.getNumberOfLessons());
-        day.removeLesson(day.findLesson(0));
+        day.removeLesson(lesson);
         assertEquals(0, day.getNumberOfLessons());
     }
 

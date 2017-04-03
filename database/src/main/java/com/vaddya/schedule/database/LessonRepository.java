@@ -6,6 +6,7 @@ import com.vaddya.schedule.core.utils.WeekType;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -16,7 +17,7 @@ import java.util.UUID;
  */
 public interface LessonRepository {
 
-    Lesson findById(UUID id);
+    Optional<Lesson> findById(UUID id);
 
     List<Lesson> findAll(WeekType week, DayOfWeek day);
 
@@ -26,7 +27,7 @@ public interface LessonRepository {
 
     void save(WeekType week, DayOfWeek day, Lesson lesson);
 
-    void delete(Lesson lesson);
+    void delete(WeekType week, DayOfWeek day, Lesson lesson);
 
     void deleteAll();
 

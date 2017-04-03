@@ -25,4 +25,7 @@ public interface TaskRepository {
 
     void deleteAll();
 
+    boolean isEmpty();
+
+    long size();
 }

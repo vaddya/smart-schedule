@@ -1,9 +1,10 @@
 package com.vaddya.schedule.database;
 
-import com.vaddya.schedule.core.lessons.ChangedLesson;
+import com.vaddya.schedule.core.lessons.Change;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -14,14 +15,17 @@ import java.util.UUID;
  */
 public interface ChangeRepository {
 
-    ChangedLesson findById(UUID id);
+    Optional<Change> findById(UUID id);
 
-    List<ChangedLesson> findAll(LocalDate date);
+    List<Change> findAll(LocalDate date);
 
-    void insert(ChangedLesson lesson);
+    void insert(Change lesson);
 
-    void delete(ChangedLesson lesson);
+    void delete(Change lesson);
 
     void deleteAll();
 
+    boolean isEmpty();
+
+    long size();
 }

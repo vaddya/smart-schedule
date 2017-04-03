@@ -1,8 +1,10 @@
 package com.vaddya.schedule.desktop.controllers;
 
+import com.mongodb.MongoClient;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.mongo.MongoDatabase;
 import com.vaddya.schedule.desktop.Main;
 import javafx.application.Platform;
@@ -52,7 +54,9 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        schedule = new SmartScheduleImpl(new MongoDatabase("mongodb://localhost"));
+        MongoClient client = new MongoClient();
+        Database database = new MongoDatabase(client);
+        schedule = new SmartScheduleImpl(database);
         lessonsController.init(this, schedule);
         tasksController.init(this, schedule);
         currDateMenu.setText(Main.getBundle().getString("today") + " " + LocalDate.now().format(FORMATTER));

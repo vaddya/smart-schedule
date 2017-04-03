@@ -4,7 +4,7 @@ import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.database.Database;
-import com.vaddya.schedule.database.stub.StubDatabase;
+import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class StudyWeekScheduleTest {
 
     @Before
     public void setUp() {
-        Database stub = new StubDatabase();
+        Database stub = new MemoryDatabase();
         schedule = new StudySchedule(ODD, stub.getLessonRepository());
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")

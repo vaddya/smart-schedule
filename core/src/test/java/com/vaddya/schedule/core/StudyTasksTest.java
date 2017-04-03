@@ -5,7 +5,7 @@ import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.TaskRepository;
-import com.vaddya.schedule.database.stub.StubDatabase;
+import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ public class StudyTasksTest {
 
     @Before
     public void setUp() throws Exception {
-        Database stub = new StubDatabase();
+        Database stub = new MemoryDatabase();
         TaskRepository repository = stub.getTaskRepository();
         tasks = new StudyTasks(repository);
         task1 = new Task.Builder()
