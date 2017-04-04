@@ -69,6 +69,18 @@ public class StudyWeekTest {
 
     @Test
     public void testChangeLessonDay() throws Exception {
-        // TODO: 4/4/2017
+        assertEquals(0, week.getDay(MONDAY).getLessons().size());
+        assertEquals(0, week.getDay(FRIDAY).getLessons().size());
+
+        week.getDay(MONDAY).addLesson(lesson);
+
+        assertEquals(1, week.getDay(MONDAY).getLessons().size());
+        assertEquals(0, week.getDay(FRIDAY).getLessons().size());
+
+        week.changeLessonDay(MONDAY, FRIDAY, lesson);
+
+        assertEquals(1, week.getDay(FRIDAY).getLessons().size());
+        assertEquals(0, week.getDay(MONDAY).getLessons().size());
     }
+
 }

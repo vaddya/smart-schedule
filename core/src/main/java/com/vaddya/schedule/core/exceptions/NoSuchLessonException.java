@@ -8,7 +8,9 @@ import java.util.NoSuchElementException;
  * @author vaddya
  */
 public class NoSuchLessonException extends NoSuchElementException {
+
     public NoSuchLessonException(String s) {
         super(s);
     }
+
 }

@@ -8,7 +8,9 @@ import java.util.NoSuchElementException;
  * @author vaddya
  */
 public class NoSuchTaskException extends NoSuchElementException {
+
     public NoSuchTaskException(String s) {
         super(s);
     }
+
 }

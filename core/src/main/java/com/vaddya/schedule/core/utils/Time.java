@@ -81,4 +81,5 @@ public final class Time implements Comparable<Time> {
     public String toString() {
         return time.format(FORMATTER);
     }
+
 }

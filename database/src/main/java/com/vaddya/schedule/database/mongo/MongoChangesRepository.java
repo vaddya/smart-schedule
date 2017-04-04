@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -34,7 +35,7 @@ public class MongoChangesRepository implements ChangeRepository {
     @Override
     public Optional<Change> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
-        return Optional.ofNullable(parseChangedLesson(document));
+        return ofNullable(parseChange(document));
     }
 
     @Override
@@ -45,19 +46,24 @@ public class MongoChangesRepository implements ChangeRepository {
         return collection.find(filter)
                 .into(new ArrayList<>())
                 .stream()
-                .map(this::parseChangedLesson)
+                .map(this::parseChange)
                 .collect(toList());
     }
 
     @Override
-    public void insert(Change lesson) {
-        Document document = fromChangedLesson(lesson);
+    public void insert(Change change) {
+        Bson filter = eq("lesson.id", change.getLesson().getId().toString());
+        Document document = fromChange(change);
+        Document existed = collection.find(filter).first();
+        if (existed != null) {
+            collection.deleteOne(filter);
+        }
         collection.insertOne(document);
     }
 
     @Override
-    public void delete(Change lesson) {
-        collection.deleteOne(eq("_id", lesson.getId().toString()));
+    public void delete(Change change) {
+        collection.deleteOne(eq("_id", change.getId().toString()));
     }
 
     @Override
@@ -67,7 +73,7 @@ public class MongoChangesRepository implements ChangeRepository {
 
     @Override
     public boolean isEmpty() {
-        return collection.count() != 0;
+        return collection.count() == 0;
     }
 
     @Override
@@ -75,17 +81,18 @@ public class MongoChangesRepository implements ChangeRepository {
         return collection.count();
     }
 
-    private Document fromChangedLesson(Change lesson) {
-        String json = new Gson().toJson(lesson);
+    private Document fromChange(Change change) {
+        String json = new Gson().toJson(change);
         json = json.replaceFirst("id", "_id");
         return Document.parse(json);
     }
 
-    private Change parseChangedLesson(Document document) {
+    private Change parseChange(Document document) {
         if (document == null) {
             return null;
         }
         document.put("id", document.remove("_id"));
         return new Gson().fromJson(document.toJson(), Change.class);
     }
+
 }

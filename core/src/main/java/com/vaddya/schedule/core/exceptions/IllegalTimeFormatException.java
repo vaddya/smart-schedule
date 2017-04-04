@@ -6,7 +6,9 @@ package com.vaddya.schedule.core.exceptions;
  * @author vaddya
  */
 public class IllegalTimeFormatException extends IllegalArgumentException {
+
     public IllegalTimeFormatException(String s) {
         super(s);
     }
+
 }

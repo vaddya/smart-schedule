@@ -19,10 +19,10 @@ public class StudySchedules {
 
     private final Map<WeekType, StudySchedule> schedules;
 
-    public StudySchedules(LessonRepository repository) {
+    public StudySchedules(LessonRepository lessons) {
         schedules = new EnumMap<>(WeekType.class);
-        schedules.put(ODD, new StudySchedule(ODD, repository));
-        schedules.put(EVEN, new StudySchedule(EVEN, repository));
+        schedules.put(ODD, new StudySchedule(ODD, lessons));
+        schedules.put(EVEN, new StudySchedule(EVEN, lessons));
     }
 
     public StudySchedule get(WeekType weekType) {
@@ -34,4 +34,5 @@ public class StudySchedules {
         schedules.get(EVEN).setWeekType(ODD);
         schedules.put(EVEN, schedules.put(ODD, schedules.get(EVEN)));
     }
+
 }

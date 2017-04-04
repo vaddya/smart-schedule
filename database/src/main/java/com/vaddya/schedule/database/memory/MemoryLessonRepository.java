@@ -48,12 +48,17 @@ public class MemoryLessonRepository implements LessonRepository {
 
     @Override
     public List<Lesson> findAll(WeekType week, DayOfWeek day) {
-        return getSchedule(week).get(day);
+        return new ArrayList<>(getSchedule(week).get(day));
     }
 
     @Override
     public Map<DayOfWeek, List<Lesson>> findAll(WeekType week) {
-        return getSchedule(week);
+        Map<DayOfWeek, List<Lesson>> source = getSchedule(week);
+        Map<DayOfWeek, List<Lesson>> clone = new EnumMap<>(DayOfWeek.class);
+        for (DayOfWeek day : DayOfWeek.values()) {
+            clone.put(day, new ArrayList<>(source.get(day)));
+        }
+        return clone;
     }
 
     @Override
@@ -63,7 +68,11 @@ public class MemoryLessonRepository implements LessonRepository {
 
     @Override
     public void save(WeekType week, DayOfWeek day, Lesson lesson) {
-        getSchedule(week).get(day).add(lesson);
+        Optional<Lesson> optional = findById(lesson.getId());
+        if (optional.isPresent()) {
+            getSchedule(week).get(day).remove(optional.get());
+            getSchedule(week).get(day).add(lesson);
+        }
     }
 
     @Override
@@ -80,4 +89,5 @@ public class MemoryLessonRepository implements LessonRepository {
     private Map<DayOfWeek, List<Lesson>> getSchedule(WeekType weekType) {
         return weekType == ODD ? odd : even;
     }
+
 }

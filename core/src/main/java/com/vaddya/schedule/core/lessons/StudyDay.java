@@ -5,7 +5,6 @@ import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.ChangeRepository;
 import com.vaddya.schedule.database.LessonRepository;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -20,18 +19,16 @@ import static com.vaddya.schedule.core.lessons.ChangeType.*;
 public class StudyDay implements Iterable<Lesson> {
 
     private static final Comparator<Lesson> TIME_ORDER = Comparator.comparing(Lesson::getStartTime);
+    private final LocalDate date;
+    private WeekType weekType;
     private final LessonRepository lessons;
     private final ChangeRepository changes;
-    private final LocalDate date;
-    private final DayOfWeek dayOfWeek;
-    private WeekType weekType;
 
     /**
-     * Конструктор, получающий список занятий и дату
+     * Конструктор, принимающий дату, тип недели и хранилища уроков и изменений
      */
     public StudyDay(LocalDate date, WeekType weekType, LessonRepository lessons, ChangeRepository changes) {
         this.date = date;
-        this.dayOfWeek = date.getDayOfWeek();
         this.weekType = weekType;
         this.lessons = lessons;
         this.changes = changes;
@@ -62,7 +59,7 @@ public class StudyDay implements Iterable<Lesson> {
      * Проверить пуст ли список занятий
      */
     public boolean isEmpty() {
-        return changes.findAll(date).isEmpty();
+        return getLessonsAfterChanges().isEmpty();
     }
 
     /**
@@ -98,9 +95,8 @@ public class StudyDay implements Iterable<Lesson> {
                 .findFirst();
         if (res.isPresent()) {
             return res.get();
-        } else {
-            throw new NoSuchLessonException("Wrong task ID: " + id);
         }
+        throw new NoSuchLessonException("Wrong task ID: " + id);
     }
 
     /**
@@ -112,18 +108,16 @@ public class StudyDay implements Iterable<Lesson> {
         List<Lesson> list = getLessonsAfterChanges();
         if (index >= 0 && index < list.size()) {
             return list.get(index);
-        } else {
-            throw new NoSuchLessonException("Wrong lesson index: " + index +
-                    ", Size: " + list.size());
         }
+        throw new NoSuchLessonException("Wrong lesson index: " + index +
+                ", Size: " + list.size());
     }
 
     /**
      * Получить спсок занятий
      */
     public List<Lesson> getLessons() {
-        List<Lesson> list = getLessonsAfterChanges();
-        return new ArrayList<>(list);
+        return getLessonsAfterChanges();
     }
 
     /**
@@ -181,21 +175,20 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     private List<Lesson> getLessonsAfterChanges() {
-        List<Lesson> list = lessons.findAll(weekType, dayOfWeek);
+        List<Lesson> list = lessons.findAll(weekType, date.getDayOfWeek());
         changes.findAll(date).forEach(change -> {
-            switch (change.getChange()) {
+            switch (change.getChangeType()) {
                 case ADD:
                     list.add(change.getLesson());
                     break;
                 case UPDATE:
                     UUID id = change.getLesson().getId();
-                    try {
-                        Lesson lesson = lessons.findById(id).get();
-                        list.remove(lesson);
+                    Optional<Lesson> optional = lessons.findById(id);
+                    if (optional.isPresent()) {
+                        list.remove(optional.get());
                         list.add(change.getLesson());
-                    } catch (NoSuchLessonException e) {
+                    } else {
                         changes.delete(change);
-                        e.printStackTrace();
                     }
                     break;
                 case REMOVE:
@@ -209,4 +202,5 @@ public class StudyDay implements Iterable<Lesson> {
         list.sort(TIME_ORDER);
         return list;
     }
+
 }

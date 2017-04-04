@@ -19,9 +19,9 @@ public interface ChangeRepository {
 
     List<Change> findAll(LocalDate date);
 
-    void insert(Change lesson);
+    void insert(Change change);
 
-    void delete(Change lesson);
+    void delete(Change change);
 
     void deleteAll();
 

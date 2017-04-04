@@ -27,7 +27,7 @@ public class StudyWeek {
     private final ChangeRepository changes;
 
     /**
-     * Конструктор, получающий недельный период времени и расписание
+     * Конструктор, принимающий недельный период времени, тип недели и хранилища уроков и изменений
      */
     public StudyWeek(WeekTime weekTime, WeekType weekType, LessonRepository lessons, ChangeRepository changes) {
         this.weekTime = weekTime;
@@ -112,4 +112,5 @@ public class StudyWeek {
                         .append(entry.getValue()));
         return sb.toString();
     }
+
 }

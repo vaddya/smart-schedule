@@ -37,7 +37,7 @@ public class SmartScheduleImpl implements SmartSchedule {
         weeks.swapWeekTypes();
     }
 
-    public StudyWeek getCurrentWeekType() {
+    public StudyWeek getCurrentWeek() {
         return weeks.get(WeekTime.current(), schedules.get(currentWeekType),
                 database.getLessonRepository(), database.getChangeRepository());
     }
@@ -61,12 +61,13 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public WeekType getWeekType(WeekTime weekTime) {
-        return weekTime.getWeekNumber() % 2 == 1
-                ? WeekType.ODD
-                : WeekType.EVEN;
+        return weekTime.getWeekNumber() % 2 != 0
+                ? WeekType.EVEN
+                : WeekType.ODD;
     }
 
     public void updateLessons() {
         weeks.clear();
     }
+
 }

@@ -50,7 +50,7 @@ public class SmartScheduleTest {
                 .textTask("Todo course work")
                 .isComplete(false)
                 .build();
-        day = schedule.getCurrentWeekType().getDay(MONDAY);
+        day = schedule.getCurrentWeek().getDay(MONDAY);
         tasks = schedule.getTasks();
     }
 
@@ -107,4 +107,5 @@ public class SmartScheduleTest {
         assertEquals(WeekType.EVEN, schedule.getSchedule(WeekType.EVEN).getWeekType());
         assertNotEquals(current, schedule.getCurrentSchedule().getWeekType());
     }
+
 }

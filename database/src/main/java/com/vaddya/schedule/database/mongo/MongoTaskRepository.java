@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -31,7 +32,7 @@ public class MongoTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
-        return Optional.ofNullable(parseTask(document));
+        return ofNullable(parseTask(document));
     }
 
     @Override
@@ -67,7 +68,7 @@ public class MongoTaskRepository implements TaskRepository {
 
     @Override
     public boolean isEmpty() {
-        return collection.count() != 0;
+        return collection.count() == 0;
     }
 
     @Override
@@ -82,7 +83,11 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     private Task parseTask(Document document) {
+        if (document == null) {
+            return null;
+        }
         document.put("id", document.remove("_id"));
         return new Gson().fromJson(document.toJson(), Task.class);
     }
+
 }

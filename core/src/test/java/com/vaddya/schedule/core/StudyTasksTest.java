@@ -29,8 +29,8 @@ public class StudyTasksTest {
 
     @Before
     public void setUp() throws Exception {
-        Database stub = new MemoryDatabase();
-        TaskRepository repository = stub.getTaskRepository();
+        Database database = new MemoryDatabase();
+        TaskRepository repository = database.getTaskRepository();
         tasks = new StudyTasks(repository);
         task1 = new Task.Builder()
                 .subject("Programming")
@@ -94,5 +94,5 @@ public class StudyTasksTest {
     public void testAnotherNoSuchTaskException() throws Exception {
         assertNull(tasks.findTask(100));
     }
-}
 
+}

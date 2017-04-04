@@ -41,7 +41,7 @@ public class Application {
         MongoClient client = new MongoClient();
         Database database = new MongoDatabase(client);
         schedule = new SmartScheduleImpl(database);
-        week = schedule.getCurrentWeekType();
+        week = schedule.getCurrentWeek();
         tasks = schedule.getTasks();
 
         printWeek("Current Week", week);
@@ -64,7 +64,7 @@ public class Application {
                     printSchedule("Even schedule", schedule.getSchedule(EVEN));
                     break;
                 case "current":
-                    printWeek("Current week", schedule.getCurrentWeekType());
+                    printWeek("Current week", schedule.getCurrentWeek());
                     break;
                 case "next":
                     weekTime = WeekTime.after(weekTime);

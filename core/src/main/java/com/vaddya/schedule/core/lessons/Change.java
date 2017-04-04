@@ -1,49 +1,42 @@
 package com.vaddya.schedule.core.lessons;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.UUID;
 
 /**
- * Класс для представления перенесенного, измененного или отмененного урока
+ * Класс для представления однократного изменения в расписании
  *
  * @author vaddya
+ * @see ChangeType
  */
 public class Change {
 
     private final UUID id;
-
-    private final ChangeType change;
-
+    private final ChangeType changeType;
     private final LocalDate date;
-
     private final Lesson lesson;
 
-    public Change(UUID id, ChangeType change, LocalDate date, Lesson lesson) {
+    public Change(UUID id, ChangeType changeType, LocalDate date, Lesson lesson) {
         this.id = id;
-        this.change = change;
+        this.changeType = changeType;
         this.date = date;
         this.lesson = lesson;
     }
 
-    public Change(ChangeType change, LocalDate date, Lesson lesson) {
-        this(UUID.randomUUID(), change, date, lesson);
+    public Change(ChangeType changeType, LocalDate date, Lesson lesson) {
+        this(UUID.randomUUID(), changeType, date, lesson);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public ChangeType getChange() {
-        return change;
+    public ChangeType getChangeType() {
+        return changeType;
     }
 
     public LocalDate getDate() {
         return date;
-    }
-
-    public DayOfWeek getDayOfWeek() {
-        return date.getDayOfWeek();
     }
 
     public Lesson getLesson() {
@@ -55,20 +48,21 @@ public class Change {
         if (this == o) return true;
         if (!(o instanceof Change)) return false;
 
-        Change change1 = (Change) o;
+        Change change = (Change) o;
 
-        if (!id.equals(change1.id)) return false;
-        if (change != change1.change) return false;
-        if (!date.equals(change1.date)) return false;
-        return lesson.equals(change1.lesson);
+        if (!id.equals(change.id)) return false;
+        if (this.changeType != change.changeType) return false;
+        if (!date.equals(change.date)) return false;
+        return lesson.equals(change.lesson);
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + change.hashCode();
+        result = 31 * result + changeType.hashCode();
         result = 31 * result + date.hashCode();
         result = 31 * result + lesson.hashCode();
         return result;
     }
+
 }

@@ -13,6 +13,7 @@ import java.util.*;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -32,7 +33,7 @@ public class MongoLessonRepository implements LessonRepository {
     @Override
     public Optional<Lesson> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
-        return Optional.ofNullable(parseLesson(document));
+        return ofNullable(parseLesson(document));
     }
 
     @Override
@@ -92,4 +93,5 @@ public class MongoLessonRepository implements LessonRepository {
         document.put("id", document.remove("_id"));
         return new Gson().fromJson(document.toJson(), Lesson.class);
     }
+
 }

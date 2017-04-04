@@ -13,18 +13,23 @@ import com.vaddya.schedule.database.TaskRepository;
  */
 public class MemoryDatabase implements Database {
 
+    private final TaskRepository tasks = new MemoryTaskRepository();
+    private final LessonRepository lessons = new MemoryLessonRepository();
+    private final ChangeRepository changes = new MemoryChangeRepository();
+
     @Override
     public TaskRepository getTaskRepository() {
-        return new MemoryTaskRepository();
+        return tasks;
     }
 
     @Override
     public LessonRepository getLessonRepository() {
-        return new MemoryLessonRepository();
+        return lessons;
     }
 
     @Override
     public ChangeRepository getChangeRepository() {
-        return new MemoryChangeRepository();
+        return changes;
     }
+
 }

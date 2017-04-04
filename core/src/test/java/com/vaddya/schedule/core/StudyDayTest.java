@@ -14,8 +14,7 @@ import java.util.UUID;
 
 import static com.vaddya.schedule.core.utils.WeekType.ODD;
 import static java.time.LocalDate.of;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Модульное тестирование учебного дня
@@ -51,30 +50,30 @@ public class StudyDayTest {
                 .build();
     }
 
-//    @Test
-//    public void testAddAndRemove() {
-//        day.addLesson(lesson1);
-//        day.addLesson(lesson2);
-//
-//        assertEquals(2, day.getNumberOfLessons());
-//        assertEquals("Programming", day.findLesson(0).getSubject());
-//        assertEquals("High math", day.findLesson(lesson2.getId()).getSubject());
-//
-//        for (Lesson lesson : day) {
-//            lesson.setPlace("Test");
-//            day.updateLesson(lesson);
-//        }
-//        assertEquals("Test", day.findLesson(0).getPlace());
-//
-//        for (Lesson lesson : day.getLessons()) {
-//            day.removeLesson(lesson);
-//        }
-//        assertEquals(0, day.getNumberOfLessons());
-//        assertTrue(day.isEmpty());
-//
-//        day.addAllLessons(lesson1, lesson2);
-//        assertEquals(2, day.getNumberOfLessons());
-//    }
+    @Test
+    public void testAddAndRemove() {
+        day.addLesson(lesson1);
+        day.addLesson(lesson2);
+
+        assertEquals(2, day.getNumberOfLessons());
+        assertEquals("Programming", day.findLesson(0).getSubject());
+        assertEquals("High math", day.findLesson(lesson2.getId()).getSubject());
+
+        for (Lesson lesson : day) {
+            lesson.setPlace("Test");
+            day.updateLesson(lesson);
+        }
+        assertEquals("Test", day.findLesson(0).getPlace());
+
+        for (Lesson lesson : day.getLessons()) {
+            day.removeLesson(lesson);
+        }
+        assertEquals(0, day.getNumberOfLessons());
+        assertTrue(day.isEmpty());
+
+        day.addAllLessons(lesson1, lesson2);
+        assertEquals(2, day.getNumberOfLessons());
+    }
 
     @Test
     public void testDate() throws Exception {
@@ -91,4 +90,5 @@ public class StudyDayTest {
     public void testAnotherNoSuchLessonException() throws Exception {
         assertNull(day.findLesson(100));
     }
+
 }

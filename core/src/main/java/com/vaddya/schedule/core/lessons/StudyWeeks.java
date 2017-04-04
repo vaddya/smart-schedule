@@ -9,18 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Класс для хранения учебных недель
+ * Класс для хранения созданных учебных недель
  *
  * @author vaddya
  * @see StudyWeek
  */
 public class StudyWeeks {
 
-    private final Map<WeekTime, StudyWeek> weeks;
-
-    public StudyWeeks() {
-        weeks = new HashMap<>();
-    }
+    private final Map<WeekTime, StudyWeek> weeks = new HashMap<>();
 
     public StudyWeek get(WeekTime weekTime, StudySchedule schedule, LessonRepository lessons, ChangeRepository changes) {
         if (!weeks.containsKey(weekTime)) {
@@ -36,4 +32,5 @@ public class StudyWeeks {
     public void clear() {
         weeks.clear();
     }
+
 }

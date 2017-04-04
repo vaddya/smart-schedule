@@ -59,4 +59,5 @@ public class MemoryChangeRepository implements ChangeRepository {
     public long size() {
         return changes.size();
     }
+
 }

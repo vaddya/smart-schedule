@@ -26,8 +26,8 @@ public class StudyWeekScheduleTest {
 
     @Before
     public void setUp() {
-        Database stub = new MemoryDatabase();
-        schedule = new StudySchedule(ODD, stub.getLessonRepository());
+        Database database = new MemoryDatabase();
+        schedule = new StudySchedule(ODD, database.getLessonRepository());
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

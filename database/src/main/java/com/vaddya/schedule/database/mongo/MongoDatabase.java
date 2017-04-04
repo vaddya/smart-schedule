@@ -45,4 +45,5 @@ public class MongoDatabase implements Database {
     private MongoCollection<Document> getCollection(String name) {
         return client.getDatabase(DB).getCollection(name);
     }
+
 }

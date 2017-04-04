@@ -26,4 +26,5 @@ public final class Dates {
     public static boolean isPast(LocalDate date) {
         return LocalDate.now().isAfter(date);
     }
+
 }

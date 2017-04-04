@@ -18,13 +18,8 @@ import java.util.ResourceBundle;
  */
 public class Main extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    private static ResourceBundle bundle;
-
-    private static Image icon;
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundles/Locale", new Locale("ru"));
+    private static Image icon = new Image(Main.class.getClassLoader().getResourceAsStream("img/icon.png"));
 
     public static ResourceBundle getBundle() {
         return bundle;
@@ -37,13 +32,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setCharset(StandardCharsets.UTF_8);
-        bundle = ResourceBundle.getBundle("bundles/Locale", new Locale("ru"));
         fxmlLoader.setResources(bundle);
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
 
         Parent root = fxmlLoader.load();
         primaryStage.setTitle(fxmlLoader.getResources().getString("smart_schedule"));
-        icon = new Image(getClass().getClassLoader().getResourceAsStream("img/icon.png"));
         primaryStage.getIcons().add(icon);
         primaryStage.setMinWidth(850);
         primaryStage.setMinHeight(600);
@@ -51,5 +44,9 @@ public class Main extends Application {
         primaryStage.setHeight(700);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

@@ -76,14 +76,15 @@ public class WeekTime {
     }
 
     public static WeekTime before(WeekTime current) {
-        return new WeekTime(current.getDateOf(MONDAY).minus(7, DAYS));
+        return WeekTime.of(current.getDateOf(MONDAY).minus(7, DAYS));
     }
 
     public static WeekTime after(WeekTime current) {
-        return new WeekTime(current.getDateOf(SUNDAY).plus(1, DAYS));
+        return WeekTime.of(current.getDateOf(SUNDAY).plus(1, DAYS));
     }
 
     public static int between(WeekTime first, WeekTime second) {
         return Math.abs(first.getWeekNumber() - second.getWeekNumber());
     }
+
 }
