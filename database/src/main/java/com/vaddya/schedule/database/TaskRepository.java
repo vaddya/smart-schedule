@@ -3,6 +3,7 @@ package com.vaddya.schedule.database;
 import com.vaddya.schedule.core.tasks.Task;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -13,7 +14,7 @@ import java.util.UUID;
  */
 public interface TaskRepository {
 
-    Task findById(UUID id);
+    Optional<Task> findById(UUID id);
 
     List<Task> findAll();
 
@@ -28,4 +29,5 @@ public interface TaskRepository {
     boolean isEmpty();
 
     long size();
+
 }

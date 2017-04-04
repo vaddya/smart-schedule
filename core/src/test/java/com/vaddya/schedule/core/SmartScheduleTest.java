@@ -10,11 +10,10 @@ import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
-
 import static com.vaddya.schedule.core.lessons.LessonType.LAB;
 import static com.vaddya.schedule.core.lessons.LessonType.LECTURE;
 import static java.time.DayOfWeek.MONDAY;
+import static java.time.LocalDate.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -24,13 +23,9 @@ import static org.junit.Assert.assertNotEquals;
  * @author vaddya
  */
 
-//TODO: Были ведь раньше интеграционные тесты тоже? Куда делись?
-
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest(DatabaseDeprecated.class)
 public class SmartScheduleTest {
 
-    private SmartSchedule smartSchedule;
+    private SmartSchedule schedule;
     private Lesson lesson;
     private Task task;
     private StudyDay day;
@@ -39,7 +34,7 @@ public class SmartScheduleTest {
     @Before
     public void setUp() {
         Database database = new MemoryDatabase();
-        smartSchedule = new SmartScheduleImpl(database);
+        schedule = new SmartScheduleImpl(database);
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")
@@ -51,12 +46,12 @@ public class SmartScheduleTest {
         task = new Task.Builder()
                 .subject("Programming")
                 .type(LAB)
-                .deadline(LocalDate.of(2016, 12, 31))
+                .deadline(of(2016, 12, 31))
                 .textTask("Todo course work")
                 .isComplete(false)
                 .build();
-        day = smartSchedule.getCurrentWeek().getDay(MONDAY);
-        tasks = smartSchedule.getTasks();
+        day = schedule.getCurrentWeekType().getDay(MONDAY);
+        tasks = schedule.getTasks();
     }
 
     @Test
@@ -71,7 +66,7 @@ public class SmartScheduleTest {
 
     @Test
     public void addTaskTest() throws Exception {
-        StudyTasks tasks = smartSchedule.getTasks();
+        StudyTasks tasks = schedule.getTasks();
         assertEquals(0, tasks.getActiveTasks().size());
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
@@ -81,7 +76,7 @@ public class SmartScheduleTest {
 
     @Test
     public void editTaskTest() throws Exception {
-        StudyTasks tasks = smartSchedule.getTasks();
+        StudyTasks tasks = schedule.getTasks();
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
         assertEquals(0, tasks.getCompletedTasks().size());
@@ -102,15 +97,14 @@ public class SmartScheduleTest {
 
     @Test
     public void testSwapSchedules() throws Exception {
-        WeekType odd = smartSchedule.getSchedule(WeekType.ODD).getWeekType();
-        WeekType even = smartSchedule.getSchedule(WeekType.EVEN).getWeekType();
-        WeekType current = smartSchedule.getCurrentSchedule().getWeekType();
+        WeekType odd = schedule.getSchedule(WeekType.ODD).getWeekType();
+        WeekType even = schedule.getSchedule(WeekType.EVEN).getWeekType();
+        WeekType current = schedule.getCurrentSchedule().getWeekType();
         assertNotEquals(odd, even);
 
-        smartSchedule.swapSchedules();
-        assertEquals(WeekType.ODD, smartSchedule.getSchedule(WeekType.ODD).getWeekType());
-        assertEquals(WeekType.EVEN, smartSchedule.getSchedule(WeekType.EVEN).getWeekType());
-        assertNotEquals(current, smartSchedule.getCurrentSchedule().getWeekType());
-
+        schedule.swapSchedules();
+        assertEquals(WeekType.ODD, schedule.getSchedule(WeekType.ODD).getWeekType());
+        assertEquals(WeekType.EVEN, schedule.getSchedule(WeekType.EVEN).getWeekType());
+        assertNotEquals(current, schedule.getCurrentSchedule().getWeekType());
     }
 }

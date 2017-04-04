@@ -13,6 +13,8 @@ import java.time.format.DateTimeParseException;
  */
 public final class Time implements Comparable<Time> {
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
     public static Time of(String time) {
         return new Time(time);
     }
@@ -20,8 +22,6 @@ public final class Time implements Comparable<Time> {
     public static Time of(int hours, int minutes) {
         return new Time(hours, minutes);
     }
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     private LocalTime time;
 
@@ -49,13 +49,16 @@ public final class Time implements Comparable<Time> {
         return time.getMinute();
     }
 
-//    public boolean isAfter(Time time) {
-//        return hours() > time.hours() || hours() >= time.hours() && minutes() > time.minutes();
-//    }
 
     @Override
-    public String toString() {
-        return time.format(FORMATTER);
+    public int compareTo(Time time) {
+        int diff = hours() - time.hours();
+        if (diff != 0) {
+            return diff;
+        } else {
+            diff = minutes() - time.minutes();
+            return diff;
+        }
     }
 
     @Override
@@ -75,21 +78,7 @@ public final class Time implements Comparable<Time> {
     }
 
     @Override
-    public int compareTo(Time time) {
-        int diff = hours() - time.hours();
-        if (diff != 0) {
-            return diff;
-        } else {
-            diff = minutes() - time.minutes();
-            return diff;
-        }
-//        return hours() == time.hours() && minutes() == time.minutes()
-//                ? 0
-//                : hours() > time.hours()
-//                    ? 1
-//                    :
-        //        return hours() > time.hours() || hours() == time.hours() && minutes() > time.minutes()
-//                ? 1
-//                : minutes() == time.minutes() ? 0 : -1;
+    public String toString() {
+        return time.format(FORMATTER);
     }
 }

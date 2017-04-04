@@ -19,7 +19,6 @@ import java.util.UUID;
 public class StudySchedule {
 
     private final LessonRepository lessons;
-
     private WeekType weekType;
 
     /**
@@ -54,7 +53,7 @@ public class StudySchedule {
     /**
      * Найти занятие по ID
      */
-    public Lesson findLesson(UUID id) {
+    public Lesson findLesson(UUID id) throws NoSuchLessonException {
         Optional<Lesson> result = lessons.findById(id);
         if (result.isPresent()) {
             return result.get();
@@ -65,8 +64,13 @@ public class StudySchedule {
     /**
      * Найти занятие по индексу
      */
-    public Lesson findLesson(DayOfWeek day, int index) {
-        return lessons.findAll(weekType).get(day).get(index);
+    public Lesson findLesson(DayOfWeek day, int index) throws NoSuchLessonException {
+        List<Lesson> list = lessons.findAll(weekType).get(day);
+        if (index >= 0 && index < list.size()) {
+            return list.get(index);
+        }
+        throw new NoSuchLessonException("Wrong lesson index: " + index +
+                ", Size: " + list.size());
     }
 
     /**

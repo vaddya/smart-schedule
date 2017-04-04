@@ -12,7 +12,7 @@ import java.util.UUID;
 import static java.util.stream.Collectors.toList;
 
 /**
- * com.vaddya.schedule.database.memory at smart-schedule
+ * Хранилище изменений, хранящееся в памяти
  *
  * @author vaddya
  * @since March 31, 2017

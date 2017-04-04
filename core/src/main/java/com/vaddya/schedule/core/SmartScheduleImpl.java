@@ -18,31 +18,27 @@ import com.vaddya.schedule.database.Database;
 public class SmartScheduleImpl implements SmartSchedule {
 
     private final Database database;
-
     private final StudyTasks tasks;
-
     private final StudySchedules schedules;
-
     private final StudyWeeks weeks;
-
-    private WeekType currentWeek;
+    private WeekType currentWeekType;
 
     public SmartScheduleImpl(Database database) {
         this.database = database;
         this.tasks = new StudyTasks(database.getTaskRepository());
         this.schedules = new StudySchedules(database.getLessonRepository());
         this.weeks = new StudyWeeks();
-        this.currentWeek = getWeekType(WeekTime.current());
+        this.currentWeekType = getWeekType(WeekTime.current());
     }
 
     public void swapSchedules() {
-        schedules.swap();
-        currentWeek = currentWeek.opposite();
+        currentWeekType = currentWeekType.opposite();
+        schedules.swapWeekTypes();
         weeks.swapWeekTypes();
     }
 
-    public StudyWeek getCurrentWeek() {
-        return weeks.get(WeekTime.current(), schedules.get(currentWeek),
+    public StudyWeek getCurrentWeekType() {
+        return weeks.get(WeekTime.current(), schedules.get(currentWeekType),
                 database.getLessonRepository(), database.getChangeRepository());
     }
 
@@ -53,7 +49,7 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public StudySchedule getCurrentSchedule() {
-        return schedules.get(currentWeek);
+        return schedules.get(currentWeekType);
     }
 
     public StudySchedule getSchedule(WeekType weekType) {

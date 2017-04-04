@@ -6,7 +6,7 @@ import com.vaddya.schedule.database.LessonRepository;
 import com.vaddya.schedule.database.TaskRepository;
 
 /**
- * com.vaddya.schedule.database.memory at smart-schedule
+ * База данных, хранящаяся в памяти
  *
  * @author vaddya
  * @since March 31, 2017

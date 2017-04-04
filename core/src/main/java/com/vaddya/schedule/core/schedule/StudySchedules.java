@@ -20,17 +20,16 @@ public class StudySchedules {
     private final Map<WeekType, StudySchedule> schedules;
 
     public StudySchedules(LessonRepository repository) {
-        schedules = new EnumMap<WeekType, StudySchedule>(WeekType.class) {{
-            put(ODD, new StudySchedule(ODD, repository));
-            put(EVEN, new StudySchedule(EVEN, repository));
-        }};
+        schedules = new EnumMap<>(WeekType.class);
+        schedules.put(ODD, new StudySchedule(ODD, repository));
+        schedules.put(EVEN, new StudySchedule(EVEN, repository));
     }
 
     public StudySchedule get(WeekType weekType) {
         return schedules.get(weekType);
     }
 
-    public void swap() {
+    public void swapWeekTypes() {
         schedules.get(ODD).setWeekType(EVEN);
         schedules.get(EVEN).setWeekType(ODD);
         schedules.put(EVEN, schedules.put(ODD, schedules.get(EVEN)));

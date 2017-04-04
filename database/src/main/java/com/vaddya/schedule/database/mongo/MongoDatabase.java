@@ -9,7 +9,7 @@ import com.vaddya.schedule.database.TaskRepository;
 import org.bson.Document;
 
 /**
- * com.vaddya.schedule.database.mongo at smart-schedule
+ * База данных MongoDB
  *
  * @author vaddya
  * @since March 31, 2017

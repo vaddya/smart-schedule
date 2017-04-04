@@ -8,13 +8,14 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
 import static java.util.stream.Collectors.toList;
 
 /**
- * com.vaddya.schedule.database at smart-schedule
+ * Хранилище заданий, хранящееся в MongoDB
  *
  * @author vaddya
  * @since March 31, 2017
@@ -28,12 +29,9 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     @Override
-    public Task findById(UUID id) {
+    public Optional<Task> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
-        if (document != null) {
-            return parseTask(document);
-        }
-        return null;
+        return Optional.ofNullable(parseTask(document));
     }
 
     @Override

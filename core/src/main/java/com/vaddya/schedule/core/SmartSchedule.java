@@ -31,7 +31,7 @@ public interface SmartSchedule {
     /**
      * Получить текущую учебную неделю, содержащую учебные дни
      */
-    StudyWeek getCurrentWeek();
+    StudyWeek getCurrentWeekType();
 
     /**
      * Получить заданную учебную неделю, содержащую учебные дни

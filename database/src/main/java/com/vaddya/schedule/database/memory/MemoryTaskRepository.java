@@ -5,10 +5,11 @@ import com.vaddya.schedule.database.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
- * com.vaddya.schedule.database.memory at smart-schedule
+ * Хранилище заданий, хранящееся в памяти
  *
  * @author vaddya
  * @since March 31, 2017
@@ -18,11 +19,10 @@ public class MemoryTaskRepository implements TaskRepository {
     private List<Task> tasks = new ArrayList<>();
 
     @Override
-    public Task findById(UUID id) {
+    public Optional<Task> findById(UUID id) {
         return tasks.stream()
                 .filter(task -> task.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
@@ -37,8 +37,8 @@ public class MemoryTaskRepository implements TaskRepository {
 
     @Override
     public void save(Task task) {
-        Task upd = findById(task.getId());
-        tasks.set(tasks.indexOf(upd), task);
+        Optional<Task> optional = findById(task.getId());
+        optional.ifPresent(upd -> tasks.set(tasks.indexOf(upd), task));
     }
 
     @Override

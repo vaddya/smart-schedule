@@ -63,7 +63,7 @@ public class MainController implements Initializable {
     }
 
     public List<String> getSubjectSuggestions() {
-        return schedule.getCurrentWeek()
+        return schedule.getCurrentWeekType()
                 .getAllDays()
                 .entrySet()
                 .stream()

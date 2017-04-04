@@ -37,10 +37,23 @@ public class StudyDay implements Iterable<Lesson> {
         this.changes = changes;
     }
 
+    /**
+     * Получить дату учебного дня
+     */
+    public LocalDate getDate() {
+        return date;
+    }
+
+    /**
+     * Получить тип недели
+     */
     public WeekType getWeekType() {
         return weekType;
     }
 
+    /**
+     * Установить тип недели
+     */
     public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
     }
@@ -57,13 +70,6 @@ public class StudyDay implements Iterable<Lesson> {
      */
     public long getNumberOfLessons() {
         return getLessonsAfterChanges().size();
-    }
-
-    /**
-     * Получить дату учебного дня
-     */
-    public LocalDate getDate() {
-        return date;
     }
 
     /**
@@ -176,7 +182,7 @@ public class StudyDay implements Iterable<Lesson> {
 
     private List<Lesson> getLessonsAfterChanges() {
         List<Lesson> list = lessons.findAll(weekType, dayOfWeek);
-        for (Change change : changes.findAll(date)) {
+        changes.findAll(date).forEach(change -> {
             switch (change.getChange()) {
                 case ADD:
                     list.add(change.getLesson());
@@ -199,7 +205,7 @@ public class StudyDay implements Iterable<Lesson> {
                     }
                     break;
             }
-        }
+        });
         list.sort(TIME_ORDER);
         return list;
     }

@@ -4,12 +4,11 @@ import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.database.TaskRepository;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
 
 /**
  * Класс для представления списка учебных заданий
@@ -23,44 +22,43 @@ public class StudyTasks implements Iterable<Task> {
             (t1, t2) -> t1.isComplete()
                     ? -t1.getDeadline().compareTo(t2.getDeadline())
                     : t1.getDeadline().compareTo(t2.getDeadline());
-
     private static final Comparator<Task> COMPLETE_DATE_ORDER =
-            Comparator.comparing(Task::isComplete).thenComparing(DATE_ORDER);
+            comparing(Task::isComplete).thenComparing(DATE_ORDER);
+    private final TaskRepository tasks;
 
-    private final TaskRepository repository;
-
-    public StudyTasks(TaskRepository repository) {
-        this.repository = repository;
+    /**
+     * Конструктор, принимающий хранилище задач
+     */
+    public StudyTasks(TaskRepository tasks) {
+        this.tasks = tasks;
     }
 
     /**
      * Проверить пуст ли список заданий
      */
     public boolean isEmpty() {
-        return repository.isEmpty();
+        return tasks.isEmpty();
     }
 
     /**
      * Получить количество заданий
      */
     public long getNumberOfTasks() {
-        return repository.size();
+        return tasks.size();
     }
 
     /**
      * Добавить задание в список заданий
      */
     public void addTask(Task task) {
-        repository.insert(task);
+        tasks.insert(task);
     }
 
     /**
      * Добавить все задания в список заданий
      */
     public void addAllTasks(Task... tasks) {
-        for (Task task : tasks) {
-            repository.insert(task);
-        }
+        Arrays.asList(tasks).forEach(this.tasks::insert);
     }
 
     /**
@@ -69,12 +67,11 @@ public class StudyTasks implements Iterable<Task> {
      * @throws NoSuchTaskException если указан несуществующий ID
      */
     public Task findTask(UUID id) {
-        Task task = repository.findById(id);
-        if (task != null) {
-            return task;
-        } else {
-            throw new NoSuchTaskException("Wrong task ID: " + id);
+        Optional<Task> task = tasks.findById(id);
+        if (task.isPresent()) {
+            return task.get();
         }
+        throw new NoSuchTaskException("Wrong task ID: " + id);
     }
 
     /**
@@ -86,10 +83,9 @@ public class StudyTasks implements Iterable<Task> {
         List<Task> tasks = getAllTasks();
         if (index >= 0 && index < tasks.size()) {
             return tasks.get(index);
-        } else {
-            throw new NoSuchTaskException("Wrong task index: " + index +
-                    ", Size: " + tasks.size());
         }
+        throw new NoSuchTaskException("Wrong task index: " + index +
+                ", Size: " + tasks.size());
     }
 
     /**
@@ -98,49 +94,60 @@ public class StudyTasks implements Iterable<Task> {
      * @throws NoSuchTaskException если указано несуществующее задание
      */
     public void updateTask(Task task) {
-        repository.save(task);
+        tasks.save(task);
     }
 
     /**
      * Удалить задание
      */
     public void removeTask(Task task) {
-        repository.delete(task);
+        tasks.delete(task);
     }
 
     /**
      * Удалить все задания
      */
     public void removeAllTasks() {
-        repository.deleteAll();
+        tasks.deleteAll();
     }
 
     /**
      * Получить все задания
      */
     public List<Task> getAllTasks() {
-        return getTasksBy(task -> true);
+        return getFilteredTasks(task -> true);
+    }
+
+    /**
+     * Получить только задания, удовлетворяющие условию
+     */
+    public List<Task> getFilteredTasks(Predicate<Task> predicate) {
+        return tasks.findAll().stream()
+                .filter(predicate)
+                .sorted(COMPLETE_DATE_ORDER)
+                .collect(Collectors.toList());
     }
 
     /**
      * Получить только активные задания
      */
     public List<Task> getActiveTasks() {
-        return getTasksBy(task -> !task.isComplete());
+        return getFilteredTasks(task -> !task.isComplete());
     }
 
     /**
      * Получить только выполненные задания
      */
     public List<Task> getCompletedTasks() {
-        return getTasksBy(Task::isComplete);
+        return getFilteredTasks(Task::isComplete);
     }
 
     /**
      * Получить только просроченные задания
      */
     public List<Task> getOverdueTasks() {
-        return getTasksBy(task -> !task.isComplete() && !Dates.isAfter(task.getDeadline()));
+        return getFilteredTasks(task -> !task.isComplete()
+                && Dates.isPast(task.getDeadline()));
     }
 
     /**
@@ -179,12 +186,5 @@ public class StudyTasks implements Iterable<Task> {
                 return tasks.get(index++);
             }
         };
-    }
-
-    private List<Task> getTasksBy(Predicate<Task> predicate) {
-        return repository.findAll().stream()
-                .filter(predicate)
-                .sorted(COMPLETE_DATE_ORDER)
-                .collect(Collectors.toList());
     }
 }

@@ -49,4 +49,26 @@ public class Change {
     public Lesson getLesson() {
         return lesson;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Change)) return false;
+
+        Change change1 = (Change) o;
+
+        if (!id.equals(change1.id)) return false;
+        if (change != change1.change) return false;
+        if (!date.equals(change1.date)) return false;
+        return lesson.equals(change1.lesson);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + change.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + lesson.hashCode();
+        return result;
+    }
 }

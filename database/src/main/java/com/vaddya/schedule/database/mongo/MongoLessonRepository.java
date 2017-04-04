@@ -16,7 +16,7 @@ import static com.mongodb.client.model.Filters.eq;
 import static java.util.stream.Collectors.toList;
 
 /**
- * com.vaddya.schedule.database.mongo at smart-schedule
+ * Хранилище уроков, хранящееся в MongoDB
  *
  * @author vaddya
  * @since March 31, 2017

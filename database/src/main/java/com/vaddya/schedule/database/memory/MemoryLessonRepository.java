@@ -8,10 +8,11 @@ import java.time.DayOfWeek;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.vaddya.schedule.core.utils.WeekType.EVEN;
 import static com.vaddya.schedule.core.utils.WeekType.ODD;
 
 /**
- * com.vaddya.schedule.database.memory at smart-schedule
+ * Хранилище уроков, хранящееся в памяти
  *
  * @author vaddya
  * @since March 31, 2017
@@ -32,58 +33,51 @@ public class MemoryLessonRepository implements LessonRepository {
 
     @Override
     public Optional<Lesson> findById(UUID id) {
-        Stream<Lesson> oddStream = odd.entrySet().stream()
+        Stream<Lesson> oddStream = getSchedule(ODD).entrySet()
+                .stream()
                 .map(Map.Entry::getValue)
                 .flatMap(Collection::stream);
-        Stream<Lesson> evenStream = even.entrySet().stream()
+        Stream<Lesson> evenStream = getSchedule(EVEN).entrySet()
+                .stream()
                 .map(Map.Entry::getValue)
                 .flatMap(Collection::stream);
         return Stream.concat(oddStream, evenStream)
                 .filter(lesson -> lesson.getId().equals(id))
                 .findFirst();
-
     }
 
     @Override
     public List<Lesson> findAll(WeekType week, DayOfWeek day) {
-        return week == ODD ? odd.get(day) : even.get(day);
+        return getSchedule(week).get(day);
     }
 
     @Override
     public Map<DayOfWeek, List<Lesson>> findAll(WeekType week) {
-        return week == ODD ? odd : even;
+        return getSchedule(week);
     }
 
     @Override
     public void insert(WeekType week, DayOfWeek day, Lesson lesson) {
-        if (week == ODD) {
-            odd.get(day).add(lesson);
-        } else {
-            even.get(day).add(lesson);
-        }
+        getSchedule(week).get(day).add(lesson);
     }
 
     @Override
     public void save(WeekType week, DayOfWeek day, Lesson lesson) {
-        if (week == ODD) {
-            odd.get(day).add(lesson);
-        } else {
-            even.get(day).add(lesson);
-        }
+        getSchedule(week).get(day).add(lesson);
     }
 
     @Override
     public void delete(WeekType week, DayOfWeek day, Lesson lesson) {
-        if (week == ODD) {
-            odd.get(day).remove(lesson);
-        } else {
-            even.get(day).remove(lesson);
-        }
+        getSchedule(week).get(day).remove(lesson);
     }
 
     @Override
     public void deleteAll() {
-        odd.forEach((dayOfWeek, lessons) -> lessons.clear());
-        even.forEach((dayOfWeek, lessons) -> lessons.clear());
+        getSchedule(ODD).forEach((dayOfWeek, lessons) -> lessons.clear());
+        getSchedule(EVEN).forEach((dayOfWeek, lessons) -> lessons.clear());
+    }
+
+    private Map<DayOfWeek, List<Lesson>> getSchedule(WeekType weekType) {
+        return weekType == ODD ? odd : even;
     }
 }

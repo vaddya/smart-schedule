@@ -77,7 +77,7 @@ public class Task {
     }
 
     public boolean isOverdue() {
-        return !Dates.isAfter(deadline);
+        return Dates.isPast(deadline);
     }
 
     /**

@@ -28,4 +28,5 @@ public interface ChangeRepository {
     boolean isEmpty();
 
     long size();
+
 }

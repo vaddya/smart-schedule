@@ -22,11 +22,8 @@ import static com.vaddya.schedule.core.lessons.ChangeType.REMOVE;
 public class StudyWeek {
 
     private final WeekTime weekTime;
-
     private WeekType weekType;
-
     private final Map<DayOfWeek, StudyDay> days;
-
     private final ChangeRepository changes;
 
     /**
@@ -55,6 +52,7 @@ public class StudyWeek {
      */
     public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
+        days.forEach((key, value) -> value.setWeekType(weekType));
     }
 
     /**
@@ -91,8 +89,8 @@ public class StudyWeek {
      */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
         Change remove = new Change(REMOVE, weekTime.getDateOf(from), lesson);
-        Change add = new Change(ADD, weekTime.getDateOf(to), lesson);
         changes.insert(remove);
+        Change add = new Change(ADD, weekTime.getDateOf(to), lesson);
         changes.insert(add);
     }
 
