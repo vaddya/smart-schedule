@@ -1,23 +1,19 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.db.FakeDB;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.time.LocalDate;
-
+import static com.vaddya.schedule.core.lessons.LessonType.LAB;
+import static com.vaddya.schedule.core.lessons.LessonType.LECTURE;
 import static java.time.DayOfWeek.MONDAY;
+import static java.time.LocalDate.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -27,13 +23,9 @@ import static org.junit.Assert.assertNotEquals;
  * @author vaddya
  */
 
-//TODO: Были ведь раньше интеграционные тесты тоже? Куда делись?
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Database.class)
 public class SmartScheduleTest {
 
-    private SmartSchedule model;
+    private SmartSchedule schedule;
     private Lesson lesson;
     private Task task;
     private StudyDay day;
@@ -41,27 +33,25 @@ public class SmartScheduleTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(Database.class);
-        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
-
-        model = new SmartScheduleImpl();
+        Database database = new MemoryDatabase();
+        schedule = new SmartScheduleImpl(database);
         lesson = new Lesson.Builder()
                 .startTime("10:00")
                 .endTime("11:30")
                 .subject("Programming")
-                .type(LessonType.LECTURE)
+                .type(LECTURE)
                 .place("Place")
                 .teacher("Teacher")
                 .build();
         task = new Task.Builder()
                 .subject("Programming")
-                .type(LessonType.LAB)
-                .deadline(LocalDate.of(2016, 12, 31))
+                .type(LAB)
+                .deadline(of(2016, 12, 31))
                 .textTask("Todo course work")
                 .isComplete(false)
                 .build();
-        day = model.getCurrentWeek().getDay(MONDAY);
-        tasks = model.getTasks();
+        day = schedule.getCurrentWeek().getDay(MONDAY);
+        tasks = schedule.getTasks();
     }
 
     @Test
@@ -70,19 +60,13 @@ public class SmartScheduleTest {
         day.addLesson(lesson);
         assertEquals(1, day.getNumberOfLessons());
         assertEquals("Programming", day.findLesson(lesson.getId()).getSubject());
-    }
-
-    @Test
-    public void removeLessonTest() throws Exception {
-        day.addLesson(lesson);
-        assertEquals(1, day.getNumberOfLessons());
-        day.removeLesson(day.findLesson(0));
+        day.removeLesson(lesson);
         assertEquals(0, day.getNumberOfLessons());
     }
 
     @Test
     public void addTaskTest() throws Exception {
-        StudyTasks tasks = model.getTasks();
+        StudyTasks tasks = schedule.getTasks();
         assertEquals(0, tasks.getActiveTasks().size());
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
@@ -92,7 +76,7 @@ public class SmartScheduleTest {
 
     @Test
     public void editTaskTest() throws Exception {
-        StudyTasks tasks = model.getTasks();
+        StudyTasks tasks = schedule.getTasks();
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
         assertEquals(0, tasks.getCompletedTasks().size());
@@ -113,15 +97,15 @@ public class SmartScheduleTest {
 
     @Test
     public void testSwapSchedules() throws Exception {
-        WeekType odd = model.getSchedule(WeekType.ODD).getWeekType();
-        WeekType even = model.getSchedule(WeekType.EVEN).getWeekType();
-        WeekType current = model.getCurrentSchedule().getWeekType();
+        WeekType odd = schedule.getSchedule(WeekType.ODD).getWeekType();
+        WeekType even = schedule.getSchedule(WeekType.EVEN).getWeekType();
+        WeekType current = schedule.getCurrentSchedule().getWeekType();
         assertNotEquals(odd, even);
 
-        model.swapSchedules();
-        assertEquals(WeekType.ODD, model.getSchedule(WeekType.ODD).getWeekType());
-        assertEquals(WeekType.EVEN, model.getSchedule(WeekType.EVEN).getWeekType());
-        assertNotEquals(current, model.getCurrentSchedule().getWeekType());
-
+        schedule.swapSchedules();
+        assertEquals(WeekType.ODD, schedule.getSchedule(WeekType.ODD).getWeekType());
+        assertEquals(WeekType.EVEN, schedule.getSchedule(WeekType.EVEN).getWeekType());
+        assertNotEquals(current, schedule.getCurrentSchedule().getWeekType());
     }
+
 }

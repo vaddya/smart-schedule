@@ -3,4 +3,5 @@
 gradle/
 build/
 out/
-*.properties
+/gradle.properties
+/local.properties

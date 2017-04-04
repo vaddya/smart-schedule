@@ -1,16 +1,12 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.db.FakeDB;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.schedule.StudySchedule;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static com.vaddya.schedule.core.utils.WeekType.EVEN;
 import static com.vaddya.schedule.core.utils.WeekType.ODD;
@@ -22,9 +18,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author vaddya
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Database.class)
-public class StudyScheduleTest {
+public class StudyWeekScheduleTest {
 
     private StudySchedule schedule;
     private Lesson lesson1;
@@ -32,10 +26,8 @@ public class StudyScheduleTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(Database.class);
-        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
-
-        schedule = new StudySchedule(ODD);
+        Database database = new MemoryDatabase();
+        schedule = new StudySchedule(ODD, database.getLessonRepository());
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")

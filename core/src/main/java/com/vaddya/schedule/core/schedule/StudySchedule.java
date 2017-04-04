@@ -1,33 +1,32 @@
 package com.vaddya.schedule.core.schedule;
 
-import com.vaddya.schedule.core.db.Database;
+import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.LessonRepository;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
- * Класс для представления расписания
+ * Класс для представления расписания на неделю
  *
  * @author vaddya
  */
 public class StudySchedule {
 
-    private static final Database db = Database.getConnection();
-
+    private final LessonRepository lessons;
     private WeekType weekType;
-
-    private final Map<DayOfWeek, List<Lesson>> days;
 
     /**
      * Конструктор, принимающий тип недели
      */
-    public StudySchedule(WeekType weekType) {
+    public StudySchedule(WeekType weekType, LessonRepository lessons) {
         this.weekType = weekType;
-        this.days = db.getLessons(weekType);
+        this.lessons = lessons;
     }
 
     /**
@@ -48,44 +47,59 @@ public class StudySchedule {
      * Добавить занятие
      */
     public void addLesson(DayOfWeek day, Lesson lesson) {
-        days.get(day).add(lesson);
-        db.addLesson(weekType, day, lesson);
+        lessons.insert(weekType, day, lesson);
+    }
+
+    /**
+     * Найти занятие по ID
+     */
+    public Lesson findLesson(UUID id) throws NoSuchLessonException {
+        Optional<Lesson> result = lessons.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new NoSuchLessonException("No lesson with ID: " + id);
     }
 
     /**
      * Найти занятие по индексу
      */
-    public Lesson findLesson(DayOfWeek day, int index) {
-        return days.get(day).get(index);
+    public Lesson findLesson(DayOfWeek day, int index) throws NoSuchLessonException {
+        List<Lesson> list = lessons.findAll(weekType).get(day);
+        if (index >= 0 && index < list.size()) {
+            return list.get(index);
+        }
+        throw new NoSuchLessonException("Wrong lesson index: " + index +
+                ", Size: " + list.size());
     }
 
     /**
      * Обновить занятие
      */
     public void updateLesson(DayOfWeek day, Lesson lesson) {
-        days.get(day).add(lesson);
-        db.updateLesson(weekType, day, lesson);
+        lessons.save(weekType, day, lesson);
     }
 
+    /**
+     * Изменить день занятия
+     */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
-        // TODO: 12/22/2016
+        lessons.delete(weekType, from, lesson);
+        lessons.insert(weekType, to, lesson);
     }
 
     /**
      * Удалить занятие
      */
     public void removeLesson(DayOfWeek day, Lesson lesson) {
-        days.get(day).remove(lesson);
-        db.removeLesson(weekType, day, lesson);
+        lessons.delete(weekType, day, lesson);
     }
 
     /**
      * Получить занятие по дню недели
      */
     public List<Lesson> getLessons(DayOfWeek day) {
-        List<Lesson> clone = new ArrayList<>();
-        days.get(day).forEach(clone::add);
-        return clone;
+        return lessons.findAll(weekType, day);
     }
 
     /**
@@ -94,6 +108,7 @@ public class StudySchedule {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        Map<DayOfWeek, List<Lesson>> days = lessons.findAll(weekType);
         sb.append("Week Type: ").append(weekType).append("\n");
         for (DayOfWeek day : DayOfWeek.values()) {
             sb.append(day)
@@ -102,4 +117,5 @@ public class StudySchedule {
         }
         return sb.toString();
     }
+
 }

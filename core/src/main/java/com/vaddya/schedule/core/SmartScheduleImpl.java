@@ -7,6 +7,7 @@ import com.vaddya.schedule.core.schedule.StudySchedules;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.Database;
 
 /**
  * Реализация интерфейса приложения Smart Schedule
@@ -16,35 +17,39 @@ import com.vaddya.schedule.core.utils.WeekType;
  */
 public class SmartScheduleImpl implements SmartSchedule {
 
-    private final StudyTasks tasks = new StudyTasks();
+    private final Database database;
+    private final StudyTasks tasks;
+    private final StudySchedules schedules;
+    private final StudyWeeks weeks;
+    private WeekType currentWeekType;
 
-    private final StudyWeeks weeks = new StudyWeeks();
-
-    private final StudySchedules schedules = new StudySchedules();
-
-    private WeekType currentWeek;
-
-    public SmartScheduleImpl() {
-        currentWeek = getWeekType(WeekTime.current());
+    public SmartScheduleImpl(Database database) {
+        this.database = database;
+        this.tasks = new StudyTasks(database.getTaskRepository());
+        this.schedules = new StudySchedules(database.getLessonRepository());
+        this.weeks = new StudyWeeks();
+        this.currentWeekType = getWeekType(WeekTime.current());
     }
 
     public void swapSchedules() {
-        schedules.swap();
-        currentWeek = currentWeek.opposite();
+        currentWeekType = currentWeekType.opposite();
+        schedules.swapWeekTypes();
         weeks.swapWeekTypes();
     }
 
     public StudyWeek getCurrentWeek() {
-        return weeks.get(WeekTime.current(), schedules.get(currentWeek));
+        return weeks.get(WeekTime.current(), schedules.get(currentWeekType),
+                database.getLessonRepository(), database.getChangeRepository());
     }
 
     public StudyWeek getWeek(WeekTime weekTime) {
         WeekType weekType = getWeekType(weekTime);
-        return weeks.get(weekTime, schedules.get(weekType));
+        return weeks.get(weekTime, schedules.get(weekType),
+                database.getLessonRepository(), database.getChangeRepository());
     }
 
     public StudySchedule getCurrentSchedule() {
-        return schedules.get(currentWeek);
+        return schedules.get(currentWeekType);
     }
 
     public StudySchedule getSchedule(WeekType weekType) {
@@ -56,12 +61,13 @@ public class SmartScheduleImpl implements SmartSchedule {
     }
 
     public WeekType getWeekType(WeekTime weekTime) {
-        return weekTime.getWeekNumber() % 2 == 1
-                ? WeekType.ODD
-                : WeekType.EVEN;
+        return weekTime.getWeekNumber() % 2 != 0
+                ? WeekType.EVEN
+                : WeekType.ODD;
     }
 
     public void updateLessons() {
         weeks.clear();
     }
+
 }

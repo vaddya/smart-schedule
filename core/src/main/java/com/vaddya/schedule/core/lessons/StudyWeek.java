@@ -1,17 +1,17 @@
 package com.vaddya.schedule.core.lessons;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
-import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.ChangeRepository;
+import com.vaddya.schedule.database.LessonRepository;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+
+import static com.vaddya.schedule.core.lessons.ChangeType.ADD;
+import static com.vaddya.schedule.core.lessons.ChangeType.REMOVE;
 
 /**
  * Класс для представления учебной недели (списка учебных дней)
@@ -21,22 +21,21 @@ import java.util.UUID;
  */
 public class StudyWeek {
 
-    private static final Database db = Database.getConnection();
-
     private final WeekTime weekTime;
-
     private WeekType weekType;
-
-    private final Map<DayOfWeek, StudyDay> days = new EnumMap<>(DayOfWeek.class);
+    private final Map<DayOfWeek, StudyDay> days;
+    private final ChangeRepository changes;
 
     /**
-     * Конструктор, получающий недельный период времени и расписание
+     * Конструктор, принимающий недельный период времени, тип недели и хранилища уроков и изменений
      */
-    public StudyWeek(WeekTime weekTime, StudySchedule schedule) {
+    public StudyWeek(WeekTime weekTime, WeekType weekType, LessonRepository lessons, ChangeRepository changes) {
         this.weekTime = weekTime;
-        this.weekType = schedule.getWeekType();
+        this.weekType = weekType;
+        this.changes = changes;
+        this.days = new EnumMap<>(DayOfWeek.class);
         for (DayOfWeek day : DayOfWeek.values()) {
-            StudyDay studyDay = new StudyDay(schedule.getLessons(day), weekTime.getDateOf(day));
+            StudyDay studyDay = new StudyDay(weekTime.getDateOf(day), weekType, lessons, changes);
             days.put(day, studyDay);
         }
     }
@@ -53,6 +52,7 @@ public class StudyWeek {
      */
     public void setWeekType(WeekType weekType) {
         this.weekType = weekType;
+        days.forEach((key, value) -> value.setWeekType(weekType));
     }
 
     /**
@@ -67,23 +67,6 @@ public class StudyWeek {
      */
     public WeekTime getWeekTime() {
         return weekTime;
-    }
-
-    /**
-     * Найти занятие по ID
-     *
-     * @throws NoSuchLessonException если указан несуществующий ID
-     */
-    public Lesson findLesson(UUID id) {
-        Optional<Lesson> res = days.entrySet().stream()
-                .flatMap(entrySet -> entrySet.getValue().getLessons().stream())
-                .filter(lesson -> lesson.getId().equals(id))
-                .findFirst();
-        if (res.isPresent()) {
-            return res.get();
-        } else {
-            throw new NoSuchLessonException("Wrong lesson ID: " + id);
-        }
     }
 
     /**
@@ -105,17 +88,10 @@ public class StudyWeek {
      * Изменить день занятия на данной неделе
      */
     public void changeLessonDay(DayOfWeek from, DayOfWeek to, Lesson lesson) {
-        UUID id = lesson.getId();
-        try {
-            days.get(from).removeLesson(findLesson(id));
-            days.get(to).addLesson(lesson);
-            ChangedLesson remove = new ChangedLesson(LessonChanges.REMOVE, weekTime.getDateOf(from), lesson);
-            ChangedLesson add = new ChangedLesson(LessonChanges.ADD, weekTime.getDateOf(to), lesson);
-            db.addChange(remove);
-            db.addChange(add);
-        } catch (NoSuchLessonException e) {
-            e.printStackTrace();
-        }
+        Change remove = new Change(REMOVE, weekTime.getDateOf(from), lesson);
+        changes.insert(remove);
+        Change add = new Change(ADD, weekTime.getDateOf(to), lesson);
+        changes.insert(add);
     }
 
     /**
@@ -124,8 +100,7 @@ public class StudyWeek {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(
-                String.format("Week Type: %s (%s)%n", weekType, weekTime)
-        );
+                String.format("Week Type: %s (%s)%n", weekType, weekTime));
         days.entrySet()
                 .stream()
                 .filter(entry -> !entry.getValue().isEmpty())
@@ -137,4 +112,5 @@ public class StudyWeek {
                         .append(entry.getValue()));
         return sb.toString();
     }
+
 }

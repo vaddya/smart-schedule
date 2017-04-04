@@ -37,4 +37,5 @@ public class WeekTimeTest {
         assertNotEquals(week1, week3);
         assertNotEquals(week1.hashCode(), week3.hashCode());
     }
+
 }

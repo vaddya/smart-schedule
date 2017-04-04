@@ -1,10 +1,14 @@
 package com.vaddya.schedule.core.lessons;
 
-import com.vaddya.schedule.core.db.Database;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
+import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.database.ChangeRepository;
+import com.vaddya.schedule.database.LessonRepository;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import static com.vaddya.schedule.core.lessons.ChangeType.*;
 
 /**
  * Класс для представления учебного дня (списка занятий)
@@ -14,58 +18,20 @@ import java.util.*;
  */
 public class StudyDay implements Iterable<Lesson> {
 
-    private static final Database db = Database.getConnection();
-
     private static final Comparator<Lesson> TIME_ORDER = Comparator.comparing(Lesson::getStartTime);
-
-    private final List<Lesson> lessons;
-
     private final LocalDate date;
+    private WeekType weekType;
+    private final LessonRepository lessons;
+    private final ChangeRepository changes;
 
     /**
-     * Конструктор, получающий список занятий и дату
+     * Конструктор, принимающий дату, тип недели и хранилища уроков и изменений
      */
-    public StudyDay(List<Lesson> lessons, LocalDate date) {
-        this.lessons = lessons;
-        this.lessons.sort(TIME_ORDER);
+    public StudyDay(LocalDate date, WeekType weekType, LessonRepository lessons, ChangeRepository changes) {
         this.date = date;
-        for (ChangedLesson change : db.getChanges(date)) {
-            switch (change.getChanges()) {
-                case ADD:
-                    lessons.add(change.getLesson());
-                    break;
-                case UPDATE:
-                    UUID id = change.getLesson().getId();
-                    try {
-                        Lesson lesson = findLesson(id);
-                        lessons.add(lessons.indexOf(lesson), change.getLesson());
-                    } catch (NoSuchLessonException e) {
-                        db.removeChange(change);
-                        e.printStackTrace();
-                    }
-                    break;
-                case REMOVE:
-                    boolean removed = lessons.remove(change.getLesson());
-                    if (!removed) {
-                        db.removeChange(change);
-                    }
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Проверить пуст ли список занятий
-     */
-    public boolean isEmpty() {
-        return lessons.isEmpty();
-    }
-
-    /**
-     * Получить количество занятий
-     */
-    public int getNumberOfLessons() {
-        return lessons.size();
+        this.weekType = weekType;
+        this.lessons = lessons;
+        this.changes = changes;
     }
 
     /**
@@ -76,19 +42,46 @@ public class StudyDay implements Iterable<Lesson> {
     }
 
     /**
+     * Получить тип недели
+     */
+    public WeekType getWeekType() {
+        return weekType;
+    }
+
+    /**
+     * Установить тип недели
+     */
+    public void setWeekType(WeekType weekType) {
+        this.weekType = weekType;
+    }
+
+    /**
+     * Проверить пуст ли список занятий
+     */
+    public boolean isEmpty() {
+        return getLessonsAfterChanges().isEmpty();
+    }
+
+    /**
+     * Получить количество занятий
+     */
+    public long getNumberOfLessons() {
+        return getLessonsAfterChanges().size();
+    }
+
+    /**
      * Добавить занятие в учебный день
      */
     public void addLesson(Lesson lesson) {
-        lessons.add(lesson);
-        lessons.sort(TIME_ORDER);
-        db.addChange(new ChangedLesson(LessonChanges.ADD, date, lesson));
+        Change change = new Change(ADD, date, lesson);
+        changes.insert(change);
     }
 
     /**
      * Добавить все занятия в учебный день
      */
     public void addAllLessons(Lesson... lessons) {
-        Collections.addAll(this.lessons, lessons);
+        Arrays.asList(lessons).forEach(this::addLesson);
     }
 
     /**
@@ -97,14 +90,13 @@ public class StudyDay implements Iterable<Lesson> {
      * @throws NoSuchLessonException если указан несуществующий ID
      */
     public Lesson findLesson(UUID id) {
-        Optional<Lesson> res = lessons.stream()
+        Optional<Lesson> res = getLessonsAfterChanges().stream()
                 .filter((lesson -> id.equals(lesson.getId())))
                 .findFirst();
         if (res.isPresent()) {
             return res.get();
-        } else {
-            throw new NoSuchLessonException("Wrong task ID: " + id);
         }
+        throw new NoSuchLessonException("Wrong task ID: " + id);
     }
 
     /**
@@ -113,19 +105,19 @@ public class StudyDay implements Iterable<Lesson> {
      * @throws NoSuchLessonException если указан неверный индекс
      */
     public Lesson findLesson(int index) {
-        if (index >= 0 && index < lessons.size()) {
-            return lessons.get(index);
-        } else {
-            throw new NoSuchLessonException("Wrong lesson index: " + index +
-                    ", Size: " + lessons.size());
+        List<Lesson> list = getLessonsAfterChanges();
+        if (index >= 0 && index < list.size()) {
+            return list.get(index);
         }
+        throw new NoSuchLessonException("Wrong lesson index: " + index +
+                ", Size: " + list.size());
     }
 
     /**
      * Получить спсок занятий
      */
     public List<Lesson> getLessons() {
-        return new ArrayList<>(lessons);
+        return getLessonsAfterChanges();
     }
 
     /**
@@ -134,30 +126,23 @@ public class StudyDay implements Iterable<Lesson> {
      * @throws NoSuchLessonException если указано несуществующее занятие
      */
     public void updateLesson(Lesson lesson) {
-        Lesson prev = findLesson(lesson.getId());
-        lessons.set(lessons.indexOf(prev), lesson);
-        lessons.sort(TIME_ORDER);
-        db.addChange(new ChangedLesson(LessonChanges.UPDATE, date, lesson));
+        Change change = new Change(UPDATE, date, lesson);
+        changes.insert(change);
     }
 
     /**
      * Удалить занятие
      */
     public void removeLesson(Lesson lesson) {
-        if (lessons.remove(lesson)) {
-            lessons.sort(TIME_ORDER);
-            db.addChange(new ChangedLesson(LessonChanges.REMOVE, date, lesson));
-        }
+        Change change = new Change(REMOVE, date, lesson);
+        changes.insert(change);
     }
 
     /**
      * Удалить все занятия
      */
     public void removeAllLessons() {
-        for (Lesson lesson : lessons) {
-            db.addChange(new ChangedLesson(LessonChanges.REMOVE, date, lesson));
-        }
-        lessons.clear();
+        changes.deleteAll();
     }
 
     /**
@@ -166,7 +151,8 @@ public class StudyDay implements Iterable<Lesson> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        lessons.forEach(lesson -> sb.append(lesson.toString()).append("\n"));
+        List<Lesson> list = getLessonsAfterChanges();
+        list.forEach(lesson -> sb.append(lesson.toString()).append("\n"));
         return sb.toString();
     }
 
@@ -174,10 +160,11 @@ public class StudyDay implements Iterable<Lesson> {
     public Iterator<Lesson> iterator() {
         return new Iterator<Lesson>() {
             private int index = 0;
+            private List<Lesson> list = getLessonsAfterChanges();
 
             @Override
             public boolean hasNext() {
-                return index < lessons.size();
+                return index < list.size();
             }
 
             @Override
@@ -186,4 +173,34 @@ public class StudyDay implements Iterable<Lesson> {
             }
         };
     }
+
+    private List<Lesson> getLessonsAfterChanges() {
+        List<Lesson> list = lessons.findAll(weekType, date.getDayOfWeek());
+        changes.findAll(date).forEach(change -> {
+            switch (change.getChangeType()) {
+                case ADD:
+                    list.add(change.getLesson());
+                    break;
+                case UPDATE:
+                    UUID id = change.getLesson().getId();
+                    Optional<Lesson> optional = lessons.findById(id);
+                    if (optional.isPresent()) {
+                        list.remove(optional.get());
+                        list.add(change.getLesson());
+                    } else {
+                        changes.delete(change);
+                    }
+                    break;
+                case REMOVE:
+                    boolean removed = list.remove(change.getLesson());
+                    if (!removed) {
+                        changes.delete(change);
+                    }
+                    break;
+            }
+        });
+        list.sort(TIME_ORDER);
+        return list;
+    }
+
 }

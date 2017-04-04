@@ -52,4 +52,5 @@ public interface SmartSchedule {
      * Обновить информацию о занятиях
      */
     void updateLessons();
+
 }

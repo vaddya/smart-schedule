@@ -1,16 +1,13 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.db.Database;
-import com.vaddya.schedule.core.db.FakeDB;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
+import com.vaddya.schedule.database.Database;
+import com.vaddya.schedule.database.TaskRepository;
+import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,8 +21,6 @@ import static org.junit.Assert.*;
  *
  * @author vaddya
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Database.class)
 public class StudyTasksTest {
 
     private StudyTasks tasks;
@@ -34,10 +29,9 @@ public class StudyTasksTest {
 
     @Before
     public void setUp() throws Exception {
-        PowerMockito.mockStatic(Database.class);
-        PowerMockito.when(Database.getConnection()).thenReturn(FakeDB.getConnection());
-
-        tasks = new StudyTasks();
+        Database database = new MemoryDatabase();
+        TaskRepository repository = database.getTaskRepository();
+        tasks = new StudyTasks(repository);
         task1 = new Task.Builder()
                 .subject("Programming")
                 .type(LAB)
@@ -100,5 +94,5 @@ public class StudyTasksTest {
     public void testAnotherNoSuchTaskException() throws Exception {
         assertNull(tasks.findTask(100));
     }
-}
 
+}

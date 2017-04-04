@@ -1,11 +1,14 @@
 package com.vaddya.schedule.core.tasks;
 
-import com.vaddya.schedule.core.db.Database;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.utils.Dates;
+import com.vaddya.schedule.database.TaskRepository;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
 
 /**
  * Класс для представления списка учебных заданий
@@ -15,20 +18,20 @@ import java.util.stream.Collectors;
  */
 public class StudyTasks implements Iterable<Task> {
 
-    private static final Database db = Database.getConnection();
-
     private static final Comparator<Task> DATE_ORDER =
             (t1, t2) -> t1.isComplete()
                     ? -t1.getDeadline().compareTo(t2.getDeadline())
                     : t1.getDeadline().compareTo(t2.getDeadline());
-
     private static final Comparator<Task> COMPLETE_DATE_ORDER =
-            Comparator.comparing(Task::isComplete).thenComparing(DATE_ORDER);
+            comparing(Task::isComplete).thenComparing(DATE_ORDER);
+    private final TaskRepository tasks;
 
-    private final List<Task> tasks = db.getTasks()
-            .stream()
-            .sorted(COMPLETE_DATE_ORDER)
-            .collect(Collectors.toList());
+    /**
+     * Конструктор, принимающий хранилище задач
+     */
+    public StudyTasks(TaskRepository tasks) {
+        this.tasks = tasks;
+    }
 
     /**
      * Проверить пуст ли список заданий
@@ -40,7 +43,7 @@ public class StudyTasks implements Iterable<Task> {
     /**
      * Получить количество заданий
      */
-    public int getNumberOfTasks() {
+    public long getNumberOfTasks() {
         return tasks.size();
     }
 
@@ -48,16 +51,14 @@ public class StudyTasks implements Iterable<Task> {
      * Добавить задание в список заданий
      */
     public void addTask(Task task) {
-        tasks.add(task);
-        tasks.sort(COMPLETE_DATE_ORDER);
-        db.addTask(task);
+        tasks.insert(task);
     }
 
     /**
      * Добавить все задания в список заданий
      */
     public void addAllTasks(Task... tasks) {
-        Collections.addAll(this.tasks, tasks);
+        Arrays.asList(tasks).forEach(this.tasks::insert);
     }
 
     /**
@@ -66,14 +67,11 @@ public class StudyTasks implements Iterable<Task> {
      * @throws NoSuchTaskException если указан несуществующий ID
      */
     public Task findTask(UUID id) {
-        Optional<Task> res = tasks.stream()
-                .filter(task -> task.getId().equals(id))
-                .findFirst();
-        if (res.isPresent()) {
-            return res.get();
-        } else {
-            throw new NoSuchTaskException("Wrong task ID: " + id);
+        Optional<Task> task = tasks.findById(id);
+        if (task.isPresent()) {
+            return task.get();
         }
+        throw new NoSuchTaskException("Wrong task ID: " + id);
     }
 
     /**
@@ -82,12 +80,12 @@ public class StudyTasks implements Iterable<Task> {
      * @throws NoSuchTaskException если указан неверный индекс
      */
     public Task findTask(int index) {
+        List<Task> tasks = getAllTasks();
         if (index >= 0 && index < tasks.size()) {
             return tasks.get(index);
-        } else {
-            throw new NoSuchTaskException("Wrong task index: " + index +
-                    ", Size: " + tasks.size());
         }
+        throw new NoSuchTaskException("Wrong task index: " + index +
+                ", Size: " + tasks.size());
     }
 
     /**
@@ -96,63 +94,60 @@ public class StudyTasks implements Iterable<Task> {
      * @throws NoSuchTaskException если указано несуществующее задание
      */
     public void updateTask(Task task) {
-        Task upd = findTask(task.getId());
-        tasks.set(tasks.indexOf(upd), task);
-        tasks.sort(COMPLETE_DATE_ORDER);
-        db.updateTask(task);
+        tasks.save(task);
     }
 
     /**
      * Удалить задание
      */
     public void removeTask(Task task) {
-        db.removeTask(task);
-        tasks.remove(task);
+        tasks.delete(task);
     }
 
     /**
      * Удалить все задания
      */
     public void removeAllTasks() {
-        for (Task task : tasks) {
-            db.removeTask(task);
-        }
-        tasks.clear();
+        tasks.deleteAll();
     }
 
     /**
      * Получить все задания
      */
     public List<Task> getAllTasks() {
-        return new ArrayList<>(tasks);
+        return getFilteredTasks(task -> true);
+    }
+
+    /**
+     * Получить только задания, удовлетворяющие условию
+     */
+    public List<Task> getFilteredTasks(Predicate<Task> predicate) {
+        return tasks.findAll().stream()
+                .filter(predicate)
+                .sorted(COMPLETE_DATE_ORDER)
+                .collect(Collectors.toList());
     }
 
     /**
      * Получить только активные задания
      */
     public List<Task> getActiveTasks() {
-        return tasks.stream()
-                .filter(task -> !task.isComplete())
-                .collect(Collectors.toList());
+        return getFilteredTasks(task -> !task.isComplete());
     }
 
     /**
      * Получить только выполненные задания
      */
     public List<Task> getCompletedTasks() {
-        return tasks.stream()
-                .filter(Task::isComplete)
-                .collect(Collectors.toList());
+        return getFilteredTasks(Task::isComplete);
     }
 
     /**
      * Получить только просроченные задания
      */
     public List<Task> getOverdueTasks() {
-        return tasks.stream()
-                .filter(task -> !task.isComplete())
-                .filter(task -> !Dates.isAfter(task.getDeadline()))
-                .collect(Collectors.toList());
+        return getFilteredTasks(task -> !task.isComplete()
+                && Dates.isPast(task.getDeadline()));
     }
 
     /**
@@ -161,6 +156,7 @@ public class StudyTasks implements Iterable<Task> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        List<Task> tasks = getAllTasks();
         int i = 1;
         for (Task task : tasks) {
             builder.append(i++)
@@ -178,6 +174,7 @@ public class StudyTasks implements Iterable<Task> {
     public Iterator<Task> iterator() {
         return new Iterator<Task>() {
             private int index = 0;
+            private List<Task> tasks = getAllTasks();
 
             @Override
             public boolean hasNext() {
@@ -190,4 +187,5 @@ public class StudyTasks implements Iterable<Task> {
             }
         };
     }
+
 }

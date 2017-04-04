@@ -59,4 +59,5 @@ public class TimeTest {
         String time = "05:61";
         Time.of(time);
     }
+
 }
