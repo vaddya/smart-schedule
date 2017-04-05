@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -31,38 +32,37 @@ public class TasksController {
     private SmartSchedule schedule = new SmartScheduleImpl(new MongoDatabase(new MongoClient()));
 
     @RequestMapping("/tasks")
-    public String tasks(@RequestParam(value = "filter", required = false) String filter,
-                        @RequestParam(value = "subject", required = false) String subject,
-                        @RequestParam(value = "deadline", required = false) String deadline) {
+    public String tasks(@RequestParam(defaultValue = "all") String filter,
+                        @RequestParam Optional<String> subject,
+                        @RequestParam Optional<String> deadline) {
         List<Task> tasks;
 
-        if (filter != null) {
-            switch (filter.toLowerCase()) {
-                case "active":
-                    tasks = schedule.getTasks().getActiveTasks();
-                    break;
-                case "completed":
-                    tasks = schedule.getTasks().getCompletedTasks();
-                    break;
-                case "overdue":
-                    tasks = schedule.getTasks().getOverdueTasks();
-                    break;
-                default:
-                    return "filter error";
-            }
-        } else {
-            tasks = schedule.getTasks().getAllTasks();
+        switch (filter.toLowerCase()) {
+            case "all":
+                tasks = schedule.getTasks().getAllTasks();
+                break;
+            case "active":
+                tasks = schedule.getTasks().getActiveTasks();
+                break;
+            case "completed":
+                tasks = schedule.getTasks().getCompletedTasks();
+                break;
+            case "overdue":
+                tasks = schedule.getTasks().getOverdueTasks();
+                break;
+            default:
+                return "filter error";
         }
 
-        if (subject != null) {
+        if (subject.isPresent()) {
             tasks = tasks.stream()
-                    .filter(task -> task.getSubject().equals(subject))
+                    .filter(task -> task.getSubject().equals(subject.get()))
                     .collect(toList());
         }
 
-        if (deadline != null) {
+        if (deadline.isPresent()) {
             try {
-                List<Integer> dates = Stream.of(deadline.split("-"))
+                List<Integer> dates = Stream.of(deadline.get().split("-"))
                         .map(Integer::parseInt)
                         .collect(toList());
                 LocalDate date = LocalDate.of(dates.get(2), dates.get(1), dates.get(0));
