@@ -1,6 +1,7 @@
 package com.vaddya.schedule.rest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.MongoClient;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * com.vaddya.schedule.rest at smart-schedule
@@ -27,11 +29,18 @@ import static java.util.stream.Collectors.toList;
 @RestController
 public class TasksController {
 
-    private static Gson gson = new Gson();
+    private Gson gson;
+    private SmartSchedule schedule;
 
-    private SmartSchedule schedule = new SmartScheduleImpl(new MongoDatabase(new MongoClient()));
+    public TasksController() {
+        schedule = new SmartScheduleImpl(new MongoDatabase(new MongoClient()));
 
-    @RequestMapping("/tasks")
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Task.class, new TaskSerializer());
+        gson = builder.create();
+    }
+
+    @RequestMapping(value = "/tasks", method = GET)
     public String tasks(@RequestParam(defaultValue = "all") String filter,
                         @RequestParam Optional<String> subject,
                         @RequestParam Optional<String> deadline) {

@@ -114,6 +114,11 @@ public class Task {
             return this;
         }
 
+        public Builder id(String val) {
+            id = UUID.fromString(val);
+            return this;
+        }
+
         public Builder subject(String val) {
             subject = val;
             return this;
@@ -121,6 +126,11 @@ public class Task {
 
         public Builder type(LessonType val) {
             type = val;
+            return this;
+        }
+
+        public Builder type(String val) {
+            type = LessonType.valueOf(val);
             return this;
         }
 
