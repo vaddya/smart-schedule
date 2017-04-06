@@ -1,14 +1,9 @@
 package com.vaddya.schedule.rest.controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.exception.DuplicateIdException;
-import com.vaddya.schedule.rest.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,15 +26,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @RestController
 @RequestMapping("/api/tasks")
-public class TasksController {
+public class TasksController extends Controller {
 
     public static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
-
-    @Autowired
-    private Gson gson;
-
-    @Autowired
-    private SmartSchedule schedule;
 
     @RequestMapping(method = GET, produces = "application/json")
     public ResponseEntity<String> getAllTasks(@RequestParam(defaultValue = "all") String filter,
@@ -106,7 +95,7 @@ public class TasksController {
     public ResponseEntity<String> getTask(@PathVariable String id) {
         try {
             Task task = schedule.getTasks().findTask(UUID.fromString(id));
-            return new ResponseEntity<>(gson.toJson(task), OK);
+            return getBodyResponse(OK, gson.toJson(task));
         } catch (IllegalArgumentException e) {
             return getMessageResponse(BAD_REQUEST, "Task ID format is invalid");
         } catch (NoSuchTaskException e) {
@@ -140,19 +129,6 @@ public class TasksController {
         } catch (NoSuchTaskException e) {
             return getMessageResponse(NOT_FOUND, "Task does not exist");
         }
-    }
-
-    private ResponseEntity<String> getResponse(HttpStatus status) {
-        return new ResponseEntity<>(status);
-    }
-
-    private ResponseEntity<String> getBodyResponse(HttpStatus status, String body) {
-        return new ResponseEntity<>(body, status);
-    }
-
-    private ResponseEntity<String> getMessageResponse(HttpStatus status, String message) {
-        Response response = new Response(status, message);
-        return new ResponseEntity<>(gson.toJson(response), response.getStatus());
     }
 
 }
