@@ -1,15 +1,13 @@
-package com.vaddya.schedule.rest;
+package com.vaddya.schedule.rest.controllers;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.mongodb.MongoClient;
 import com.vaddya.schedule.core.SmartSchedule;
-import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.exception.DuplicateIdException;
-import com.vaddya.schedule.database.mongo.MongoDatabase;
+import com.vaddya.schedule.rest.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,16 +35,11 @@ public class TasksController {
 
     public static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
 
+    @Autowired
     private Gson gson;
+
+    @Autowired
     private SmartSchedule schedule;
-
-    public TasksController() {
-        schedule = new SmartScheduleImpl(new MongoDatabase(new MongoClient()));
-
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Task.class, new TaskSerializer());
-        gson = builder.create();
-    }
 
     @RequestMapping(method = GET, produces = "application/json")
     public ResponseEntity<String> getAllTasks(@RequestParam(defaultValue = "all") String filter,

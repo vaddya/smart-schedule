@@ -5,7 +5,7 @@ import com.vaddya.schedule.core.tasks.Task;
 
 import java.lang.reflect.Type;
 
-import static com.vaddya.schedule.rest.TasksController.DATE_FORMAT;
+import static com.vaddya.schedule.rest.controllers.TasksController.DATE_FORMAT;
 
 /**
  * com.vaddya.schedule.rest at smart-schedule
