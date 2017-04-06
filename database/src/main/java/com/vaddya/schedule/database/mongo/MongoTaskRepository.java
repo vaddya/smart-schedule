@@ -1,9 +1,14 @@
 package com.vaddya.schedule.database.mongo;
 
 import com.google.gson.Gson;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.TaskRepository;
+import com.vaddya.schedule.database.exception.DuplicateIdException;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -47,18 +52,28 @@ public class MongoTaskRepository implements TaskRepository {
     @Override
     public void insert(Task task) {
         Document document = fromTask(task);
-        collection.insertOne(document);
+        try {
+            collection.insertOne(document);
+        } catch (MongoWriteException e) {
+            throw new DuplicateIdException("Duplicate ID: " + task.getId());
+        }
     }
 
     @Override
     public void save(Task task) {
         Document document = fromTask(task);
-        collection.replaceOne(eq("_id", task.getId().toString()), document);
+        UpdateResult result = collection.replaceOne(eq("_id", task.getId().toString()), document);
+        if (result.getModifiedCount() == 0) {
+            throw new NoSuchTaskException("No task with ID: " + task.getId());
+        }
     }
 
     @Override
     public void delete(Task task) {
-        collection.deleteOne(eq("_id", task.getId().toString()));
+        DeleteResult result = collection.deleteOne(eq("_id", task.getId().toString()));
+        if (result.getDeletedCount() == 0) {
+            throw new NoSuchTaskException("No task with ID: " + task.getId());
+        }
     }
 
     @Override

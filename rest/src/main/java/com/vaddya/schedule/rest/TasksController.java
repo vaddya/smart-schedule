@@ -8,21 +8,22 @@ import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.Task;
+import com.vaddya.schedule.database.exception.DuplicateIdException;
 import com.vaddya.schedule.database.mongo.MongoDatabase;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+import static java.time.LocalDate.from;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * com.vaddya.schedule.rest at smart-schedule
@@ -48,11 +49,10 @@ public class TasksController {
     }
 
     @RequestMapping(method = GET, produces = "application/json")
-    public ResponseEntity<String> tasks(@RequestParam(defaultValue = "all") String filter,
-                                        @RequestParam Optional<String> subject,
-                                        @RequestParam Optional<String> deadline) {
+    public ResponseEntity<String> getAllTasks(@RequestParam(defaultValue = "all") String filter,
+                                              @RequestParam(required = false) String subject,
+                                              @RequestParam(required = false) String deadline) {
         List<Task> tasks;
-
         switch (filter.toLowerCase()) {
             case "all":
                 tasks = schedule.getTasks().getAllTasks();
@@ -67,54 +67,99 @@ public class TasksController {
                 tasks = schedule.getTasks().getOverdueTasks();
                 break;
             default:
-                return new ResponseEntity<>("Query parameters is invalid: filter=" + filter, BAD_REQUEST);
+                return getMessageResponse(BAD_REQUEST, "Filter is invalid");
         }
-
-        if (subject.isPresent()) {
+        if (subject != null) {
             tasks = tasks.stream()
-                    .filter(task -> task.getSubject().equals(subject.get()))
+                    .filter(task -> task.getSubject().equals(subject))
                     .collect(toList());
         }
-
-        if (deadline.isPresent()) {
+        if (deadline != null) {
             try {
-                LocalDate date = LocalDate.from(DATE_FORMAT.parse(deadline.get()));
+                LocalDate date = from(DATE_FORMAT.parse(deadline));
                 tasks = tasks.stream()
                         .filter(task -> task.getDeadline().isBefore(date))
                         .collect(toList());
             } catch (Exception e) {
-                return new ResponseEntity<>("Query parameter is invalid: deadline=" + deadline.get(), BAD_REQUEST);
+                return getMessageResponse(BAD_REQUEST, "Deadline format is invalid");
             }
         }
-
         if (tasks.isEmpty()) {
-            return new ResponseEntity<>(NO_CONTENT);
+            return getResponse(NO_CONTENT);
         }
-
-        return new ResponseEntity<>(gson.toJson(tasks), OK);
+        return getBodyResponse(OK, gson.toJson(tasks));
     }
 
-    @RequestMapping(method = POST, produces = "application/json")
+    @RequestMapping(method = POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createTask(@RequestBody String body) {
         try {
             Task task = gson.fromJson(body, Task.class);
             schedule.getTasks().addTask(task);
-            return new ResponseEntity<>("Task created, id=" + task.getId(), OK);
+            return getMessageResponse(CREATED, "Task created, id=" + task.getId());
         } catch (JsonSyntaxException e) {
-            return new ResponseEntity<>("Task syntax is invalid: " + e.getMessage(), BAD_REQUEST);
+            return getMessageResponse(BAD_REQUEST, "Task syntax is invalid");
+        } catch (DuplicateIdException e) {
+            return getMessageResponse(CONFLICT, "Task with specified ID already exists");
         }
     }
 
+    @RequestMapping(method = DELETE)
+    public ResponseEntity<String> deleteAllTasks() {
+        schedule.getTasks().removeAllTasks();
+        return getResponse(NO_CONTENT);
+    }
+
     @RequestMapping(value = "/{id}", method = GET, produces = "application/json")
-    public ResponseEntity<String> task(@PathVariable String id) {
+    public ResponseEntity<String> getTask(@PathVariable String id) {
         try {
             Task task = schedule.getTasks().findTask(UUID.fromString(id));
             return new ResponseEntity<>(gson.toJson(task), OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("Query parameter is invalid: id=" + id, BAD_REQUEST);
+            return getMessageResponse(BAD_REQUEST, "Task ID format is invalid");
         } catch (NoSuchTaskException e) {
-            return new ResponseEntity<>("Task doesn't exist: id=" + id, NOT_FOUND);
+            return getMessageResponse(NOT_FOUND, "Task does not exist");
         }
+    }
+
+    @RequestMapping(value = "/{id}", method = PUT, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> updateTask(@PathVariable String id, @RequestBody String body) {
+        try {
+            Task task = gson.fromJson(body, Task.class);
+            UUID pathId = UUID.fromString(id);
+            if (!task.getId().equals(pathId)) {
+                return getMessageResponse(BAD_REQUEST, "ID in path and in body do not match");
+            }
+            schedule.getTasks().updateTask(task);
+            return getResponse(NO_CONTENT);
+        } catch (JsonSyntaxException e) {
+            return getMessageResponse(BAD_REQUEST, "Task syntax is invalid");
+        } catch (NoSuchTaskException e) {
+            return getMessageResponse(NOT_FOUND, "Task does not exist");
+        }
+    }
+
+    @RequestMapping(value = "/{id}", method = DELETE)
+    public ResponseEntity<String> deleteTask(@PathVariable String id) {
+        try {
+            Task task = schedule.getTasks().findTask(UUID.fromString(id));
+            schedule.getTasks().removeTask(task);
+            return getResponse(NO_CONTENT);
+        } catch (NoSuchTaskException e) {
+            return getMessageResponse(NOT_FOUND, "Task does not exist");
+        }
+    }
+
+    private ResponseEntity<String> getResponse(HttpStatus status) {
+        return new ResponseEntity<>(status);
+    }
+
+    private ResponseEntity<String> getBodyResponse(HttpStatus status, String body) {
+        return new ResponseEntity<>(body, status);
+    }
+
+    private ResponseEntity<String> getMessageResponse(HttpStatus status, String message) {
+        Response response = new Response(status, message);
+        return new ResponseEntity<>(gson.toJson(response), response.getStatus());
     }
 
 }

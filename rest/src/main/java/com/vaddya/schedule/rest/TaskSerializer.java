@@ -43,7 +43,8 @@ public class TaskSerializer implements JsonSerializer<Task>, JsonDeserializer<Ta
                 .deadline(DATE_FORMAT.parse(src.get(DEADLINE).getAsString()))
                 .textTask(src.get(TEXT_TASK).getAsString())
                 .isComplete(src.get(IS_COMPLETE).getAsBoolean());
-        if (src.get(ID) != null) {
+        JsonElement id = src.get(ID);
+        if (id != null) {
             builder.id(src.get(ID).getAsString());
         }
         return builder.build();

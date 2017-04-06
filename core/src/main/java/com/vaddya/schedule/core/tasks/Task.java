@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public class Task {
 
-    private final UUID id;
+    private UUID id;
     private String subject;
     private LessonType type;
     private LocalDate deadline;
@@ -34,6 +34,10 @@ public class Task {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getSubject() {
