@@ -4,9 +4,8 @@ import com.google.gson.*;
 import com.vaddya.schedule.core.tasks.Task;
 
 import java.lang.reflect.Type;
-import java.time.format.DateTimeFormatter;
 
-import static java.time.format.DateTimeFormatter.ofPattern;
+import static com.vaddya.schedule.rest.TasksController.DATE_FORMAT;
 
 /**
  * com.vaddya.schedule.rest at smart-schedule
@@ -15,8 +14,6 @@ import static java.time.format.DateTimeFormatter.ofPattern;
  * @since April 06, 2017
  */
 public class TaskSerializer implements JsonSerializer<Task>, JsonDeserializer<Task> {
-
-    private static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
 
     private static final String ID = "id";
     private static final String SUBJECT = "subject";
@@ -40,14 +37,16 @@ public class TaskSerializer implements JsonSerializer<Task>, JsonDeserializer<Ta
     @Override
     public Task deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject src = json.getAsJsonObject();
-        return new Task.Builder()
-                .id(src.get(ID).getAsString())
+        Task.Builder builder = new Task.Builder()
                 .subject(src.get(SUBJECT).getAsString())
                 .type(src.get(TYPE).getAsString())
                 .deadline(DATE_FORMAT.parse(src.get(DEADLINE).getAsString()))
                 .textTask(src.get(TEXT_TASK).getAsString())
-                .isComplete(src.get(IS_COMPLETE).getAsBoolean())
-                .build();
+                .isComplete(src.get(IS_COMPLETE).getAsBoolean());
+        if (src.get(ID) != null) {
+            builder.id(src.get(ID).getAsString());
+        }
+        return builder.build();
     }
 
 }
