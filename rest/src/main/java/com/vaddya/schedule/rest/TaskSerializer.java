@@ -39,7 +39,7 @@ public class TaskSerializer implements JsonSerializer<Task>, JsonDeserializer<Ta
 
     @Override
     public Task deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject src = (JsonObject) json;
+        JsonObject src = json.getAsJsonObject();
         return new Task.Builder()
                 .id(src.get(ID).getAsString())
                 .subject(src.get(SUBJECT).getAsString())
