@@ -5,9 +5,16 @@ import com.google.gson.GsonBuilder;
 import com.mongodb.MongoClient;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
+import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.core.lessons.StudyDay;
+import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.mongo.MongoDatabase;
+import com.vaddya.schedule.rest.seiralizers.LessonSerializer;
+import com.vaddya.schedule.rest.seiralizers.StudyDaySerializer;
+import com.vaddya.schedule.rest.seiralizers.StudyWeekSerializer;
+import com.vaddya.schedule.rest.seiralizers.TaskSerializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +42,9 @@ public class Application {
     public Gson gson() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Task.class, new TaskSerializer());
+        builder.registerTypeAdapter(StudyWeek.class, new StudyWeekSerializer());
+        builder.registerTypeAdapter(StudyDay.class, new StudyDaySerializer());
+        builder.registerTypeAdapter(Lesson.class, new LessonSerializer());
         return builder.create();
     }
 

@@ -8,12 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
 import static java.time.LocalDate.from;
-import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -27,8 +26,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 @RequestMapping("/api/tasks")
 public class TasksController extends Controller {
-
-    public static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
 
     @RequestMapping(method = GET, produces = "application/json")
     public ResponseEntity<String> getAllTasks(@RequestParam(defaultValue = "all") String filter,
@@ -62,7 +59,7 @@ public class TasksController extends Controller {
                 tasks = tasks.stream()
                         .filter(task -> task.getDeadline().isBefore(date))
                         .collect(toList());
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 return getMessageResponse(BAD_REQUEST, "Deadline format is invalid");
             }
         }

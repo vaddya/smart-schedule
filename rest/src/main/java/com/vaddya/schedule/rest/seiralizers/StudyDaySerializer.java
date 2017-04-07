@@ -1,0 +1,33 @@
+package com.vaddya.schedule.rest.seiralizers;
+
+import com.google.gson.*;
+import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.core.lessons.StudyDay;
+
+import java.lang.reflect.Type;
+
+import static com.vaddya.schedule.rest.controllers.Controller.DATE_FORMAT;
+
+/**
+ * com.vaddya.schedule.rest.seiralizers at smart-schedule
+ *
+ * @author vaddya
+ * @since April 07, 2017
+ */
+public class StudyDaySerializer implements JsonSerializer<StudyDay> {
+
+    @Override
+    public JsonElement serialize(StudyDay src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject object = new JsonObject();
+        object.addProperty("date", DATE_FORMAT.format(src.getDate()));
+        object.addProperty("dayOfWeek", src.getDate().getDayOfWeek().toString());
+        JsonArray lessons = new JsonArray();
+        for (Lesson lesson : src.getLessons()) {
+            JsonElement element = context.serialize(lesson);
+            lessons.add(element);
+        }
+        object.add("lessons", lessons);
+        return object;
+    }
+
+}

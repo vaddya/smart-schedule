@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.format.DateTimeFormatter;
+
+import static java.time.format.DateTimeFormatter.ofPattern;
+
 /**
  * com.vaddya.schedule.rest.controllers at smart-schedule
  *
@@ -14,6 +18,8 @@ import org.springframework.http.ResponseEntity;
  * @since April 07, 2017
  */
 public class Controller {
+
+    public static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
 
     @Autowired
     protected Gson gson;

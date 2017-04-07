@@ -1,4 +1,4 @@
-package com.vaddya.schedule.rest;
+package com.vaddya.schedule.rest.seiralizers;
 
 import com.google.gson.*;
 import com.vaddya.schedule.core.tasks.Task;
@@ -25,12 +25,12 @@ public class TaskSerializer implements JsonSerializer<Task>, JsonDeserializer<Ta
     @Override
     public JsonElement serialize(Task src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.add(ID, new JsonPrimitive(src.getId().toString()));
-        object.add(SUBJECT, new JsonPrimitive(src.getSubject()));
-        object.add(TYPE, new JsonPrimitive(src.getType().toString()));
-        object.add(DEADLINE, new JsonPrimitive(DATE_FORMAT.format(src.getDeadline())));
-        object.add(TEXT_TASK, new JsonPrimitive(src.getTextTask()));
-        object.add(IS_COMPLETE, new JsonPrimitive(src.isComplete()));
+        object.addProperty(ID, src.getId().toString());
+        object.addProperty(SUBJECT, src.getSubject());
+        object.addProperty(TYPE, src.getType().toString());
+        object.addProperty(DEADLINE, DATE_FORMAT.format(src.getDeadline()));
+        object.addProperty(TEXT_TASK, src.getTextTask());
+        object.addProperty(IS_COMPLETE, src.isComplete());
         return object;
     }
 
