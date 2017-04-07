@@ -1,5 +1,6 @@
 package com.vaddya.schedule.core;
 
+import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.lessons.StudyWeeks;
 import com.vaddya.schedule.core.schedule.StudySchedule;
@@ -8,6 +9,8 @@ import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.Database;
+
+import java.time.LocalDate;
 
 /**
  * Реализация интерфейса приложения Smart Schedule
@@ -35,6 +38,7 @@ public class SmartScheduleImpl implements SmartSchedule {
         currentWeekType = currentWeekType.opposite();
         schedules.swapWeekTypes();
         weeks.swapWeekTypes();
+        database.getLessonRepository().swapWeeks();
     }
 
     public StudyWeek getCurrentWeek() {
@@ -46,6 +50,12 @@ public class SmartScheduleImpl implements SmartSchedule {
         WeekType weekType = getWeekType(weekTime);
         return weeks.get(weekTime, schedules.get(weekType),
                 database.getLessonRepository(), database.getChangeRepository());
+    }
+
+    @Override
+    public StudyDay getDay(LocalDate date) {
+        StudyWeek week = getWeek(WeekTime.of(date));
+        return week.getDay(date.getDayOfWeek());
     }
 
     public StudySchedule getCurrentSchedule() {

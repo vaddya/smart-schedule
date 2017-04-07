@@ -13,6 +13,7 @@ import java.util.*;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
@@ -68,6 +69,13 @@ public class MongoLessonRepository implements LessonRepository {
         Document document = fromLesson(lesson);
         document.append("week", week.toString()).append("day", day.toString());
         collection.replaceOne(eq("_id", lesson.getId().toString()), document);
+    }
+
+    @Override
+    public void swapWeeks() {
+        collection.updateMany(eq("week", "ODD"), set("week", "TEMP"));
+        collection.updateMany(eq("week", "EVEN"), set("week", "ODD"));
+        collection.updateMany(eq("week", "TEMP"), set("week", "EVEN"));
     }
 
     @Override

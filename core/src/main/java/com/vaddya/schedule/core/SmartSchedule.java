@@ -1,10 +1,13 @@
 package com.vaddya.schedule.core;
 
+import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.schedule.StudySchedule;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.utils.WeekTime;
 import com.vaddya.schedule.core.utils.WeekType;
+
+import java.time.LocalDate;
 
 /**
  * Интерфейс приложения Smart Schedule
@@ -37,6 +40,11 @@ public interface SmartSchedule {
      * Получить заданную учебную неделю, содержащую учебные дни
      */
     StudyWeek getWeek(WeekTime weekTime);
+
+    /**
+     * Получить учебный день по дате
+     */
+    StudyDay getDay(LocalDate date);
 
     /**
      * Получить учебные задания

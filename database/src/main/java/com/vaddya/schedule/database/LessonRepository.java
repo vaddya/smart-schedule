@@ -27,6 +27,8 @@ public interface LessonRepository {
 
     void save(WeekType week, DayOfWeek day, Lesson lesson);
 
+    void swapWeeks();
+
     void delete(WeekType week, DayOfWeek day, Lesson lesson);
 
     void deleteAll();

@@ -72,9 +72,10 @@ public class StudyDay implements Iterable<Lesson> {
     /**
      * Добавить занятие в учебный день
      */
-    public void addLesson(Lesson lesson) {
+    public Change addLesson(Lesson lesson) {
         Change change = new Change(ADD, date, lesson);
         changes.insert(change);
+        return change;
     }
 
     /**

@@ -19,13 +19,17 @@ import static java.time.DayOfWeek.MONDAY;
  */
 public class StudyWeekSerializer implements JsonSerializer<StudyWeek> {
 
+    private static final String START_DATE = "startDate";
+    private static final String TYPE = "type";
+    private static final String DAYS = "days";
+
     @Override
     public JsonElement serialize(StudyWeek src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty("startDate", DATE_FORMAT.format(src.getWeekTime().getDateOf(MONDAY)));
-        object.addProperty("type", src.getWeekType().toString());
-        JsonElement days = context.serialize(src.getAllDays());
-        object.add("days", days);
+        object.addProperty(START_DATE, DATE_FORMAT.format(src.getWeekTime().getDateOf(MONDAY)));
+        object.addProperty(TYPE, src.getWeekType().toString());
+        JsonElement days = context.serialize(src.getAllDays().values());
+        object.add(DAYS, days);
         return object;
     }
 

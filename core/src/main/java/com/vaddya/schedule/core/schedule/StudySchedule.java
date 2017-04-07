@@ -96,6 +96,13 @@ public class StudySchedule {
     }
 
     /**
+     * Удалить все занятия
+     */
+    public void removeAllLessons() {
+        lessons.deleteAll();
+    }
+
+    /**
      * Получить занятие по дню недели
      */
     public List<Lesson> getLessons(DayOfWeek day) {

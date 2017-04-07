@@ -19,8 +19,8 @@ import static com.vaddya.schedule.core.utils.WeekType.ODD;
  */
 public class MemoryLessonRepository implements LessonRepository {
 
-    private final Map<DayOfWeek, List<Lesson>> odd;
-    private final Map<DayOfWeek, List<Lesson>> even;
+    private Map<DayOfWeek, List<Lesson>> odd;
+    private Map<DayOfWeek, List<Lesson>> even;
 
     public MemoryLessonRepository() {
         odd = new EnumMap<>(DayOfWeek.class);
@@ -73,6 +73,13 @@ public class MemoryLessonRepository implements LessonRepository {
             getSchedule(week).get(day).remove(optional.get());
             getSchedule(week).get(day).add(lesson);
         }
+    }
+
+    @Override
+    public void swapWeeks() {
+        Map<DayOfWeek, List<Lesson>> temp = odd;
+        odd = even;
+        even = odd;
     }
 
     @Override

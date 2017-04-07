@@ -16,17 +16,21 @@ import static com.vaddya.schedule.rest.controllers.Controller.DATE_FORMAT;
  */
 public class StudyDaySerializer implements JsonSerializer<StudyDay> {
 
+    private static final String DATE = "date";
+    private static final String DAY_OF_WEEK = "dayOfWeek";
+    private static final String LESSONS = "lessons";
+
     @Override
     public JsonElement serialize(StudyDay src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty("date", DATE_FORMAT.format(src.getDate()));
-        object.addProperty("dayOfWeek", src.getDate().getDayOfWeek().toString());
+        object.addProperty(DATE, DATE_FORMAT.format(src.getDate()));
+        object.addProperty(DAY_OF_WEEK, src.getDate().getDayOfWeek().toString());
         JsonArray lessons = new JsonArray();
         for (Lesson lesson : src.getLessons()) {
             JsonElement element = context.serialize(lesson);
             lessons.add(element);
         }
-        object.add("lessons", lessons);
+        object.add(LESSONS, lessons);
         return object;
     }
 
