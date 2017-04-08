@@ -74,6 +74,17 @@ public class StudySchedule {
     }
 
     /**
+     * Вернуть день занятия
+     */
+    public DayOfWeek findLessonDay(UUID id) {
+        Optional<DayOfWeek> optional = lessons.findLessonDay(id);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        throw new NoSuchLessonException("No lesson with ID: " + id);
+    }
+
+    /**
      * Обновить занятие
      */
     public void updateLesson(DayOfWeek day, Lesson lesson) {
@@ -91,8 +102,8 @@ public class StudySchedule {
     /**
      * Удалить занятие
      */
-    public void removeLesson(DayOfWeek day, Lesson lesson) {
-        lessons.delete(weekType, day, lesson);
+    public void removeLesson(UUID id) {
+        lessons.delete(id);
     }
 
     /**

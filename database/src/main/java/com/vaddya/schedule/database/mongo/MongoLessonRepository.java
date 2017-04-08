@@ -60,6 +60,16 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     @Override
+    public Optional<DayOfWeek> findLessonDay(UUID id) {
+        Document document = collection.find(eq("_id", id.toString())).first();
+        try {
+            return Optional.of(DayOfWeek.valueOf(document.get("day").toString()));
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public void insert(WeekType week, DayOfWeek day, Lesson lesson) {
         Document document = fromLesson(lesson);
         document.append("week", week.toString()).append("day", day.toString());
@@ -82,6 +92,11 @@ public class MongoLessonRepository implements LessonRepository {
         collection.updateMany(eq("week", "ODD"), set("week", "TEMP"));
         collection.updateMany(eq("week", "EVEN"), set("week", "ODD"));
         collection.updateMany(eq("week", "TEMP"), set("week", "EVEN"));
+    }
+
+    @Override
+    public void delete(UUID id) {
+        collection.deleteOne(eq("_id", id.toString()));
     }
 
     @Override

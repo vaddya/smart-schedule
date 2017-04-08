@@ -214,7 +214,7 @@ public class LessonsController {
                         .removeLesson(lesson.getLesson());
             } else {
                 schedule.getSchedule(schedule.getWeekType(currentWeek))
-                        .removeLesson(lesson.getDay(), lesson.getLesson());
+                        .removeLesson(lesson.getLesson().getId());
             }
             schedule.updateLessons();
             refreshLessons();

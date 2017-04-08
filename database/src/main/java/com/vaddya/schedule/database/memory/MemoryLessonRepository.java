@@ -1,5 +1,6 @@
 package com.vaddya.schedule.database.memory;
 
+import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.LessonRepository;
@@ -62,6 +63,20 @@ public class MemoryLessonRepository implements LessonRepository {
     }
 
     @Override
+    public Optional<DayOfWeek> findLessonDay(UUID id) {
+        Optional<Lesson> optional = findById(id);
+        if (optional.isPresent()) {
+            Lesson lesson = optional.get();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                if (getSchedule(ODD).get(day).contains(lesson) || getSchedule(EVEN).get(day).contains(lesson)) {
+                    return Optional.of(day);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void insert(WeekType week, DayOfWeek day, Lesson lesson) {
         getSchedule(week).get(day).add(lesson);
     }
@@ -80,6 +95,27 @@ public class MemoryLessonRepository implements LessonRepository {
         Map<DayOfWeek, List<Lesson>> temp = odd;
         odd = even;
         even = odd;
+    }
+
+    @Override
+    public void delete(UUID id) {
+        Optional<Lesson> optional = findById(id);
+        if (optional.isPresent()) {
+            Lesson lesson = optional.get();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                List<Lesson> lessons = getSchedule(ODD).get(day);
+                if (lessons.contains(lesson)) {
+                    lessons.remove(lesson);
+                    return;
+                }
+                lessons = getSchedule(EVEN).get(day);
+                if (lessons.contains(lesson)) {
+                    lessons.remove(lesson);
+                    return;
+                }
+            }
+        }
+        throw new NoSuchLessonException("Lesson does not exist: " + id);
     }
 
     @Override

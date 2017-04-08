@@ -23,11 +23,15 @@ public interface LessonRepository {
 
     Map<DayOfWeek, List<Lesson>> findAll(WeekType week);
 
+    Optional<DayOfWeek> findLessonDay(UUID id);
+
     void insert(WeekType week, DayOfWeek day, Lesson lesson);
 
     void save(WeekType week, DayOfWeek day, Lesson lesson);
 
     void swapWeeks();
+
+    void delete(UUID id);
 
     void delete(WeekType week, DayOfWeek day, Lesson lesson);
 

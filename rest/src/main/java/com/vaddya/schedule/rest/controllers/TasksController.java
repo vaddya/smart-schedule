@@ -91,7 +91,8 @@ public class TasksController extends Controller {
     @RequestMapping(value = "/{id}", method = GET, produces = JSON)
     public ResponseEntity<String> getTask(@PathVariable String id) {
         try {
-            Task task = schedule.getTasks().findTask(UUID.fromString(id));
+            UUID uuid = UUID.fromString(id);
+            Task task = schedule.getTasks().findTask(uuid);
             return getBodyResponse(OK, gson.toJson(task));
         } catch (IllegalArgumentException e) {
             return getMessageResponse(BAD_REQUEST, "Task ID format is invalid");
@@ -111,6 +112,8 @@ public class TasksController extends Controller {
             }
             schedule.getTasks().updateTask(task);
             return getResponse(NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return getMessageResponse(BAD_REQUEST, "Task ID format is invalid");
         } catch (JsonSyntaxException e) {
             return getMessageResponse(BAD_REQUEST, "Task syntax is invalid");
         } catch (NoSuchTaskException e) {
@@ -118,12 +121,15 @@ public class TasksController extends Controller {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE)
+    @RequestMapping(value = "/{id}", method = DELETE, produces = JSON)
     public ResponseEntity<String> deleteTask(@PathVariable String id) {
         try {
-            Task task = schedule.getTasks().findTask(UUID.fromString(id));
+            UUID uuid = UUID.fromString(id);
+            Task task = schedule.getTasks().findTask(uuid);
             schedule.getTasks().removeTask(task);
             return getResponse(NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return getMessageResponse(BAD_REQUEST, "Task ID format is invalid");
         } catch (NoSuchTaskException e) {
             return getMessageResponse(NOT_FOUND, "Task does not exist");
         }
