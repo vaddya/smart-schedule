@@ -31,6 +31,8 @@ public interface LessonRepository {
 
     void delete(WeekType week, DayOfWeek day, Lesson lesson);
 
+    void deleteAll(WeekType week, DayOfWeek day);
+
     void deleteAll();
 
 }

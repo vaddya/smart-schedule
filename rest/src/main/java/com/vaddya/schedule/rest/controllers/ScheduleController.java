@@ -25,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/api/schedule")
 public class ScheduleController extends Controller {
 
-    @RequestMapping(method = GET, produces = "application/json")
+    @RequestMapping(method = GET, produces = JSON)
     public ResponseEntity<String> getWeek(@RequestParam(required = false) String startDate) {
         if (startDate != null) {
             try {
@@ -39,7 +39,7 @@ public class ScheduleController extends Controller {
         return getBodyResponse(OK, gson.toJson(schedule.getCurrentWeek()));
     }
 
-    @RequestMapping(value = "{date}", method = GET, produces = "application/json")
+    @RequestMapping(value = "{date}", method = GET, produces = JSON)
     public ResponseEntity<String> getDay(@PathVariable String date) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
@@ -50,8 +50,9 @@ public class ScheduleController extends Controller {
         }
     }
 
-    @RequestMapping(value = "{date}", method = POST, consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> createLessonForDate(@PathVariable String date, @RequestBody String body) {
+    @RequestMapping(value = "{date}", method = POST, consumes = JSON, produces = JSON)
+    public ResponseEntity<String> createLessonForDate(@PathVariable String date,
+                                                      @RequestBody String body) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
             StudyDay day = schedule.getDay(localDate);
@@ -65,8 +66,8 @@ public class ScheduleController extends Controller {
         }
     }
 
-    @RequestMapping(value = "{date}", method = DELETE, produces = "application/json")
-    public ResponseEntity<String> deleteLessonsForDate(@PathVariable String date, @RequestBody String body) {
+    @RequestMapping(value = "{date}", method = DELETE, produces = JSON)
+    public ResponseEntity<String> deleteLessonsForDate(@PathVariable String date) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
             StudyDay day = schedule.getDay(localDate);

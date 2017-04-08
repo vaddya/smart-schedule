@@ -1,10 +1,12 @@
 package com.vaddya.schedule.database.mongo;
 
 import com.google.gson.Gson;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.LessonRepository;
+import com.vaddya.schedule.database.exception.DuplicateIdException;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -61,7 +63,11 @@ public class MongoLessonRepository implements LessonRepository {
     public void insert(WeekType week, DayOfWeek day, Lesson lesson) {
         Document document = fromLesson(lesson);
         document.append("week", week.toString()).append("day", day.toString());
-        collection.insertOne(document);
+        try {
+            collection.insertOne(document);
+        } catch (MongoWriteException e) {
+            throw new DuplicateIdException("Duplicate ID: " + lesson.getId());
+        }
     }
 
     @Override
@@ -81,6 +87,11 @@ public class MongoLessonRepository implements LessonRepository {
     @Override
     public void delete(WeekType week, DayOfWeek day, Lesson lesson) {
         collection.deleteOne(eq("_id", lesson.getId().toString()));
+    }
+
+    @Override
+    public void deleteAll(WeekType week, DayOfWeek day) {
+        collection.deleteMany(and(eq("week", week.toString()), eq("day", day.toString())));
     }
 
     @Override

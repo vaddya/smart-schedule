@@ -21,6 +21,8 @@ public class Controller {
 
     public static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
 
+    protected static final String JSON = "application/json";
+
     @Autowired
     protected Gson gson;
 

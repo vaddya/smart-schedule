@@ -88,6 +88,11 @@ public class MemoryLessonRepository implements LessonRepository {
     }
 
     @Override
+    public void deleteAll(WeekType week, DayOfWeek day) {
+        getSchedule(week).get(day).clear();
+    }
+
+    @Override
     public void deleteAll() {
         getSchedule(ODD).forEach((dayOfWeek, lessons) -> lessons.clear());
         getSchedule(EVEN).forEach((dayOfWeek, lessons) -> lessons.clear());

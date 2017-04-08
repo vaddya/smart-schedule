@@ -27,7 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/api/tasks")
 public class TasksController extends Controller {
 
-    @RequestMapping(method = GET, produces = "application/json")
+    @RequestMapping(method = GET, produces = JSON)
     public ResponseEntity<String> getAllTasks(@RequestParam(defaultValue = "all") String filter,
                                               @RequestParam(required = false) String subject,
                                               @RequestParam(required = false) String deadline) {
@@ -69,7 +69,7 @@ public class TasksController extends Controller {
         return getBodyResponse(OK, gson.toJson(tasks));
     }
 
-    @RequestMapping(method = POST, consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = POST, consumes = JSON, produces = JSON)
     public ResponseEntity<String> createTask(@RequestBody String body) {
         try {
             Task task = gson.fromJson(body, Task.class);
@@ -88,7 +88,7 @@ public class TasksController extends Controller {
         return getResponse(NO_CONTENT);
     }
 
-    @RequestMapping(value = "/{id}", method = GET, produces = "application/json")
+    @RequestMapping(value = "/{id}", method = GET, produces = JSON)
     public ResponseEntity<String> getTask(@PathVariable String id) {
         try {
             Task task = schedule.getTasks().findTask(UUID.fromString(id));
@@ -100,8 +100,9 @@ public class TasksController extends Controller {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = PUT, consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> updateTask(@PathVariable String id, @RequestBody String body) {
+    @RequestMapping(value = "/{id}", method = PUT, consumes = JSON, produces = JSON)
+    public ResponseEntity<String> updateTask(@PathVariable String id,
+                                             @RequestBody String body) {
         try {
             Task task = gson.fromJson(body, Task.class);
             UUID pathId = UUID.fromString(id);
