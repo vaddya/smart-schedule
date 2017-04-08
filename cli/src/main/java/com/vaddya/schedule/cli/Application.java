@@ -5,11 +5,10 @@ import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
-import com.vaddya.schedule.core.lessons.StudyWeek;
-import com.vaddya.schedule.core.schedule.StudySchedule;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
-import com.vaddya.schedule.core.utils.WeekTime;
+import com.vaddya.schedule.core.utils.LocalWeek;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.mongo.MongoDatabase;
 
@@ -19,8 +18,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import static com.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
-import static com.vaddya.schedule.core.utils.WeekType.EVEN;
-import static com.vaddya.schedule.core.utils.WeekType.ODD;
 
 /**
  * Класс для консольного взаимодействия с пользователем
@@ -30,11 +27,11 @@ import static com.vaddya.schedule.core.utils.WeekType.ODD;
 public class Application {
 
     private final SmartSchedule schedule;
-    private final StudyWeek week;
+    private final ScheduleWeek week;
     private final StudyTasks tasks;
     private final Scanner in = new Scanner(System.in, "UTF-8");
     private final PrintStream out = System.out;
-    private WeekTime weekTime = WeekTime.current();
+    private LocalWeek localWeek = LocalWeek.current();
     private static final String CANCEL = "q";
 
     public Application() {
@@ -54,28 +51,28 @@ public class Application {
         out.print(">> ");
         while (!CANCEL.equals(request = in.nextLine())) {
             switch (request) {
-                case "schedule":
-                    printSchedule("Current schedule", schedule.getCurrentSchedule());
-                    break;
-                case "odd":
-                    printSchedule("Odd schedule", schedule.getSchedule(ODD));
-                    break;
-                case "even":
-                    printSchedule("Even schedule", schedule.getSchedule(EVEN));
-                    break;
+//                case "schedule":
+//                    printSchedule("Current schedule", schedule.getCurrentSchedule());
+//                    break;
+//                case "odd":
+//                    printSchedule("Odd schedule", schedule.getSchedule(ODD));
+//                    break;
+//                case "even":
+//                    printSchedule("Even schedule", schedule.getSchedule(EVEN));
+//                    break;
                 case "current":
-                    printWeek("Current week", schedule.getCurrentWeek());
+                    printWeek("Current localWeek", schedule.getCurrentWeek());
                     break;
                 case "next":
-                    weekTime = WeekTime.after(weekTime);
-                    printWeek("Next week", schedule.getWeek(weekTime));
+                    localWeek = LocalWeek.after(localWeek);
+                    printWeek("Next localWeek", schedule.getWeek(localWeek));
                     break;
                 case "prev":
-                    weekTime = WeekTime.before(weekTime);
-                    printWeek("Previous week", schedule.getWeek(weekTime));
+                    localWeek = LocalWeek.before(localWeek);
+                    printWeek("Previous localWeek", schedule.getWeek(localWeek));
                     break;
-                case "swapWeekTypes":
-                    schedule.swapSchedules();
+                case "swapTypesOfWeeks":
+                    schedule.swapTypesOfWeeks();
                     break;
                 case "tasks":
                     printTasks("All tasks", tasks.getAllTasks());
@@ -109,12 +106,12 @@ public class Application {
         }
     }
 
-    public void printSchedule(String title, StudySchedule schedule) {
-        out.println("\n" + title);
-        out.println(schedule);
-    }
+//    public void printSchedule(String title, StudySchedule schedule) {
+//        out.println("\n" + title);
+//        out.println(schedule);
+//    }
 
-    public void printWeek(String title, StudyWeek week) {
+    public void printWeek(String title, ScheduleWeek week) {
         out.println("\n" + title);
         out.println(week);
     }
@@ -143,7 +140,7 @@ public class Application {
     private void parseAdd() {
         String kind = in.nextLine();
         if ("lesson".equals(kind)) {
-            out.print("Day of week: ");
+            out.print("Day of localWeek: ");
             DayOfWeek day = DayOfWeek.valueOf(in.nextLine().toUpperCase());
             week.getDay(day).addLesson(parseLesson());
         } else if ("task".equals(kind)) {
@@ -153,28 +150,27 @@ public class Application {
         }
     }
 
-
     private void parseComplete(boolean isComplete) {
         out.println("Task index: ");
         int index = in.nextInt();
-        Task task = tasks.findTask(index);
-        task.setComplete(isComplete);
-        tasks.updateTask(task);
+//        Task task = tasks.findTask(index);
+//        task.setComplete(isComplete);
+//        tasks.updateTask(task);
     }
 
     private void parseRemove() {
         String kind = in.nextLine();
         if ("lesson".equals(kind)) {
-            out.print("Day of week: ");
+            out.print("Day of localWeek: ");
             DayOfWeek day = DayOfWeek.valueOf(in.nextLine().toUpperCase());
             out.print("Lesson number: ");
             int index = in.nextInt();
-            week.getDay(day).removeLesson(week.getDay(day).findLesson(index));
+//            week.getDay(day).removeLesson(week.getDay(day).findLesson(index));
         } else if ("task".equals(kind)) {
             out.print("Task index: ");
             int index = in.nextInt();
-            Task task = tasks.findTask(index);
-            tasks.removeTask(task);
+//            Task task = tasks.findTask(index);
+//            tasks.removeTask(task);
         } else {
             printHelp();
         }

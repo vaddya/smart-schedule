@@ -5,10 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.mongodb.MongoClient;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
+import com.vaddya.schedule.core.changes.Change;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.StudyDay;
 import com.vaddya.schedule.core.lessons.StudyWeek;
-import com.vaddya.schedule.core.schedule.StudySchedule;
+import com.vaddya.schedule.core.schedule.ScheduleDay;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.mongo.MongoDatabase;
@@ -40,10 +41,11 @@ public class Main {
     public Gson gson() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Task.class, new TaskSerializer());
-        builder.registerTypeAdapter(StudyWeek.class, new StudyWeekSerializer());
-        builder.registerTypeAdapter(StudyDay.class, new StudyDaySerializer());
+        builder.registerTypeAdapter(ScheduleWeek.class, new StudyWeekSerializer());
+        builder.registerTypeAdapter(ScheduleDay.class, new StudyDaySerializer());
         builder.registerTypeAdapter(Lesson.class, new LessonSerializer());
-        builder.registerTypeAdapter(StudySchedule.class, new StudyScheduleSerializer());
+        builder.registerTypeAdapter(StudyWeek.class, new LessonsWeekSerializers());
+        builder.registerTypeAdapter(Change.class, new ChangeSerializer());
         return builder.create();
     }
 

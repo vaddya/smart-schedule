@@ -16,21 +16,21 @@ import static java.util.Calendar.WEEK_OF_YEAR;
  *
  * @author vaddya
  */
-public class WeekTime {
+public class LocalWeek {
 
     private final LocalDate firstDay;
 
     private final int weekNumber;
 
-    public static WeekTime of(LocalDate date) {
-        return new WeekTime(date);
+    public static LocalWeek of(LocalDate date) {
+        return new LocalWeek(date);
     }
 
-    public static WeekTime of(String date) {
-        return new WeekTime(LocalDate.from(Dates.FULL_DATE_FORMAT.parse(date)));
+    public static LocalWeek of(String date) {
+        return new LocalWeek(LocalDate.from(Dates.FULL_DATE_FORMAT.parse(date)));
     }
 
-    private WeekTime(LocalDate date) {
+    private LocalWeek(LocalDate date) {
         firstDay = date.minus(date.getDayOfWeek().ordinal(), DAYS);
         Calendar calendar = new GregorianCalendar(new Locale("ru"));
         calendar.set(firstDay.getYear(),
@@ -55,11 +55,11 @@ public class WeekTime {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WeekTime)) return false;
+        if (!(o instanceof LocalWeek)) return false;
 
-        WeekTime weekTime = (WeekTime) o;
+        LocalWeek week = (LocalWeek) o;
 
-        return firstDay.equals(weekTime.firstDay);
+        return firstDay.equals(week.firstDay);
     }
 
     @Override
@@ -67,23 +67,23 @@ public class WeekTime {
         return firstDay.getYear() + firstDay.getMonthValue() + firstDay.getDayOfMonth(); // unique for any week
     }
 
-    public static WeekTime current() {
+    public static LocalWeek current() {
         return of(LocalDate.now());
     }
 
-    public static WeekTime next() {
+    public static LocalWeek next() {
         return after(current());
     }
 
-    public static WeekTime before(WeekTime current) {
-        return WeekTime.of(current.getDateOf(MONDAY).minus(7, DAYS));
+    public static LocalWeek before(LocalWeek current) {
+        return LocalWeek.of(current.getDateOf(MONDAY).minus(7, DAYS));
     }
 
-    public static WeekTime after(WeekTime current) {
-        return WeekTime.of(current.getDateOf(SUNDAY).plus(1, DAYS));
+    public static LocalWeek after(LocalWeek current) {
+        return LocalWeek.of(current.getDateOf(SUNDAY).plus(1, DAYS));
     }
 
-    public static int between(WeekTime first, WeekTime second) {
+    public static int between(LocalWeek first, LocalWeek second) {
         return Math.abs(first.getWeekNumber() - second.getWeekNumber());
     }
 

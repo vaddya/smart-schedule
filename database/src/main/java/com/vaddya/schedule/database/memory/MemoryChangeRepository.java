@@ -1,6 +1,7 @@
 package com.vaddya.schedule.database.memory;
 
-import com.vaddya.schedule.core.lessons.Change;
+import com.vaddya.schedule.core.changes.Change;
+import com.vaddya.schedule.core.exceptions.NoSuchChangeException;
 import com.vaddya.schedule.database.ChangeRepository;
 
 import java.time.LocalDate;
@@ -29,6 +30,11 @@ public class MemoryChangeRepository implements ChangeRepository {
     }
 
     @Override
+    public List<Change> findAll() {
+        return new ArrayList<>(changes);
+    }
+
+    @Override
     public List<Change> findAll(LocalDate date) {
         return changes.stream()
                 .filter(change -> change.getDate().equals(date))
@@ -41,13 +47,13 @@ public class MemoryChangeRepository implements ChangeRepository {
     }
 
     @Override
-    public void delete(Change change) {
-        changes.remove(change);
-    }
-
-    @Override
-    public void deleteAll() {
-        changes.clear();
+    public void save(Change change) {
+        Optional<Change> optional = findById(change.getId());
+        if (optional.isPresent()) {
+            changes.remove(optional.get());
+            changes.add(change);
+        }
+        throw new NoSuchChangeException(change.getId());
     }
 
     @Override
@@ -58,6 +64,16 @@ public class MemoryChangeRepository implements ChangeRepository {
     @Override
     public long size() {
         return changes.size();
+    }
+
+    @Override
+    public void delete(Change change) {
+        changes.remove(change);
+    }
+
+    @Override
+    public void deleteAll() {
+        changes.clear();
     }
 
 }

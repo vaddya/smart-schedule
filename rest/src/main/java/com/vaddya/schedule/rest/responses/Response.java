@@ -1,4 +1,4 @@
-package com.vaddya.schedule.rest;
+package com.vaddya.schedule.rest.responses;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,6 +1,6 @@
 package com.vaddya.schedule.database;
 
-import com.vaddya.schedule.core.lessons.Change;
+import com.vaddya.schedule.core.changes.Change;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,16 +17,20 @@ public interface ChangeRepository {
 
     Optional<Change> findById(UUID id);
 
+    List<Change> findAll();
+
     List<Change> findAll(LocalDate date);
 
     void insert(Change change);
 
-    void delete(Change change);
-
-    void deleteAll();
+    void save(Change change);
 
     boolean isEmpty();
 
     long size();
+
+    void delete(Change change);
+
+    void deleteAll();
 
 }

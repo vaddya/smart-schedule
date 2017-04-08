@@ -2,7 +2,7 @@ package com.vaddya.schedule.rest.seiralizers;
 
 import com.google.gson.*;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.StudyDay;
+import com.vaddya.schedule.core.schedule.ScheduleDay;
 
 import java.lang.reflect.Type;
 
@@ -14,14 +14,14 @@ import static com.vaddya.schedule.rest.controllers.Controller.DATE_FORMAT;
  * @author vaddya
  * @since April 07, 2017
  */
-public class StudyDaySerializer implements JsonSerializer<StudyDay> {
+public class StudyDaySerializer implements JsonSerializer<ScheduleDay> {
 
     private static final String DATE = "date";
     private static final String DAY_OF_WEEK = "dayOfWeek";
     private static final String LESSONS = "lessons";
 
     @Override
-    public JsonElement serialize(StudyDay src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(ScheduleDay src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty(DATE, DATE_FORMAT.format(src.getDate()));
         object.addProperty(DAY_OF_WEEK, src.getDate().getDayOfWeek().toString());

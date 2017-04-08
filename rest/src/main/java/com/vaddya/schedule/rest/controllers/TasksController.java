@@ -1,9 +1,10 @@
 package com.vaddya.schedule.rest.controllers;
 
 import com.google.gson.JsonSyntaxException;
+import com.vaddya.schedule.core.exceptions.DuplicateIdException;
 import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.Task;
-import com.vaddya.schedule.database.exception.DuplicateIdException;
+import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * @since April 05, 2017
  */
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping(Paths.TASKS)
 public class TasksController extends Controller {
 
     @RequestMapping(method = GET, produces = JSON)
@@ -74,7 +75,7 @@ public class TasksController extends Controller {
         try {
             Task task = gson.fromJson(body, Task.class);
             schedule.getTasks().addTask(task);
-            return getMessageResponse(CREATED, "Task created, id=" + task.getId());
+            return getResponseCreated(CREATED, "Task created", Paths.TASKS, task.getId());
         } catch (JsonSyntaxException e) {
             return getMessageResponse(BAD_REQUEST, "Task syntax is invalid");
         } catch (DuplicateIdException e) {

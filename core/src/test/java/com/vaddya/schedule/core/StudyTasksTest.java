@@ -61,7 +61,7 @@ public class StudyTasksTest {
             task.setType(SEMINAR);
             tasks.updateTask(task);
         }
-        assertEquals(SEMINAR, tasks.findTask(0).getType());
+        assertEquals(SEMINAR, tasks.findTask(task1.getId()).getType());
 
         for (Task task : tasks.getAllTasks()) {
             tasks.removeTask(task);
@@ -88,11 +88,6 @@ public class StudyTasksTest {
     @Test(expected = NoSuchTaskException.class)
     public void testNoSuchTaskException() throws Exception {
         assertNull(tasks.findTask(UUID.randomUUID()));
-    }
-
-    @Test(expected = NoSuchTaskException.class)
-    public void testAnotherNoSuchTaskException() throws Exception {
-        assertNull(tasks.findTask(100));
     }
 
 }

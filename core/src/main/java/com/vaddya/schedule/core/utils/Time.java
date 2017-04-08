@@ -29,7 +29,7 @@ public final class Time implements Comparable<Time> {
         try {
             this.time = LocalTime.of(hours, minutes);
         } catch (DateTimeParseException e) {
-            throw new IllegalTimeFormatException("Illegal time format: " + hours + ":" + minutes);
+            throw new IllegalTimeFormatException(hours + ":" + minutes);
         }
     }
 
@@ -37,7 +37,7 @@ public final class Time implements Comparable<Time> {
         try {
             this.time = LocalTime.parse(time);
         } catch (DateTimeParseException e) {
-            throw new IllegalTimeFormatException("Illegal time format: " + time);
+            throw new IllegalTimeFormatException(time);
         }
     }
 

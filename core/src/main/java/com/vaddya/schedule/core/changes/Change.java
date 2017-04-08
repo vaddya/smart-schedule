@@ -1,4 +1,6 @@
-package com.vaddya.schedule.core.lessons;
+package com.vaddya.schedule.core.changes;
+
+import com.vaddya.schedule.core.lessons.Lesson;
 
 import java.time.LocalDate;
 import java.util.UUID;

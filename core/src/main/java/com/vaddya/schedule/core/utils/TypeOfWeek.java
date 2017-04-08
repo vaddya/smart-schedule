@@ -1,14 +1,14 @@
 package com.vaddya.schedule.core.utils;
 
-import com.vaddya.schedule.core.lessons.StudyWeek;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
 
 /**
  * Перечисление типов недели
  *
  * @author vaddya
- * @see StudyWeek
+ * @see ScheduleWeek
  */
-public enum WeekType {
+public enum TypeOfWeek {
 
     /**
      * Нечетная неделя
@@ -18,9 +18,14 @@ public enum WeekType {
     /**
      * Четная неделя
      */
-    EVEN;
+    EVEN,
 
-    public WeekType opposite() {
+    /**
+     * Обе недели
+     */
+    BOTH;
+
+    public TypeOfWeek opposite() {
         return equals(ODD) ? EVEN : ODD;
     }
 

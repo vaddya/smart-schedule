@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.vaddya.schedule.core.lessons.StudyWeek;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
 
 import java.lang.reflect.Type;
 
@@ -17,17 +17,17 @@ import static java.time.DayOfWeek.MONDAY;
  * @author vaddya
  * @since April 07, 2017
  */
-public class StudyWeekSerializer implements JsonSerializer<StudyWeek> {
+public class StudyWeekSerializer implements JsonSerializer<ScheduleWeek> {
 
     private static final String START_DATE = "startDate";
     private static final String TYPE = "type";
     private static final String DAYS = "days";
 
     @Override
-    public JsonElement serialize(StudyWeek src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(ScheduleWeek src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(START_DATE, DATE_FORMAT.format(src.getWeekTime().getDateOf(MONDAY)));
-        object.addProperty(TYPE, src.getWeekType().toString());
+        object.addProperty(START_DATE, DATE_FORMAT.format(src.getWeek().getDateOf(MONDAY)));
+        object.addProperty(TYPE, src.getTypeOfWeek().toString());
         JsonElement days = context.serialize(src.getAllDays().values());
         object.add(DAYS, days);
         return object;

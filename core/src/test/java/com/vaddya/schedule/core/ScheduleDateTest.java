@@ -1,18 +1,21 @@
 package com.vaddya.schedule.core;
 
+import com.vaddya.schedule.core.changes.StudyChanges;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
-import com.vaddya.schedule.core.lessons.StudyDay;
+import com.vaddya.schedule.core.lessons.StudyLessons;
+import com.vaddya.schedule.core.schedule.ScheduleDay;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.UUID;
 
-import static com.vaddya.schedule.core.utils.WeekType.ODD;
+import static com.vaddya.schedule.core.utils.TypeOfWeek.ODD;
 import static java.time.LocalDate.of;
 import static org.junit.Assert.*;
 
@@ -22,16 +25,18 @@ import static org.junit.Assert.*;
  * @author vaddya
  * @since December 01, 2016
  */
-public class StudyDayTest {
+public class ScheduleDateTest {
 
-    private StudyDay day;
+    private ScheduleDay day;
     private Lesson lesson1;
     private Lesson lesson2;
 
     @Before
     public void setUp() {
         Database database = new MemoryDatabase();
-        day = new StudyDay(of(2016, 12, 1), ODD, database.getLessonRepository(), database.getChangeRepository());
+        StudyLessons lessons = new StudyLessons(database.getLessonRepository());
+        StudyChanges changes = new StudyChanges(database.getChangeRepository());
+        day = new ScheduleDay(of(2016, 12, 1), ODD, changes, lessons);
         lesson1 = new Lesson.Builder()
                 .startTime("12:00")
                 .endTime("13:30")
@@ -56,14 +61,14 @@ public class StudyDayTest {
         day.addLesson(lesson2);
 
         assertEquals(2, day.getNumberOfLessons());
-        assertEquals("Programming", day.findLesson(0).getSubject());
+        assertEquals("Programming", day.findLesson(lesson1.getId()).getSubject());
         assertEquals("High math", day.findLesson(lesson2.getId()).getSubject());
 
         for (Lesson lesson : day) {
             lesson.setPlace("Test");
             day.updateLesson(lesson);
         }
-        assertEquals("Test", day.findLesson(0).getPlace());
+        assertEquals("Test", day.findLesson(lesson1.getId()).getPlace());
 
         for (Lesson lesson : day.getLessons()) {
             day.removeLesson(lesson);
@@ -71,7 +76,7 @@ public class StudyDayTest {
         assertEquals(0, day.getNumberOfLessons());
         assertTrue(day.isEmpty());
 
-        day.addAllLessons(lesson1, lesson2);
+        day.addAllLessons(Arrays.asList(lesson1, lesson2));
         assertEquals(2, day.getNumberOfLessons());
     }
 
@@ -84,11 +89,6 @@ public class StudyDayTest {
     @Test(expected = NoSuchLessonException.class)
     public void testNoSuchLessonException() throws Exception {
         assertNull(day.findLesson(UUID.randomUUID()));
-    }
-
-    @Test(expected = NoSuchLessonException.class)
-    public void testAnotherNoSuchLessonException() throws Exception {
-        assertNull(day.findLesson(100));
     }
 
 }

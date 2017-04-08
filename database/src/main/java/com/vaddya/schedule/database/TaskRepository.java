@@ -22,12 +22,12 @@ public interface TaskRepository {
 
     void save(Task task);
 
-    void delete(Task task);
-
-    void deleteAll();
-
     boolean isEmpty();
 
     long size();
+
+    void delete(Task task);
+
+    void deleteAll();
 
 }

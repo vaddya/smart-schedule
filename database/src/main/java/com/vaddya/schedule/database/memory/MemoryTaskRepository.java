@@ -42,16 +42,6 @@ public class MemoryTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void delete(Task task) {
-        tasks.remove(task);
-    }
-
-    @Override
-    public void deleteAll() {
-        tasks.clear();
-    }
-
-    @Override
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
@@ -59,6 +49,16 @@ public class MemoryTaskRepository implements TaskRepository {
     @Override
     public long size() {
         return tasks.size();
+    }
+
+    @Override
+    public void delete(Task task) {
+        tasks.remove(task);
+    }
+
+    @Override
+    public void deleteAll() {
+        tasks.clear();
     }
 
 }

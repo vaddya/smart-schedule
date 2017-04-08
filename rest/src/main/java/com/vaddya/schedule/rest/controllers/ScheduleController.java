@@ -1,12 +1,16 @@
 package com.vaddya.schedule.rest.controllers;
 
-import com.vaddya.schedule.core.lessons.Change;
+import com.vaddya.schedule.core.changes.Change;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.StudyDay;
-import com.vaddya.schedule.core.lessons.StudyWeek;
-import com.vaddya.schedule.core.utils.WeekTime;
+import com.vaddya.schedule.core.schedule.ScheduleDay;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
+import com.vaddya.schedule.core.utils.LocalWeek;
+import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -22,28 +26,30 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * @since April 07, 2017
  */
 @RestController
-@RequestMapping("/api/schedule")
+@RequestMapping(Paths.SCHEDULE)
 public class ScheduleController extends Controller {
 
     @RequestMapping(method = GET, produces = JSON)
-    public ResponseEntity<String> getWeek(@RequestParam(required = false) String startDate) {
-        if (startDate != null) {
-            try {
-                LocalDate date = from(DATE_FORMAT.parse(startDate));
-                StudyWeek week = schedule.getWeek(WeekTime.of(date));
-                return getBodyResponse(OK, gson.toJson(week));
-            } catch (DateTimeException e) {
-                return getMessageResponse(BAD_REQUEST, "Date format is invalid");
-            }
-        }
+    public ResponseEntity<String> getCurrentWeek() {
         return getBodyResponse(OK, gson.toJson(schedule.getCurrentWeek()));
+    }
+
+    @RequestMapping(value = "week/{date}", method = GET, produces = JSON)
+    public ResponseEntity<String> getWeek(@PathVariable String date) {
+        try {
+            LocalDate localDate = from(DATE_FORMAT.parse(date));
+            ScheduleWeek week = schedule.getWeek(LocalWeek.of(localDate));
+            return getBodyResponse(OK, gson.toJson(week));
+        } catch (DateTimeException e) {
+            return getMessageResponse(BAD_REQUEST, "Date format is invalid");
+        }
     }
 
     @RequestMapping(value = "{date}", method = GET, produces = JSON)
     public ResponseEntity<String> getDay(@PathVariable String date) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
-            StudyDay day = schedule.getDay(localDate);
+            ScheduleDay day = schedule.getDay(localDate);
             return getBodyResponse(OK, gson.toJson(day));
         } catch (DateTimeException e) {
             return getMessageResponse(BAD_REQUEST, "Date is invalid");
@@ -55,10 +61,10 @@ public class ScheduleController extends Controller {
                                                       @RequestBody String body) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
-            StudyDay day = schedule.getDay(localDate);
+            ScheduleDay day = schedule.getDay(localDate);
             Lesson lesson = gson.fromJson(body, Lesson.class);
             Change change = day.addLesson(lesson);
-            return getMessageResponse(CREATED, "Lesson created, change id=" + change.getId());
+            return getResponseCreated(CREATED, "Change created", Paths.CHANGES, change.getId());
         } catch (DateTimeException e) {
             return getMessageResponse(BAD_REQUEST, "Date format is invalid");
         } catch (Throwable e) {
@@ -70,7 +76,7 @@ public class ScheduleController extends Controller {
     public ResponseEntity<String> deleteLessonsForDate(@PathVariable String date) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
-            StudyDay day = schedule.getDay(localDate);
+            ScheduleDay day = schedule.getDay(localDate);
             day.removeAllLessons();
             return getResponse(NO_CONTENT);
         } catch (DateTimeException e) {

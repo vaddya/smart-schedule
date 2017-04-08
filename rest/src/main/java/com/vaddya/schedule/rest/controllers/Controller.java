@@ -2,14 +2,14 @@ package com.vaddya.schedule.rest.controllers;
 
 import com.google.gson.Gson;
 import com.vaddya.schedule.core.SmartSchedule;
-import com.vaddya.schedule.rest.Response;
+import com.vaddya.schedule.rest.responses.Response;
+import com.vaddya.schedule.rest.responses.ResponseCreated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.format.DateTimeFormatter;
-
-import static java.time.format.DateTimeFormatter.ofPattern;
+import java.util.UUID;
 
 /**
  * com.vaddya.schedule.rest.controllers at smart-schedule
@@ -19,9 +19,9 @@ import static java.time.format.DateTimeFormatter.ofPattern;
  */
 public class Controller {
 
-    public static final DateTimeFormatter DATE_FORMAT = ofPattern("dd-MM-yyyy");
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    protected static final String JSON = "application/json";
+    public static final String JSON = "application/json";
 
     @Autowired
     protected Gson gson;
@@ -39,6 +39,11 @@ public class Controller {
 
     protected ResponseEntity<String> getMessageResponse(HttpStatus status, String message) {
         Response response = new Response(status, message);
+        return new ResponseEntity<>(gson.toJson(response), response.getStatus());
+    }
+
+    protected ResponseEntity<String> getResponseCreated(HttpStatus status, String message, String baseUrl, UUID id) {
+        ResponseCreated response = new ResponseCreated(status, message, baseUrl + "/" + id);
         return new ResponseEntity<>(gson.toJson(response), response.getStatus());
     }
 }

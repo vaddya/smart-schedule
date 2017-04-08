@@ -2,9 +2,9 @@ package com.vaddya.schedule.desktop.controllers;
 
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.StudyWeek;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.utils.Dates;
-import com.vaddya.schedule.core.utils.WeekTime;
+import com.vaddya.schedule.core.utils.LocalWeek;
 import com.vaddya.schedule.desktop.Main;
 import com.vaddya.schedule.desktop.lessons.CreatedLesson;
 import com.vaddya.schedule.desktop.lessons.LessonListItem;
@@ -51,7 +51,7 @@ public class LessonsController {
 
     private SmartSchedule schedule;
 
-    private WeekTime currentWeek;
+    private LocalWeek currentWeek;
 
     private EditLessonController editLessonController;
 
@@ -71,16 +71,16 @@ public class LessonsController {
     public void init(MainController main, SmartSchedule schedule) {
         this.main = main;
         this.schedule = schedule;
-        currentWeek = WeekTime.current();
+        currentWeek = LocalWeek.current();
         weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
         weekDatePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
         weekDatePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
         weekDatePicker.setConverter(new StringConverter<LocalDate>() {
             @Override
             public String toString(LocalDate object) {
-                WeekTime weekTime = WeekTime.of(object);
-                return weekTime.getDateOf(MONDAY).format(WEEK_FORMATTER) + " - " +
-                        weekTime.getDateOf(SUNDAY).format(WEEK_FORMATTER);
+                LocalWeek week = LocalWeek.of(object);
+                return week.getDateOf(MONDAY).format(WEEK_FORMATTER) + " - " +
+                        week.getDateOf(SUNDAY).format(WEEK_FORMATTER);
             }
 
             @Override
@@ -134,7 +134,7 @@ public class LessonsController {
                 }
             }
         });
-        currentWeek = WeekTime.current();
+        currentWeek = LocalWeek.current();
         refreshLessons();
     }
 
@@ -142,12 +142,12 @@ public class LessonsController {
         Button button = (Button) event.getSource();
         switch (button.getId()) {
             case "prevWeekButton":
-                currentWeek = WeekTime.before(currentWeek);
+                currentWeek = LocalWeek.before(currentWeek);
                 weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
                 refreshLessons();
                 break;
             case "nextWeekButton":
-                currentWeek = WeekTime.after(currentWeek);
+                currentWeek = LocalWeek.after(currentWeek);
                 weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
                 refreshLessons();
                 break;
@@ -175,20 +175,22 @@ public class LessonsController {
                     parseRemoveLessonDialog(lesson);
                 }
                 break;
+            default:
+                break;
         }
     }
 
     public void datePickerHandler(ActionEvent event) {
-        currentWeek = WeekTime.of(weekDatePicker.getValue());
+        currentWeek = LocalWeek.of(weekDatePicker.getValue());
         refreshLessons();
     }
 
     private void refreshLessons() {
-        String currWeek = Main.getBundle().getString(schedule.getWeek(currentWeek).getWeekType().toString().toLowerCase());
+        String currWeek = Main.getBundle().getString(schedule.getWeek(currentWeek).getTypeOfWeek().toString().toLowerCase());
         currWeekLabel.setText(currWeek);
         currWeekLabel.setTextAlignment(TextAlignment.CENTER);
         lessonList.getItems().clear();
-        StudyWeek week = schedule.getWeek(currentWeek);
+        ScheduleWeek week = schedule.getWeek(currentWeek);
         for (DayOfWeek day : DayOfWeek.values()) {
             if (week.getDay(day).isEmpty()) {
                 continue;
@@ -213,10 +215,8 @@ public class LessonsController {
                 schedule.getWeek(currentWeek).getDay(lesson.getDay())
                         .removeLesson(lesson.getLesson());
             } else {
-                schedule.getSchedule(schedule.getWeekType(currentWeek))
-                        .removeLesson(lesson.getLesson().getId());
+                schedule.getLessons().removeLesson(lesson.getLesson().getId());
             }
-            schedule.updateLessons();
             refreshLessons();
         }
     }
@@ -229,8 +229,8 @@ public class LessonsController {
                     schedule.getWeek(currentWeek).getDay(lesson.getSourceDay())
                             .addLesson(lesson.getLesson());
                 } else {
-                    schedule.getCurrentSchedule()
-                            .addLesson(lesson.getTargetDay(), lesson.getLesson());
+                    schedule.getLessons().addLesson(schedule.getTypeOfWeek(currentWeek),
+                            lesson.getTargetDay(), lesson.getLesson());
                 }
             } else {
                 if (lesson.isOnce()) {
@@ -243,16 +243,14 @@ public class LessonsController {
                     }
                 } else {
                     if (lesson.isDayChanged()) {
-                        schedule.getSchedule(schedule.getWeekType(currentWeek))
-                                .changeLessonDay(lesson.getSourceDay(), lesson.getTargetDay(), lesson.getLesson());
+                        schedule.getLessons().changeLessonDay(schedule.getTypeOfWeek(currentWeek),
+                                lesson.getTargetDay(), lesson.getLesson());
                     } else {
-                        schedule.getSchedule(schedule.getWeekType(currentWeek))
-                                .updateLesson(lesson.getSourceDay(), lesson.getLesson());
+                        schedule.getLessons().updateLesson(lesson.getLesson());
 
                     }
                 }
             }
-            schedule.updateLessons();
             refreshLessons();
         }
     }
