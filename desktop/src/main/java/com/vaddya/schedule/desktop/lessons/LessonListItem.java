@@ -1,7 +1,7 @@
 package com.vaddya.schedule.desktop.lessons;
 
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.desktop.Main;
+import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -19,21 +19,16 @@ public class LessonListItem extends AnchorPane {
 
     @FXML
     private Label timeLabel;
-
     @FXML
     private Label subjectLabel;
-
     @FXML
     private Label typeLabel;
-
     @FXML
     private Label placeLabel;
-
     @FXML
     private Label teacherLabel;
 
     private Lesson lesson;
-
     private DayOfWeek day;
 
     public LessonListItem(Lesson lesson, DayOfWeek day) {
@@ -54,7 +49,7 @@ public class LessonListItem extends AnchorPane {
     private void initComponents(Lesson lesson) {
         timeLabel.setText(lesson.getStartTime().toString() + " - " + lesson.getEndTime().toString());
         subjectLabel.setText(lesson.getSubject());
-        typeLabel.setText(Main.getBundle().getString(lesson.getType().toString().toLowerCase()));
+        typeLabel.setText(TypeFormatter.format(lesson.getType()));
         placeLabel.setText(lesson.getPlace());
         teacherLabel.setText(lesson.getTeacher());
     }
@@ -66,4 +61,5 @@ public class LessonListItem extends AnchorPane {
     public DayOfWeek getDay() {
         return day;
     }
+
 }

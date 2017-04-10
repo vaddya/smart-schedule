@@ -3,7 +3,7 @@ package com.vaddya.schedule.desktop.controllers;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.desktop.Main;
-import com.vaddya.schedule.desktop.util.TypeTranslator;
+import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,39 +31,32 @@ import static com.vaddya.schedule.core.lessons.LessonType.ANOTHER;
  */
 public class EditTaskController implements Initializable {
 
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getLocale());
+
     @FXML
     private TextField subjectField;
-
     @FXML
     private ChoiceBox<String> typeChoiceBox;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     private TextArea textArea;
-
     @FXML
     private CheckBox doneCheckBox;
 
-    private UUID uuid;
-
+    private UUID id;
     private Task task;
-
     private boolean saved;
-
     private boolean created;
-
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getBundle().getLocale());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (LessonType type : LessonType.values()) {
-            typeChoiceBox.getItems().add(Main.getBundle().getString(type.toString().toLowerCase()));
+            typeChoiceBox.getItems().add(TypeFormatter.format(type));
         }
-        datePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
-        datePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
+        datePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getLocale()));
+        datePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getLocale()));
         datePicker.setConverter(new StringConverter<LocalDate>() {
             @Override
             public String toString(LocalDate object) {
@@ -80,17 +73,17 @@ public class EditTaskController implements Initializable {
     public void setActiveTask(Task task, List<String> suggestions) {
         if (task == null) {
             created = true;
-            uuid = UUID.randomUUID();
+            id = UUID.randomUUID();
             subjectField.clear();
-            typeChoiceBox.setValue(Main.getBundle().getString(ANOTHER.toString().toLowerCase()));
+            typeChoiceBox.setValue(TypeFormatter.format(ANOTHER));
             datePicker.setValue(LocalDate.now());
             textArea.clear();
             doneCheckBox.setSelected(false);
         } else {
             created = false;
-            uuid = task.getId();
+            id = task.getId();
             subjectField.setText(task.getSubject());
-            typeChoiceBox.setValue(Main.getBundle().getString(task.getType().toString().toLowerCase()));
+            typeChoiceBox.setValue(TypeFormatter.format(task.getType()));
             datePicker.setValue(task.getDeadline());
             textArea.setText(task.getTextTask());
             doneCheckBox.setSelected(task.isComplete());
@@ -108,9 +101,9 @@ public class EditTaskController implements Initializable {
     public void actionSave(ActionEvent event) {
         saved = true;
         task = new Task.Builder()
-                .id(uuid)
+                .id(id)
                 .subject(subjectField.getText())
-                .type(TypeTranslator.parseLessonType(typeChoiceBox.getValue()))
+                .type(TypeFormatter.parseLessonType(typeChoiceBox.getValue()))
                 .deadline(datePicker.getValue())
                 .textTask(textArea.getText())
                 .isComplete(doneCheckBox.isSelected())
@@ -129,4 +122,5 @@ public class EditTaskController implements Initializable {
     public Task getTask() {
         return task;
     }
+
 }

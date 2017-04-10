@@ -11,6 +11,11 @@ import com.vaddya.schedule.core.schedule.ScheduleWeek;
 public enum TypeOfWeek {
 
     /**
+     * Обе недели
+     */
+    BOTH,
+
+    /**
      * Нечетная неделя
      */
     ODD,
@@ -18,12 +23,7 @@ public enum TypeOfWeek {
     /**
      * Четная неделя
      */
-    EVEN,
-
-    /**
-     * Обе недели
-     */
-    BOTH;
+    EVEN;
 
     public TypeOfWeek opposite() {
         return equals(ODD) ? EVEN : ODD;

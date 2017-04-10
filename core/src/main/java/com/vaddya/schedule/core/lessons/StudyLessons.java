@@ -42,6 +42,16 @@ public class StudyLessons {
         throw new NoSuchLessonException(id);
     }
 
+    public List<Lesson> findAll() {
+        List<Lesson> list = new ArrayList<>();
+        for (TypeOfWeek week : TypeOfWeek.values()) {
+            for (DayOfWeek day : DayOfWeek.values()) {
+                list.addAll(lessons.findAll(week, day));
+            }
+        }
+        return list;
+    }
+
     /**
      * Найти занятия по указанной неделе
      */
@@ -82,12 +92,15 @@ public class StudyLessons {
         throw new NoSuchLessonException(id);
     }
 
+    public void changeWeekType(Lesson lesson, TypeOfWeek week) {
+        lessons.saveTypeOfWeek(lesson, week);
+    }
+
     /**
      * Изменить день занятия
      */
-    public void changeLessonDay(TypeOfWeek typeOfWeek, DayOfWeek newDay, Lesson lesson) {
-        lessons.delete(lesson.getId());
-        lessons.insert(typeOfWeek, newDay, lesson);
+    public void changeLessonDay(Lesson lesson, DayOfWeek newDay) {
+        lessons.saveDayOfWeek(lesson, newDay);
     }
 
     /**

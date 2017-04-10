@@ -8,56 +8,40 @@
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.vaddya.schedule.desktop.controllers.MainController"
       stylesheets="@../css/styles.css">
-    <children>
-        <MenuBar VBox.vgrow="NEVER">
-            <menus>
-                <Menu mnemonicParsing="false" text="Файл">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Новый"/>
-                        <MenuItem mnemonicParsing="false" text="Открыть…"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="Закрыть"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Изменить">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Добавить занятие"/>
-                        <MenuItem mnemonicParsing="false" text="Удалить все изменения"/>
-                        <MenuItem mnemonicParsing="false" disable="true" text="Настройки…"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Помощь">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="О программе"/>
-                    </items>
-                </Menu>
-                <Menu fx:id="currDateMenu" mnemonicParsing="false" disable="true"/>
-            </menus>
-        </MenuBar>
-        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-            <tabs>
-                <Tab text="%schedule" closable="true">
-                    <graphic>
-                        <ImageView>
-                            <Image url="@../img/lessons.png"/>
-                        </ImageView>
-                    </graphic>
-                    <content>
-                        <fx:include fx:id="lessons" source="lessons.fxml"/>
-                    </content>
-                </Tab>
-                <Tab text="%tasks">
-                    <graphic>
-                        <ImageView>
-                            <Image url="@../img/tasks.png"/>
-                        </ImageView>
-                    </graphic>
-                    <content>
-                        <fx:include fx:id="tasks" source="tasks.fxml"/>
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
-        <StatusBar fx:id="statusBar" text=""/>
-    </children>
+    <MenuBar VBox.vgrow="NEVER">
+        <Menu mnemonicParsing="false" text="Файл">
+            <MenuItem mnemonicParsing="false" text="Новый"/>
+            <MenuItem mnemonicParsing="false" text="Открыть…"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Закрыть"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Изменить">
+            <MenuItem mnemonicParsing="false" text="Добавить занятие"/>
+            <MenuItem mnemonicParsing="false" text="Удалить все изменения"/>
+            <MenuItem mnemonicParsing="false" disable="true" text="Настройки…"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Помощь">
+            <MenuItem mnemonicParsing="false" text="О программе"/>
+        </Menu>
+        <Menu fx:id="currentDateMenu" mnemonicParsing="false" disable="true"/>
+    </MenuBar>
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="%schedule">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/lessons.png"/>
+                </ImageView>
+            </graphic>
+            <fx:include source="lessons.fxml"/>
+        </Tab>
+        <Tab text="%tasks">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/tasks.png"/>
+                </ImageView>
+            </graphic>
+            <fx:include source="tasks.fxml"/>
+        </Tab>
+    </TabPane>
+    <StatusBar fx:id="statusBar" text=""/>
 </VBox>

@@ -45,6 +45,15 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     @Override
+    public List<Lesson> findAll() {
+        return collection.find()
+                .into(new ArrayList<>())
+                .stream()
+                .map(this::parseLesson)
+                .collect(toList());
+    }
+
+    @Override
     public List<Lesson> findAll(TypeOfWeek week, DayOfWeek day) {
         Bson filter = and(
                 or(eq("week", week.toString()), eq("week", BOTH.toString())),
@@ -96,10 +105,26 @@ public class MongoLessonRepository implements LessonRepository {
     }
 
     @Override
+    public void saveTypeOfWeek(Lesson lesson, TypeOfWeek week) {
+        Document old = collection.find(eq("_id", lesson.getId().toString())).first();
+        Document document = fromLesson(lesson);
+        document.append("week", week.toString()).append("day", old.get("day"));
+        collection.replaceOne(eq("_id", lesson.getId().toString()), document);
+    }
+
+    @Override
+    public void saveDayOfWeek(Lesson lesson, DayOfWeek day) {
+        Document old = collection.find(eq("_id", lesson.getId().toString())).first();
+        Document document = fromLesson(lesson);
+        document.append("week", old.get("week")).append("day", day.toString());
+        collection.replaceOne(eq("_id", lesson.getId().toString()), document);
+    }
+
+    @Override
     public void swapWeeks() {
         collection.updateMany(eq("week", ODD.toString()), set("week", ODD.toString()));
         collection.updateMany(eq("week", EVEN.toString()), set("week", EVEN.toString()));
-        collection.updateMany(eq("week", "TEMP"), set("week", "EVEN"));
+        collection.updateMany(eq("week", "TEMP"), set("week", EVEN.toString()));
     }
 
     @Override

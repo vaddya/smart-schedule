@@ -8,72 +8,61 @@
             fx:controller="com.vaddya.schedule.desktop.controllers.EditTaskController">
     <top>
         <VBox prefWidth="86.0" BorderPane.alignment="CENTER">
-            <children>
-                <AnchorPane>
-                    <children>
-                        <Label text="%lesson_subject" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
-                               AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="5.0">
-                        </Label>
-                        <TextField fx:id="subjectField" layoutX="71.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0">
-                        </TextField>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <Separator prefWidth="200.0"/>
-                <AnchorPane>
-                    <children>
-                        <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0">
-                        </ChoiceBox>
-                        <Label text="%lesson_type" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
-                               AnchorPane.topAnchor="5.0">
-                        </Label>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <Separator prefWidth="200.0"/>
-                <AnchorPane>
-                    <children>
-                        <Label text="%task_deadline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
-                               AnchorPane.topAnchor="5.0"/>
-                        <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="220.0" promptText="%date"
-                                    AnchorPane.rightAnchor="0.0"/>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <Separator prefWidth="200.0"/>
-                <AnchorPane>
-                    <children>
-                        <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="220.0" wrapText="true"
-                                  AnchorPane.rightAnchor="0.0"/>
-                        <Label text="%task_text" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
-                               AnchorPane.topAnchor="5.0"/>
-                        <CheckBox fx:id="doneCheckBox" layoutX="-8.0" layoutY="29.0" mnemonicParsing="false"
-                                  text="%task_complete" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"/>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <BorderPane>
-                    <left>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefWidth="160.0"
-                                text="%save" BorderPane.alignment="CENTER"/>
-                    </left>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
-                    </padding>
-                    <right>
-                        <Button cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefWidth="160.0"
-                                text="%cancel" BorderPane.alignment="CENTER"/>
-                    </right>
-                </BorderPane>
-            </children>
+            <AnchorPane>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
+                </VBox.margin>
+                <Label text="%lesson_subject" textAlignment="RIGHT" AnchorPane.leftAnchor="0.0"
+                       AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="5.0">
+                </Label>
+                <TextField fx:id="subjectField" layoutX="71.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
+            </AnchorPane>
+            <Separator prefWidth="200.0"/>
+            <AnchorPane>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                </VBox.margin>
+                <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0">
+                </ChoiceBox>
+                <Label text="%lesson_type" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                       AnchorPane.topAnchor="5.0">
+                </Label>
+            </AnchorPane>
+            <Separator prefWidth="200.0"/>
+            <AnchorPane>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                </VBox.margin>
+                <Label text="%task_deadline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                       AnchorPane.topAnchor="5.0"/>
+                <DatePicker fx:id="datePicker" layoutX="71.0" prefWidth="220.0" promptText="%date"
+                            AnchorPane.rightAnchor="0.0"/>
+            </AnchorPane>
+            <Separator prefWidth="200.0"/>
+            <AnchorPane>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                </VBox.margin>
+                <TextArea fx:id="textArea" prefHeight="100.0" prefWidth="220.0" wrapText="true"
+                          AnchorPane.rightAnchor="0.0"/>
+                <Label text="%task_text" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0"
+                       AnchorPane.topAnchor="5.0"/>
+                <CheckBox fx:id="doneCheckBox" layoutX="-8.0" layoutY="29.0" mnemonicParsing="false"
+                          text="%task_complete" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"/>
+            </AnchorPane>
+            <BorderPane>
+                <left>
+                    <Button defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefWidth="160.0"
+                            text="%save" BorderPane.alignment="CENTER"/>
+                </left>
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+                </padding>
+                <right>
+                    <Button cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefWidth="160.0"
+                            text="%cancel" BorderPane.alignment="CENTER"/>
+                </right>
+            </BorderPane>
         </VBox>
     </top>
 </BorderPane>

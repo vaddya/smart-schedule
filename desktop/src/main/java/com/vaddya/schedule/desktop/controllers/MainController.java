@@ -36,19 +36,16 @@ import java.util.stream.Collectors;
 public class MainController implements Initializable {
 
     private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getBundle().getLocale());
+            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Main.getLocale());
 
     @FXML
     private LessonsController lessonsController;
-
     @FXML
     private TasksController tasksController;
-
     @FXML
     private StatusBar statusBar;
-
     @FXML
-    private Menu currDateMenu;
+    private Menu currentDateMenu;
 
     private SmartSchedule schedule;
 
@@ -59,26 +56,16 @@ public class MainController implements Initializable {
         schedule = new SmartScheduleImpl(database);
         lessonsController.init(this, schedule);
         tasksController.init(this, schedule);
-        currDateMenu.setText(Main.getBundle().getString("today") + " " + LocalDate.now().format(FORMATTER));
+        currentDateMenu.setText(Main.getString("today") + " " + LocalDate.now().format(FORMATTER));
     }
 
     public List<String> getSubjectSuggestions() {
-        return schedule.getCurrentWeek()
-                .getAllDays()
-                .entrySet()
+        return schedule.getLessons()
+                .findAll()
                 .stream()
-                .flatMap(entrySet -> entrySet.getValue().getLessons().stream())
                 .map(Lesson::getSubject)
                 .distinct()
                 .collect(Collectors.toList());
-    }
-
-    public StatusBar getStatusBar() {
-        return statusBar;
-    }
-
-    public void setToStatusBar(String message) {
-        statusBar.setText(message);
     }
 
     public void setToStatusBar(String message, int seconds) {
@@ -106,4 +93,5 @@ public class MainController implements Initializable {
         statusBar.setText("");
         return stage;
     }
+
 }

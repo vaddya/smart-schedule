@@ -2,9 +2,9 @@ package com.vaddya.schedule.core.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
@@ -32,10 +32,7 @@ public class LocalWeek {
 
     private LocalWeek(LocalDate date) {
         firstDay = date.minus(date.getDayOfWeek().ordinal(), DAYS);
-        Calendar calendar = new GregorianCalendar(new Locale("ru"));
-        calendar.set(firstDay.getYear(),
-                firstDay.getMonthValue(),
-                firstDay.getDayOfMonth());
+        Calendar calendar = GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault()));
         weekNumber = calendar.get(WEEK_OF_YEAR);
     }
 

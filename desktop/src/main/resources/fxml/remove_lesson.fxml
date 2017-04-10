@@ -8,48 +8,42 @@
             fx:controller="com.vaddya.schedule.desktop.controllers.RemoveLessonController">
     <top>
         <VBox alignment="CENTER" prefWidth="86.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label fx:id="areYouSureLabel" alignment="CENTER" prefWidth="350.0" text="%are_you_sure_remove_lesson"
-                       textAlignment="CENTER">
-                    <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                    </VBox.margin>
-                </Label>
-                <AnchorPane layoutX="30.0" layoutY="255.0">
-                    <children>
-                        <VBox alignment="CENTER" layoutX="113.0" layoutY="9.0" spacing="10.0"
-                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                              AnchorPane.topAnchor="0.0">
-                            <children>
-                                <RadioButton fx:id="once" layoutX="113.0" layoutY="9.0" mnemonicParsing="false"
-                                             text="%lesson_once">
-                                    <toggleGroup>
-                                        <ToggleGroup fx:id="group"/>
-                                    </toggleGroup>
-                                </RadioButton>
-                                <RadioButton fx:id="always" layoutX="157.0" layoutY="9.0" mnemonicParsing="false"
-                                             text="%lesson_always" toggleGroup="$group"/>
-                            </children>
-                        </VBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </VBox.margin>
-                </AnchorPane>
-                <BorderPane>
-                    <left>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#actionRemove" prefWidth="160.0"
-                                text="%remove" BorderPane.alignment="CENTER"/>
-                    </left>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
-                    </padding>
-                    <right>
-                        <Button cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefWidth="160.0"
-                                text="%cancel" BorderPane.alignment="CENTER"/>
-                    </right>
-                </BorderPane>
-            </children>
+            <Label fx:id="sureLabel" alignment="CENTER" prefWidth="350.0" text="%lesson_remove_are_you_sure"
+                   textAlignment="CENTER">
+                <VBox.margin>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                </VBox.margin>
+            </Label>
+            <AnchorPane layoutX="30.0" layoutY="255.0">
+                <VBox.margin>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                </VBox.margin>
+                <VBox alignment="CENTER" layoutX="113.0" layoutY="9.0" spacing="10.0"
+                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                      AnchorPane.topAnchor="0.0">
+                    <RadioButton fx:id="onceRadioButton" layoutX="113.0" layoutY="9.0" mnemonicParsing="false"
+                                 text="%lesson_once">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="toggleGroup"/>
+                        </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="alwaysRadioButton" layoutX="157.0" layoutY="9.0" mnemonicParsing="false"
+                                 text="%lesson_always" toggleGroup="$toggleGroup"/>
+                </VBox>
+            </AnchorPane>
+            <BorderPane>
+                <left>
+                    <Button defaultButton="true" mnemonicParsing="false" onAction="#actionRemove" prefWidth="160.0"
+                            text="%remove" BorderPane.alignment="CENTER"/>
+                </left>
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+                </padding>
+                <right>
+                    <Button cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefWidth="160.0"
+                            text="%cancel" BorderPane.alignment="CENTER"/>
+                </right>
+            </BorderPane>
         </VBox>
     </top>
 </BorderPane>

@@ -18,11 +18,20 @@ import java.util.ResourceBundle;
  */
 public class Main extends Application {
 
-    private static ResourceBundle bundle = ResourceBundle.getBundle("bundles/Locale", new Locale("ru"));
+    private static final Locale locale = new Locale("ru");
+    private static final ResourceBundle bundle = ResourceBundle.getBundle("bundles/Locale", locale);
     private static Image icon = new Image(Main.class.getClassLoader().getResourceAsStream("img/icon.png"));
+
+    public static Locale getLocale() {
+        return locale;
+    }
 
     public static ResourceBundle getBundle() {
         return bundle;
+    }
+
+    public static String getString(String key) {
+        return bundle.getString(key);
     }
 
     public static Image getIcon() {
@@ -49,4 +58,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }

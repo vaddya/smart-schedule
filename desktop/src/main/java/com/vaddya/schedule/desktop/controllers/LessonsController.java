@@ -5,15 +5,16 @@ import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.core.utils.LocalWeek;
+import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.desktop.Main;
 import com.vaddya.schedule.desktop.lessons.CreatedLesson;
 import com.vaddya.schedule.desktop.lessons.LessonListItem;
+import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import static com.vaddya.schedule.core.utils.TypeOfWeek.BOTH;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
@@ -38,43 +40,33 @@ import static java.time.DayOfWeek.SUNDAY;
  */
 public class LessonsController {
 
+    private static final DateTimeFormatter WEEK_FORMATTER =
+            DateTimeFormatter.ofPattern("d MMMM", Main.getLocale());
+
     @FXML
     private Label currWeekLabel;
-
     @FXML
     private DatePicker weekDatePicker;
-
     @FXML
     private ListView<Node> lessonList;
-
-    private MainController main;
-
-    private SmartSchedule schedule;
-
-    private LocalWeek currentWeek;
-
+    private MainController mainController;
     private EditLessonController editLessonController;
-
     private Stage editLessonDialogStage;
-
     private Parent editLessonDialogParent;
-
     private RemoveLessonController removeLessonController;
-
     private Stage removeLessonDialogStage;
-
     private Parent removeLessonDialogParent;
 
-    private static final DateTimeFormatter WEEK_FORMATTER =
-            DateTimeFormatter.ofPattern("d MMMM", Main.getBundle().getLocale());
+    private SmartSchedule schedule;
+    private LocalWeek currentWeek;
 
-    public void init(MainController main, SmartSchedule schedule) {
-        this.main = main;
+    public void init(MainController mainController, SmartSchedule schedule) {
         this.schedule = schedule;
+        this.mainController = mainController;
         currentWeek = LocalWeek.current();
         weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
-        weekDatePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
-        weekDatePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getBundle().getLocale()));
+        weekDatePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getLocale()));
+        weekDatePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getLocale()));
         weekDatePicker.setConverter(new StringConverter<LocalDate>() {
             @Override
             public String toString(LocalDate object) {
@@ -124,11 +116,12 @@ public class LessonsController {
                     LessonListItem item = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
                     Lesson lesson = item.getLesson();
                     DayOfWeek day = item.getDay();
-                    editLessonController.setActiveLesson(lesson, day);
-                    editLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
+                    TypeOfWeek week = schedule.getLessons().getWeekType(lesson.getId());
+                    editLessonController.setActiveLesson(lesson, week, day, mainController.getSubjectSuggestions());
+                    editLessonDialogStage = mainController.showDialog(lessonList.getScene().getWindow(),
                             editLessonDialogStage,
                             editLessonDialogParent,
-                            Main.getBundle().getString("lesson_edit")
+                            Main.getString("lesson_edit")
                     );
                     parseLessonDialog();
                 }
@@ -138,55 +131,50 @@ public class LessonsController {
         refreshLessons();
     }
 
-    public void actionButtonPressed(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        switch (button.getId()) {
-            case "prevWeekButton":
-                currentWeek = LocalWeek.before(currentWeek);
-                weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
-                refreshLessons();
-                break;
-            case "nextWeekButton":
-                currentWeek = LocalWeek.after(currentWeek);
-                weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
-                refreshLessons();
-                break;
-            case "addLessonButton":
-                editLessonController.setActiveLesson(null, MONDAY);
-                editLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
-                        editLessonDialogStage,
-                        editLessonDialogParent,
-                        Main.getBundle().getString("lesson_add")
-                );
-                parseLessonDialog();
-                refreshLessons();
-                break;
-            case "removeLessonButton":
-                LessonListItem lesson = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
-                if (lesson == null) {
-                    main.setToStatusBar(Main.getBundle().getString("lesson_select_remove"), 5);
-                } else {
-                    removeLessonController.setSubject(lesson.getLesson().getSubject());
-                    removeLessonDialogStage = main.showDialog(lessonList.getScene().getWindow(),
-                            removeLessonDialogStage,
-                            removeLessonDialogParent,
-                            Main.getBundle().getString("lesson_remove")
-                    );
-                    parseRemoveLessonDialog(lesson);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     public void datePickerHandler(ActionEvent event) {
         currentWeek = LocalWeek.of(weekDatePicker.getValue());
         refreshLessons();
     }
 
+    public void prevWeekButtonPressed(ActionEvent event) {
+        currentWeek = LocalWeek.before(currentWeek);
+        weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
+        refreshLessons();
+    }
+
+    public void nextWeekButtonPressed(ActionEvent event) {
+        currentWeek = LocalWeek.after(currentWeek);
+        weekDatePicker.setValue(currentWeek.getDateOf(MONDAY));
+        refreshLessons();
+    }
+
+    public void addLessonButtonPressed(ActionEvent event) {
+        editLessonController.setActiveLesson(null, BOTH, MONDAY, mainController.getSubjectSuggestions());
+        editLessonDialogStage = mainController.showDialog(lessonList.getScene().getWindow(),
+                editLessonDialogStage,
+                editLessonDialogParent,
+                Main.getString("lesson_add")
+        );
+        parseLessonDialog();
+        refreshLessons();
+    }
+
+    public void removeLessonButtonPressed(ActionEvent event) {
+        LessonListItem lesson = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
+        if (lesson == null) {
+            mainController.setToStatusBar(Main.getString("lesson_select_remove"), 5);
+        } else {
+            removeLessonController.setSubject(lesson.getLesson().getSubject());
+            removeLessonDialogStage = mainController.showDialog(lessonList.getScene().getWindow(),
+                    removeLessonDialogStage,
+                    removeLessonDialogParent,
+                    Main.getString("lesson_remove"));
+            parseRemoveLessonDialog(lesson);
+        }
+    }
+
     private void refreshLessons() {
-        String currWeek = Main.getBundle().getString(schedule.getWeek(currentWeek).getTypeOfWeek().toString().toLowerCase());
+        String currWeek = TypeFormatter.format(schedule.getWeek(currentWeek).getTypeOfWeek());
         currWeekLabel.setText(currWeek);
         currWeekLabel.setTextAlignment(TextAlignment.CENTER);
         lessonList.getItems().clear();
@@ -195,11 +183,11 @@ public class LessonsController {
             if (week.getDay(day).isEmpty()) {
                 continue;
             }
-            Label label = new Label(Main.getBundle().getString(day.toString().toLowerCase()) + " (" +
+            Label label = new Label(TypeFormatter.format(day) + " (" +
                     Dates.FULL_DATE_FORMAT.format(currentWeek.getDateOf(day)) + ")");
             label.getStyleClass().add("title");
             if (currentWeek.getDateOf(day).equals(LocalDate.now())) {
-                label.setText(label.getText() + " (" + Main.getBundle().getString("time_today") + ")");
+                label.setText(label.getText() + " (" + Main.getString("today") + ")");
             }
             label.setDisable(true);
             lessonList.getItems().add(label);
@@ -229,7 +217,7 @@ public class LessonsController {
                     schedule.getWeek(currentWeek).getDay(lesson.getSourceDay())
                             .addLesson(lesson.getLesson());
                 } else {
-                    schedule.getLessons().addLesson(schedule.getTypeOfWeek(currentWeek),
+                    schedule.getLessons().addLesson(lesson.getTypeOfWeek(),
                             lesson.getTargetDay(), lesson.getLesson());
                 }
             } else {
@@ -243,11 +231,10 @@ public class LessonsController {
                     }
                 } else {
                     if (lesson.isDayChanged()) {
-                        schedule.getLessons().changeLessonDay(schedule.getTypeOfWeek(currentWeek),
-                                lesson.getTargetDay(), lesson.getLesson());
+                        schedule.getLessons().changeLessonDay(lesson.getLesson(), lesson.getTargetDay());
                     } else {
                         schedule.getLessons().updateLesson(lesson.getLesson());
-
+                        schedule.getLessons().changeWeekType(lesson.getLesson(), lesson.getTypeOfWeek());
                     }
                 }
             }

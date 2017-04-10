@@ -21,37 +21,32 @@ import java.util.ResourceBundle;
 public class RemoveLessonController implements Initializable {
 
     @FXML
-    private Label areYouSureLabel;
-
+    private Label sureLabel;
     @FXML
-    private RadioButton once;
-
+    private ToggleGroup toggleGroup;
     @FXML
-    private RadioButton always;
-
+    private RadioButton onceRadioButton;
     @FXML
-    private ToggleGroup group;
+    private RadioButton alwaysRadioButton;
 
     private boolean isOnce;
-
     private boolean removed;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        isOnce = true;
-        removed = false;
-        group.selectToggle(once);
+        this.isOnce = true;
+        this.removed = false;
+        this.toggleGroup.selectToggle(onceRadioButton);
     }
 
     public void setSubject(String subject) {
         String content = String.format("%s:%n\"%s\"",
-                Main.getBundle().getString("are_you_sure_remove_lesson"),
-                subject
-        );
-        areYouSureLabel.setText(content);
-        isOnce = true;
-        removed = false;
-        group.selectToggle(once);
+                Main.getString("lesson_remove_are_you_sure"),
+                subject);
+        this.sureLabel.setText(content);
+        this.isOnce = true;
+        this.removed = false;
+        this.toggleGroup.selectToggle(onceRadioButton);
     }
 
     public void actionClose(ActionEvent event) {
@@ -61,7 +56,7 @@ public class RemoveLessonController implements Initializable {
     }
 
     public void actionRemove(ActionEvent event) {
-        isOnce = once.isSelected();
+        isOnce = onceRadioButton.isSelected();
         removed = true;
         actionClose(event);
     }

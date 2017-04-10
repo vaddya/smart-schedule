@@ -18,6 +18,8 @@ public interface LessonRepository {
 
     Optional<Lesson> findById(UUID id);
 
+    List<Lesson> findAll();
+
     List<Lesson> findAll(TypeOfWeek week, DayOfWeek day);
 
     Optional<TypeOfWeek> findTypeOfWeek(UUID id);
@@ -27,6 +29,10 @@ public interface LessonRepository {
     void insert(TypeOfWeek week, DayOfWeek day, Lesson lesson);
 
     void save(Lesson lesson);
+
+    void saveTypeOfWeek(Lesson lesson, TypeOfWeek week);
+
+    void saveDayOfWeek(Lesson lesson, DayOfWeek day);
 
     void swapWeeks();
 

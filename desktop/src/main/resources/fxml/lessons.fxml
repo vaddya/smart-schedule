@@ -6,68 +6,60 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.vaddya.schedule.desktop.controllers.LessonsController">
-    <children>
-        <ListView fx:id="lessonList" layoutX="82.0" layoutY="95.0" prefHeight="200.0" prefWidth="100.0"
-                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                  AnchorPane.topAnchor="80.0"/>
-        <BorderPane prefHeight="60.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                    AnchorPane.topAnchor="0.0">
-            <left>
-                <VBox spacing="10.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <Button fx:id="prevWeekButton" mnemonicParsing="false" onAction="#actionButtonPressed"
-                                prefWidth="250.0" text="%previous_week">
-                            <graphic>
-                                <ImageView fitHeight="10" fitWidth="10">
-                                    <Image url="@../img/previous.png"/>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Button fx:id="addLessonButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
-                                onAction="#actionButtonPressed" prefWidth="250.0" text="%lesson_add">
-                            <graphic>
-                                <ImageView fitHeight="10" fitWidth="10">
-                                    <Image url="@../img/add.png"/>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                    </children>
-                </VBox>
-            </left>
-            <right>
-                <VBox spacing="10.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <Button fx:id="nextWeekButton" mnemonicParsing="false" onAction="#actionButtonPressed"
-                                prefWidth="250.0" text="%next_week" contentDisplay="RIGHT">
-                            <graphic>
-                                <ImageView fitHeight="10" fitWidth="10">
-                                    <Image url="@../img/next.png"/>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Button fx:id="removeLessonButton" mnemonicParsing="false" onAction="#actionButtonPressed"
-                                prefWidth="250.0" text="%lesson_remove" contentDisplay="RIGHT">
-                            <graphic>
-                                <ImageView fitHeight="10" fitWidth="10">
-                                    <Image url="@../img/remove.png"/>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                    </children>
-                </VBox>
-            </right>
-            <center>
-                <VBox alignment="CENTER" spacing="5.0">
-                    <children>
-                        <DatePicker fx:id="weekDatePicker" onAction="#datePickerHandler" prefWidth="220.0"
-                                    promptText="%date"/>
-                        <Label fx:id="currWeekLabel" text="Label" BorderPane.alignment="CENTER"/>
-                    </children>
-                </VBox>
-            </center>
-        </BorderPane>
-    </children>
     <padding>
         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
     </padding>
+    <ListView fx:id="lessonList" layoutX="82.0" layoutY="95.0" prefHeight="200.0" prefWidth="100.0"
+              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="80.0"/>
+    <BorderPane prefHeight="60.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.topAnchor="0.0">
+        <left>
+            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                <Button mnemonicParsing="false" onAction="#prevWeekButtonPressed"
+                        prefWidth="250.0" text="%previous_week">
+                    <graphic>
+                        <ImageView fitHeight="10" fitWidth="10">
+                            <Image url="@../img/previous.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                        onAction="#addLessonButtonPressed" prefWidth="250.0" text="%lesson_add">
+                    <graphic>
+                        <ImageView fitHeight="10" fitWidth="10">
+                            <Image url="@../img/add.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </left>
+        <right>
+            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                <Button mnemonicParsing="false" onAction="#nextWeekButtonPressed"
+                        prefWidth="250.0" text="%next_week" contentDisplay="RIGHT">
+                    <graphic>
+                        <ImageView fitHeight="10" fitWidth="10">
+                            <Image url="@../img/next.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#removeLessonButtonPressed"
+                        prefWidth="250.0" text="%lesson_remove" contentDisplay="RIGHT">
+                    <graphic>
+                        <ImageView fitHeight="10" fitWidth="10">
+                            <Image url="@../img/remove.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </right>
+        <center>
+            <VBox alignment="CENTER" spacing="5.0">
+                <DatePicker fx:id="weekDatePicker" onAction="#datePickerHandler" prefWidth="220.0"
+                            promptText="%date"/>
+                <Label fx:id="currWeekLabel" text="Label" BorderPane.alignment="CENTER"/>
+            </VBox>
+        </center>
+    </BorderPane>
 </AnchorPane>

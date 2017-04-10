@@ -12,59 +12,49 @@
                                         AnchorPane.topAnchor="0.0">
             <left>
                 <AnchorPane>
-                    <children>
-                        <CheckBox fx:id="isDoneCheckBox" graphicTextGap="3.0" mnemonicParsing="false" scaleX="0.9"
-                                  scaleY="0.9" scaleZ="0.9" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-1.0"/>
-                    </children>
                     <BorderPane.margin>
                         <Insets left="10.0" right="5.0" top="5.0"/>
                     </BorderPane.margin>
+                    <CheckBox fx:id="isDoneCheckBox" graphicTextGap="3.0" mnemonicParsing="false" scaleX="0.9"
+                              scaleY="0.9" scaleZ="0.9" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-1.0"/>
                 </AnchorPane>
             </left>
             <center>
                 <AnchorPane>
-                    <children>
-                        <Label fx:id="taskTextLabel" maxWidth="400.0" text="Доделать курсовой проект"
-                               AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
-                        </Label>
-                    </children>
                     <BorderPane.margin>
                         <Insets right="5.0" top="5.0"/>
                     </BorderPane.margin>
+                    <Label fx:id="taskTextLabel" maxWidth="400.0" text="Доделать курсовой проект"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+                    </Label>
                 </AnchorPane>
             </center>
             <bottom>
                 <AnchorPane>
-                    <children>
-                        <Label fx:id="typeLabel" text="Лабораторные" textFill="#939393" AnchorPane.rightAnchor="0.0"/>
-                        <HBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                              AnchorPane.topAnchor="0.0">
-                            <children>
-                                <Label fx:id="deadlineLabel" text="23.12.2016" textFill="#939393"/>
-                                <Label fx:id="timeLeftLabel" text="(осталось 3 дней)" textFill="#939393"/>
-                            </children>
-                        </HBox>
-                    </children>
                     <BorderPane.margin>
                         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
                     </BorderPane.margin>
+                    <Label fx:id="typeLabel" text="Лабораторные" textFill="#939393" AnchorPane.rightAnchor="0.0"/>
+                    <HBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.topAnchor="0.0">
+                        <Label fx:id="deadlineLabel" text="23.12.2016" textFill="#939393"/>
+                        <Label fx:id="timeLeftLabel" text="(осталось 3 дней)" textFill="#939393"/>
+                    </HBox>
                 </AnchorPane>
             </bottom>
             <right>
                 <AnchorPane>
-                    <children>
-                        <Label fx:id="subjectLabel" text="Программирование" BorderPane.alignment="CENTER">
-                            <font>
-                                <Font name="System Italic" size="12.0"/>
-                            </font>
-                        </Label>
-                    </children>
                     <BorderPane.margin>
                         <Insets left="5.0" right="10.0" top="5.0"/>
                     </BorderPane.margin>
                     <opaqueInsets>
                         <Insets/>
                     </opaqueInsets>
+                    <Label fx:id="subjectLabel" text="Программирование" BorderPane.alignment="CENTER">
+                        <font>
+                            <Font name="System Italic" size="12.0"/>
+                        </font>
+                    </Label>
                 </AnchorPane>
             </right>
         </javafx.scene.layout.BorderPane>

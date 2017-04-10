@@ -1,6 +1,7 @@
 package com.vaddya.schedule.desktop.lessons;
 
 import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.core.utils.TypeOfWeek;
 
 import java.time.DayOfWeek;
 
@@ -12,16 +13,15 @@ import java.time.DayOfWeek;
 public class CreatedLesson {
 
     private Lesson lesson;
-
     private boolean isOnce;
-
+    private TypeOfWeek typeOfWeek;
     private DayOfWeek sourceDay;
-
     private DayOfWeek targetDay;
 
-    public CreatedLesson(Lesson lesson, boolean isOnce, DayOfWeek sourceDay, DayOfWeek targetDay) {
+    public CreatedLesson(Lesson lesson, boolean isOnce, TypeOfWeek typeOfWeek, DayOfWeek sourceDay, DayOfWeek targetDay) {
         this.lesson = lesson;
         this.isOnce = isOnce;
+        this.typeOfWeek = typeOfWeek;
         this.sourceDay = sourceDay;
         this.targetDay = targetDay;
     }
@@ -32,6 +32,10 @@ public class CreatedLesson {
 
     public boolean isOnce() {
         return isOnce;
+    }
+
+    public TypeOfWeek getTypeOfWeek() {
+        return typeOfWeek;
     }
 
     public DayOfWeek getSourceDay() {

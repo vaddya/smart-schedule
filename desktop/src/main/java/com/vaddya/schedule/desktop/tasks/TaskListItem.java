@@ -2,8 +2,8 @@ package com.vaddya.schedule.desktop.tasks;
 
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.Dates;
-import com.vaddya.schedule.desktop.Main;
 import com.vaddya.schedule.desktop.controllers.TasksController;
+import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 
 import static com.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
+import static com.vaddya.schedule.desktop.Main.getString;
 
 /**
  * Вид для отображения задания в списке
@@ -23,24 +24,18 @@ public class TaskListItem extends AnchorPane {
 
     @FXML
     private CheckBox isDoneCheckBox;
-
     @FXML
     private Label taskTextLabel;
-
     @FXML
     private Label subjectLabel;
-
     @FXML
     private Label deadlineLabel;
-
     @FXML
     private Label timeLeftLabel;
-
     @FXML
     private Label typeLabel;
 
     private Task task;
-
     private TasksController controller;
 
     public TaskListItem(Task task, TasksController controller) {
@@ -62,12 +57,12 @@ public class TaskListItem extends AnchorPane {
         long daysUntil = Dates.daysUntil(task.getDeadline());
         String timeLeft;
         if (daysUntil == 0) {
-            timeLeft = Main.getBundle().getString("time_today");
+            timeLeft = getString("today");
         } else if (daysUntil < 0) {
-            timeLeft = -daysUntil + " " + Main.getBundle().getString("task_time_days_ago");
+            timeLeft = String.format("%d %s", -daysUntil, getString("task_time_days_ago"));
         } else {
-            timeLeft = Main.getBundle().getString("task_time_in") + " " + daysUntil + " " +
-                    Main.getBundle().getString("task_time_days");
+            timeLeft = String.format("%s %d %s", getString("task_time_in"), daysUntil,
+                    getString("task_time_days"));
         }
         isDoneCheckBox.setSelected(task.isComplete());
         isDoneCheckBox.setOnAction(event -> {
@@ -86,10 +81,11 @@ public class TaskListItem extends AnchorPane {
         subjectLabel.setText(task.getSubject());
         deadlineLabel.setText(FULL_DATE_FORMAT.format(task.getDeadline()));
         timeLeftLabel.setText("(" + timeLeft + ")");
-        typeLabel.setText(Main.getBundle().getString(task.getType().toString().toLowerCase()));
+        typeLabel.setText(TypeFormatter.format(task.getType()));
     }
 
     public Task getTask() {
         return task;
     }
+
 }

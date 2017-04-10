@@ -31,8 +31,7 @@ public class ChangeSerializer implements JsonSerializer<Change>, JsonDeserialize
         object.addProperty(CHANGE_TYPE, src.getChangeType().toString());
         object.addProperty(DATE, DATE_FORMAT.format(src.getDate()));
         JsonElement lesson = context.serialize(src.getLesson());
-        object.add(
-                LESSON, lesson);
+        object.add(LESSON, lesson);
         return object;
     }
 

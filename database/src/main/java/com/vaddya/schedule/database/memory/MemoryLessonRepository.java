@@ -7,6 +7,7 @@ import com.vaddya.schedule.database.LessonRepository;
 
 import java.time.DayOfWeek;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.vaddya.schedule.core.utils.TypeOfWeek.EVEN;
@@ -34,17 +35,15 @@ public class MemoryLessonRepository implements LessonRepository {
 
     @Override
     public Optional<Lesson> findById(UUID id) {
-        Stream<Lesson> oddStream = getSchedule(ODD).entrySet()
-                .stream()
-                .map(Map.Entry::getValue)
-                .flatMap(Collection::stream);
-        Stream<Lesson> evenStream = getSchedule(EVEN).entrySet()
-                .stream()
-                .map(Map.Entry::getValue)
-                .flatMap(Collection::stream);
-        return Stream.concat(oddStream, evenStream)
+        return getAllLessons()
                 .filter(lesson -> lesson.getId().equals(id))
                 .findFirst();
+    }
+
+    @Override
+    public List<Lesson> findAll() {
+        return getAllLessons()
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -112,6 +111,52 @@ public class MemoryLessonRepository implements LessonRepository {
     }
 
     @Override
+    public void saveTypeOfWeek(Lesson lesson, TypeOfWeek week) {
+        Optional<Lesson> optional = findById(lesson.getId());
+        if (optional.isPresent()) {
+            Lesson old = optional.get();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                List<Lesson> lessons = getSchedule(ODD).get(day);
+                if (lessons.contains(old)) {
+                    lessons.remove(old);
+                    getSchedule(week).get(day).add(lesson);
+                    return;
+                }
+                lessons = getSchedule(EVEN).get(day);
+                if (lessons.contains(lesson)) {
+                    lessons.remove(lesson);
+                    getSchedule(week).get(day).add(lesson);
+                    return;
+                }
+            }
+        }
+        throw new NoSuchLessonException(lesson.getId());
+    }
+
+    @Override
+    public void saveDayOfWeek(Lesson lesson, DayOfWeek day) {
+        Optional<Lesson> optional = findById(lesson.getId());
+        if (optional.isPresent()) {
+            Lesson old = optional.get();
+            for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+                List<Lesson> lessons = getSchedule(ODD).get(dayOfWeek);
+                if (lessons.contains(old)) {
+                    lessons.remove(old);
+                    getSchedule(ODD).get(day).add(lesson);
+                    return;
+                }
+                lessons = getSchedule(EVEN).get(dayOfWeek);
+                if (lessons.contains(lesson)) {
+                    lessons.remove(lesson);
+                    getSchedule(EVEN).get(day).add(lesson);
+                    return;
+                }
+            }
+        }
+        throw new NoSuchLessonException(lesson.getId());
+    }
+
+    @Override
     public void swapWeeks() {
         Map<DayOfWeek, List<Lesson>> temp = odd;
         odd = even;
@@ -152,6 +197,18 @@ public class MemoryLessonRepository implements LessonRepository {
 
     private Map<DayOfWeek, List<Lesson>> getSchedule(TypeOfWeek typeOfWeek) {
         return typeOfWeek == ODD ? odd : even;
+    }
+
+    private Stream<Lesson> getAllLessons() {
+        Stream<Lesson> oddStream = getSchedule(ODD).entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .flatMap(Collection::stream);
+        Stream<Lesson> evenStream = getSchedule(EVEN).entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .flatMap(Collection::stream);
+        return Stream.concat(oddStream, evenStream);
     }
 
 }
