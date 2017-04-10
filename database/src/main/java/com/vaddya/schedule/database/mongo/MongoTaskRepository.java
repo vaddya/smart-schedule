@@ -1,7 +1,12 @@
 package com.vaddya.schedule.database.mongo;
 
 import com.google.gson.Gson;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import com.vaddya.schedule.core.exceptions.DuplicateIdException;
+import com.vaddya.schedule.core.exceptions.NoSuchTaskException;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.TaskRepository;
 import org.bson.Document;
@@ -24,9 +29,11 @@ import static java.util.stream.Collectors.toList;
 public class MongoTaskRepository implements TaskRepository {
 
     private final MongoCollection<Document> collection;
+    private final Gson gson;
 
-    public MongoTaskRepository(MongoCollection<Document> collection) {
+    public MongoTaskRepository(MongoCollection<Document> collection, Gson gson) {
         this.collection = collection;
+        this.gson = gson;
     }
 
     @Override
@@ -47,18 +54,28 @@ public class MongoTaskRepository implements TaskRepository {
     @Override
     public void insert(Task task) {
         Document document = fromTask(task);
-        collection.insertOne(document);
+        try {
+            collection.insertOne(document);
+        } catch (MongoWriteException e) {
+            throw new DuplicateIdException(task.getId());
+        }
     }
 
     @Override
     public void save(Task task) {
         Document document = fromTask(task);
-        collection.replaceOne(eq("_id", task.getId().toString()), document);
+        UpdateResult result = collection.replaceOne(eq("_id", task.getId().toString()), document);
+        if (result.getModifiedCount() == 0) {
+            throw new NoSuchTaskException(task.getId());
+        }
     }
 
     @Override
     public void delete(Task task) {
-        collection.deleteOne(eq("_id", task.getId().toString()));
+        DeleteResult result = collection.deleteOne(eq("_id", task.getId().toString()));
+        if (result.getDeletedCount() == 0) {
+            throw new NoSuchTaskException(task.getId());
+        }
     }
 
     @Override
@@ -77,8 +94,8 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     private Document fromTask(Task task) {
-        String json = new Gson().toJson(task);
-        json = json.replace("id", "_id");
+        String json = gson.toJson(task);
+        json = json.replaceFirst("id", "_id");
         return Document.parse(json);
     }
 
@@ -87,7 +104,7 @@ public class MongoTaskRepository implements TaskRepository {
             return null;
         }
         document.put("id", document.remove("_id"));
-        return new Gson().fromJson(document.toJson(), Task.class);
+        return gson.fromJson(document.toJson(), Task.class);
     }
 
 }

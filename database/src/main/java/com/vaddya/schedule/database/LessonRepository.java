@@ -1,11 +1,10 @@
 package com.vaddya.schedule.database;
 
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.core.utils.TypeOfWeek;
 
 import java.time.DayOfWeek;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,16 +18,22 @@ public interface LessonRepository {
 
     Optional<Lesson> findById(UUID id);
 
-    List<Lesson> findAll(WeekType week, DayOfWeek day);
+    List<Lesson> findAll(TypeOfWeek week, DayOfWeek day);
 
-    Map<DayOfWeek, List<Lesson>> findAll(WeekType week);
+    Optional<TypeOfWeek> findTypeOfWeek(UUID id);
 
-    void insert(WeekType week, DayOfWeek day, Lesson lesson);
+    Optional<DayOfWeek> findDayOfWeek(UUID id);
 
-    void save(WeekType week, DayOfWeek day, Lesson lesson);
+    void insert(TypeOfWeek week, DayOfWeek day, Lesson lesson);
 
-    void delete(WeekType week, DayOfWeek day, Lesson lesson);
+    void save(Lesson lesson);
 
-    void deleteAll();
+    void swapWeeks();
+
+    void delete(UUID id);
+
+    void deleteAll(TypeOfWeek week);
+
+    void deleteAll(TypeOfWeek week, DayOfWeek day);
 
 }

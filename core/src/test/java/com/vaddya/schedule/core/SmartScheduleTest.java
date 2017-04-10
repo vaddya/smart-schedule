@@ -1,10 +1,9 @@
 package com.vaddya.schedule.core;
 
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.core.lessons.StudyDay;
+import com.vaddya.schedule.core.schedule.ScheduleDay;
 import com.vaddya.schedule.core.tasks.StudyTasks;
 import com.vaddya.schedule.core.tasks.Task;
-import com.vaddya.schedule.core.utils.WeekType;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
@@ -15,7 +14,6 @@ import static com.vaddya.schedule.core.lessons.LessonType.LECTURE;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.LocalDate.of;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * Функциональное тестирование приложения
@@ -28,7 +26,7 @@ public class SmartScheduleTest {
     private SmartSchedule schedule;
     private Lesson lesson;
     private Task task;
-    private StudyDay day;
+    private ScheduleDay day;
     private StudyTasks tasks;
 
     @Before
@@ -70,7 +68,6 @@ public class SmartScheduleTest {
         assertEquals(0, tasks.getActiveTasks().size());
         tasks.addTask(task);
         assertEquals(1, tasks.getActiveTasks().size());
-        assertEquals("Todo course work", tasks.findTask(0).getTextTask());
         assertEquals("Programming", tasks.findTask(task.getId()).getSubject());
     }
 
@@ -95,17 +92,17 @@ public class SmartScheduleTest {
         assertEquals(0, tasks.getActiveTasks().size());
     }
 
-    @Test
-    public void testSwapSchedules() throws Exception {
-        WeekType odd = schedule.getSchedule(WeekType.ODD).getWeekType();
-        WeekType even = schedule.getSchedule(WeekType.EVEN).getWeekType();
-        WeekType current = schedule.getCurrentSchedule().getWeekType();
-        assertNotEquals(odd, even);
-
-        schedule.swapSchedules();
-        assertEquals(WeekType.ODD, schedule.getSchedule(WeekType.ODD).getWeekType());
-        assertEquals(WeekType.EVEN, schedule.getSchedule(WeekType.EVEN).getWeekType());
-        assertNotEquals(current, schedule.getCurrentSchedule().getWeekType());
-    }
+//    @Test
+//    public void testSwapSchedules() throws Exception {
+//        TypeOfWeek odd = schedule.getSchedule(TypeOfWeek.ODD).getTypeOfWeek();
+//        TypeOfWeek even = schedule.getSchedule(TypeOfWeek.EVEN).getTypeOfWeek();
+//        TypeOfWeek current = schedule.getCurrentSchedule().getTypeOfWeek();
+//        assertNotEquals(odd, even);
+//
+//        schedule.swapTypesOfWeeks();
+//        assertEquals(TypeOfWeek.ODD, schedule.getSchedule(TypeOfWeek.ODD).getTypeOfWeek());
+//        assertEquals(TypeOfWeek.EVEN, schedule.getSchedule(TypeOfWeek.EVEN).getTypeOfWeek());
+//        assertNotEquals(current, schedule.getCurrentSchedule().getTypeOfWeek());
+//    }
 
 }

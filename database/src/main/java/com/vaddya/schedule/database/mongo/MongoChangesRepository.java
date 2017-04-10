@@ -2,7 +2,9 @@ package com.vaddya.schedule.database.mongo;
 
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
-import com.vaddya.schedule.core.lessons.Change;
+import com.mongodb.client.result.UpdateResult;
+import com.vaddya.schedule.core.changes.Change;
+import com.vaddya.schedule.core.exceptions.NoSuchChangeException;
 import com.vaddya.schedule.database.ChangeRepository;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -27,15 +29,26 @@ import static java.util.stream.Collectors.toList;
 public class MongoChangesRepository implements ChangeRepository {
 
     private final MongoCollection<Document> collection;
+    private Gson gson;
 
-    public MongoChangesRepository(MongoCollection<Document> collection) {
+    public MongoChangesRepository(MongoCollection<Document> collection, Gson gson) {
         this.collection = collection;
+        this.gson = gson;
     }
 
     @Override
     public Optional<Change> findById(UUID id) {
         Document document = collection.find(eq("_id", id.toString())).first();
         return ofNullable(parseChange(document));
+    }
+
+    @Override
+    public List<Change> findAll() {
+        return collection.find()
+                .into(new ArrayList<>())
+                .stream()
+                .map(this::parseChange)
+                .collect(toList());
     }
 
     @Override
@@ -62,6 +75,15 @@ public class MongoChangesRepository implements ChangeRepository {
     }
 
     @Override
+    public void save(Change change) {
+        Document document = fromChange(change);
+        UpdateResult result = collection.replaceOne(eq("_id", change.getId().toString()), document);
+        if (result.getModifiedCount() == 0) {
+            throw new NoSuchChangeException(change.getId());
+        }
+    }
+
+    @Override
     public void delete(Change change) {
         collection.deleteOne(eq("_id", change.getId().toString()));
     }
@@ -82,7 +104,7 @@ public class MongoChangesRepository implements ChangeRepository {
     }
 
     private Document fromChange(Change change) {
-        String json = new Gson().toJson(change);
+        String json = gson.toJson(change);
         json = json.replaceFirst("id", "_id");
         return Document.parse(json);
     }
@@ -92,7 +114,7 @@ public class MongoChangesRepository implements ChangeRepository {
             return null;
         }
         document.put("id", document.remove("_id"));
-        return new Gson().fromJson(document.toJson(), Change.class);
+        return gson.fromJson(document.toJson(), Change.class);
     }
 
 }

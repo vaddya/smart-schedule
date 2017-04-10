@@ -1,6 +1,7 @@
 package com.vaddya.schedule.core.exceptions;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 /**
  * Бросается при отсутствии запрашиваемого занятия
@@ -9,8 +10,10 @@ import java.util.NoSuchElementException;
  */
 public class NoSuchLessonException extends NoSuchElementException {
 
-    public NoSuchLessonException(String s) {
-        super(s);
+    private static final String TEMPLATE = "Lesson with ID %s does not exist";
+
+    public NoSuchLessonException(UUID id) {
+        super(String.format(TEMPLATE, id));
     }
 
 }

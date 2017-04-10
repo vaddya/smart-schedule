@@ -14,7 +14,6 @@ import static java.util.Comparator.comparing;
  * Класс для представления списка учебных заданий
  *
  * @author vaddya
- * @see Task
  */
 public class StudyTasks implements Iterable<Task> {
 
@@ -71,21 +70,7 @@ public class StudyTasks implements Iterable<Task> {
         if (task.isPresent()) {
             return task.get();
         }
-        throw new NoSuchTaskException("Wrong task ID: " + id);
-    }
-
-    /**
-     * Получить задание по индексу
-     *
-     * @throws NoSuchTaskException если указан неверный индекс
-     */
-    public Task findTask(int index) {
-        List<Task> tasks = getAllTasks();
-        if (index >= 0 && index < tasks.size()) {
-            return tasks.get(index);
-        }
-        throw new NoSuchTaskException("Wrong task index: " + index +
-                ", Size: " + tasks.size());
+        throw new NoSuchTaskException(id);
     }
 
     /**

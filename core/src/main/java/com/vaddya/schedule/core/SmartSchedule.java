@@ -1,10 +1,14 @@
 package com.vaddya.schedule.core;
 
-import com.vaddya.schedule.core.lessons.StudyWeek;
-import com.vaddya.schedule.core.schedule.StudySchedule;
+import com.vaddya.schedule.core.changes.StudyChanges;
+import com.vaddya.schedule.core.lessons.StudyLessons;
+import com.vaddya.schedule.core.schedule.ScheduleDay;
+import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.tasks.StudyTasks;
-import com.vaddya.schedule.core.utils.WeekTime;
-import com.vaddya.schedule.core.utils.WeekType;
+import com.vaddya.schedule.core.utils.LocalWeek;
+import com.vaddya.schedule.core.utils.TypeOfWeek;
+
+import java.time.LocalDate;
 
 /**
  * Интерфейс приложения Smart Schedule
@@ -14,43 +18,48 @@ import com.vaddya.schedule.core.utils.WeekType;
 public interface SmartSchedule {
 
     /**
-     * Получить расписание на текущую неделю
-     */
-    StudySchedule getCurrentSchedule();
-
-    /**
-     * Получить расписание на заданную неделю
-     */
-    StudySchedule getSchedule(WeekType weekType);
-
-    /**
-     * Поменять местами порядок расписаний (четная - нечетная)
-     */
-    void swapSchedules();
-
-    /**
-     * Получить текущую учебную неделю, содержащую учебные дни
-     */
-    StudyWeek getCurrentWeek();
-
-    /**
-     * Получить заданную учебную неделю, содержащую учебные дни
-     */
-    StudyWeek getWeek(WeekTime weekTime);
-
-    /**
      * Получить учебные задания
      */
     StudyTasks getTasks();
 
     /**
-     * Получить тип недели
+     * Получить занятия
      */
-    WeekType getWeekType(WeekTime weekTime);
+    StudyLessons getLessons();
 
     /**
-     * Обновить информацию о занятиях
+     * Поменять местами порядок расписаний (четная - нечетная)
      */
-    void updateLessons();
+    void swapTypesOfWeeks();
+
+    /**
+     * Получить текущую учебную неделю, содержащую учебные дни
+     */
+    ScheduleWeek getCurrentWeek();
+
+    /**
+     * Получить заданную учебную неделю, содержащую учебные дни
+     */
+    ScheduleWeek getWeek(LocalWeek week);
+
+    /**
+     * Получить учебный день по дате
+     */
+    ScheduleDay getDay(LocalDate date);
+
+    /**
+     * Получить изменения занятий
+     */
+    StudyChanges getChanges();
+
+    /**
+     * Получить текущий тип недели
+     */
+    TypeOfWeek getCurrentTypeOfWeek();
+
+    /**
+     * Получить тип недели
+     */
+    TypeOfWeek getTypeOfWeek(LocalWeek week);
 
 }
