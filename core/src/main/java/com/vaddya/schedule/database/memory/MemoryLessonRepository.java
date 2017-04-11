@@ -84,76 +84,80 @@ public class MemoryLessonRepository implements LessonRepository {
 
     @Override
     public void insert(TypeOfWeek week, DayOfWeek day, Lesson lesson) {
-        getSchedule(week).get(day).add(lesson);
+        Lesson copy = getCopy(lesson);
+        getSchedule(week).get(day).add(copy);
     }
 
     @Override
     public void save(Lesson lesson) {
-        Optional<Lesson> optional = findById(lesson.getId());
+        Lesson copy = getCopy(lesson);
+        Optional<Lesson> optional = findById(copy.getId());
         if (optional.isPresent()) {
             Lesson old = optional.get();
             for (DayOfWeek day : DayOfWeek.values()) {
                 List<Lesson> lessons = getSchedule(ODD).get(day);
                 if (lessons.contains(old)) {
                     lessons.remove(old);
-                    lessons.add(lesson);
+                    lessons.add(copy);
                     return;
                 }
                 lessons = getSchedule(EVEN).get(day);
-                if (lessons.contains(lesson)) {
-                    lessons.remove(lesson);
-                    lessons.add(lesson);
+                if (lessons.contains(copy)) {
+                    lessons.remove(copy);
+                    lessons.add(copy);
                     return;
                 }
             }
         }
-        throw new NoSuchLessonException(lesson.getId());
+        throw new NoSuchLessonException(copy.getId());
     }
 
     @Override
     public void saveTypeOfWeek(Lesson lesson, TypeOfWeek week) {
-        Optional<Lesson> optional = findById(lesson.getId());
+        Lesson copy = getCopy(lesson);
+        Optional<Lesson> optional = findById(copy.getId());
         if (optional.isPresent()) {
             Lesson old = optional.get();
             for (DayOfWeek day : DayOfWeek.values()) {
                 List<Lesson> lessons = getSchedule(ODD).get(day);
                 if (lessons.contains(old)) {
                     lessons.remove(old);
-                    getSchedule(week).get(day).add(lesson);
+                    getSchedule(week).get(day).add(copy);
                     return;
                 }
                 lessons = getSchedule(EVEN).get(day);
-                if (lessons.contains(lesson)) {
-                    lessons.remove(lesson);
-                    getSchedule(week).get(day).add(lesson);
+                if (lessons.contains(copy)) {
+                    lessons.remove(copy);
+                    getSchedule(week).get(day).add(copy);
                     return;
                 }
             }
         }
-        throw new NoSuchLessonException(lesson.getId());
+        throw new NoSuchLessonException(copy.getId());
     }
 
     @Override
     public void saveDayOfWeek(Lesson lesson, DayOfWeek day) {
-        Optional<Lesson> optional = findById(lesson.getId());
+        Lesson copy = getCopy(lesson);
+        Optional<Lesson> optional = findById(copy.getId());
         if (optional.isPresent()) {
             Lesson old = optional.get();
             for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
                 List<Lesson> lessons = getSchedule(ODD).get(dayOfWeek);
                 if (lessons.contains(old)) {
                     lessons.remove(old);
-                    getSchedule(ODD).get(day).add(lesson);
+                    getSchedule(ODD).get(day).add(copy);
                     return;
                 }
                 lessons = getSchedule(EVEN).get(dayOfWeek);
-                if (lessons.contains(lesson)) {
-                    lessons.remove(lesson);
-                    getSchedule(EVEN).get(day).add(lesson);
+                if (lessons.contains(copy)) {
+                    lessons.remove(copy);
+                    getSchedule(EVEN).get(day).add(copy);
                     return;
                 }
             }
         }
-        throw new NoSuchLessonException(lesson.getId());
+        throw new NoSuchLessonException(copy.getId());
     }
 
     @Override
@@ -193,6 +197,10 @@ public class MemoryLessonRepository implements LessonRepository {
     public void deleteAll(TypeOfWeek typeOfWeek) {
         getSchedule(ODD).forEach((dayOfWeek, lessons) -> lessons.clear());
         getSchedule(EVEN).forEach((dayOfWeek, lessons) -> lessons.clear());
+    }
+
+    private Lesson getCopy(Lesson lesson) {
+        return new Lesson.Builder(lesson).build();
     }
 
     private Map<DayOfWeek, List<Lesson>> getSchedule(TypeOfWeek typeOfWeek) {

@@ -31,16 +31,6 @@ public class Lesson {
         this.teacher = builder.teacher;
     }
 
-    public Lesson(Lesson lesson) {
-        this.id = UUID.randomUUID();
-        this.startTime = lesson.startTime;
-        this.endTime = lesson.endTime;
-        this.subject = lesson.subject;
-        this.type = lesson.type;
-        this.place = lesson.place;
-        this.teacher = lesson.teacher;
-    }
-
     public UUID getId() {
         return id;
     }
@@ -111,21 +101,13 @@ public class Lesson {
 
         Lesson lesson = (Lesson) o;
 
-        if (startTime != null ? !startTime.equals(lesson.startTime) : lesson.startTime != null) return false;
-        if (endTime != null ? !endTime.equals(lesson.endTime) : lesson.endTime != null) return false;
-        if (subject != null ? !subject.equals(lesson.subject) : lesson.subject != null) return false;
+        if (!id.equals(lesson.id)) return false;
+        if (!startTime.equals(lesson.startTime)) return false;
+        if (!endTime.equals(lesson.endTime)) return false;
+        if (!subject.equals(lesson.subject)) return false;
         if (type != lesson.type) return false;
-        if (place != null ? !place.equals(lesson.place) : lesson.place != null) return false;
-        return teacher != null ? teacher.equals(lesson.teacher) : lesson.teacher == null;
-    }
-
-    public boolean deepEquals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Lesson)) return false;
-
-        Lesson lesson = (Lesson) o;
-
-        return equals(lesson) && id.equals(lesson.id);
+        if (!place.equals(lesson.place)) return false;
+        return teacher.equals(lesson.teacher);
     }
 
     @Override
@@ -141,15 +123,25 @@ public class Lesson {
     }
 
     public static final class Builder {
-        private UUID id;
-        private Time startTime;
-        private Time endTime;
-        private String subject;
-        private LessonType type;
-        private String place;
-        private String teacher;
+        private UUID id = UUID.randomUUID();
+        private Time startTime = Time.now();
+        private Time endTime = Time.now();
+        private String subject = "";
+        private LessonType type = LessonType.ANOTHER;
+        private String place = "";
+        private String teacher = "";
 
         public Builder() {
+        }
+
+        public Builder(Lesson lesson) {
+            id = lesson.id;
+            startTime = lesson.startTime;
+            endTime = lesson.endTime;
+            subject = lesson.subject;
+            type = lesson.type;
+            place = lesson.place;
+            teacher = lesson.teacher;
         }
 
         public Builder id(String val) {
@@ -162,13 +154,13 @@ public class Lesson {
             return this;
         }
 
-        public Builder startTime(String val) {
-            startTime = Time.of(val);
+        public Builder startTime(Time val) {
+            startTime = val;
             return this;
         }
 
-        public Builder endTime(String val) {
-            endTime = Time.of(val);
+        public Builder endTime(Time val) {
+            endTime = val;
             return this;
         }
 

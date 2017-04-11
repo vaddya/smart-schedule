@@ -22,11 +22,11 @@ public class LocalWeek {
 
     private final int weekNumber;
 
-    public static LocalWeek of(LocalDate date) {
+    public static LocalWeek from(LocalDate date) {
         return new LocalWeek(date);
     }
 
-    public static LocalWeek of(String date) {
+    public static LocalWeek from(String date) {
         return new LocalWeek(LocalDate.from(Dates.FULL_DATE_FORMAT.parse(date)));
     }
 
@@ -65,19 +65,15 @@ public class LocalWeek {
     }
 
     public static LocalWeek current() {
-        return of(LocalDate.now());
-    }
-
-    public static LocalWeek next() {
-        return after(current());
+        return from(LocalDate.now());
     }
 
     public static LocalWeek before(LocalWeek current) {
-        return LocalWeek.of(current.getDateOf(MONDAY).minus(7, DAYS));
+        return LocalWeek.from(current.getDateOf(MONDAY).minus(7, DAYS));
     }
 
     public static LocalWeek after(LocalWeek current) {
-        return LocalWeek.of(current.getDateOf(SUNDAY).plus(1, DAYS));
+        return LocalWeek.from(current.getDateOf(SUNDAY).plus(1, DAYS));
     }
 
     public static int between(LocalWeek first, LocalWeek second) {

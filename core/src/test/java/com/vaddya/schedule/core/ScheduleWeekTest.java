@@ -6,6 +6,7 @@ import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.lessons.StudyLessons;
 import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.utils.LocalWeek;
+import com.vaddya.schedule.core.utils.Time;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
@@ -33,10 +34,10 @@ public class ScheduleWeekTest {
         Database database = new MemoryDatabase();
         StudyLessons lessons = new StudyLessons(database.getLessonRepository());
         StudyChanges changes = new StudyChanges(database.getChangeRepository());
-        week = new ScheduleWeek(LocalWeek.of("25.11.2016"), ODD, lessons, changes);
+        week = new ScheduleWeek(LocalWeek.from("25.11.2016"), ODD, lessons, changes);
         lesson = new Lesson.Builder()
-                .startTime("12:00")
-                .endTime("13:30")
+                .startTime(Time.from("12:00"))
+                .endTime(Time.from("13:30"))
                 .subject("Programming")
                 .type(LessonType.LAB)
                 .place("Place")

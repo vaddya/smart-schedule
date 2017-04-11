@@ -1,12 +1,13 @@
 package com.vaddya.schedule.core;
 
+import com.vaddya.schedule.core.utils.Dates;
 import org.junit.Test;
 
 import java.time.LocalDate;
 
 import static com.vaddya.schedule.core.utils.Dates.*;
 import static java.time.temporal.ChronoUnit.DAYS;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Модульного тестирование вспомогательного класса для работы с датами
@@ -34,6 +35,14 @@ public class DatesTest {
     public void testDaysUntil() throws Exception {
         LocalDate date = LocalDate.now().plus(10, DAYS);
         assertEquals(10, daysUntil(date));
+    }
+
+    @Test
+    public void testIsPast() throws Exception {
+        LocalDate past = LocalDate.now().minus(5, DAYS);
+        LocalDate future = LocalDate.now().plus(5, DAYS);
+        assertTrue(Dates.isPast(past));
+        assertFalse(Dates.isPast(future));
     }
 
 }

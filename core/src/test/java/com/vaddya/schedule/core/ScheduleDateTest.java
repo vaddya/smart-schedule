@@ -6,6 +6,7 @@ import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.lessons.StudyLessons;
 import com.vaddya.schedule.core.schedule.ScheduleDay;
+import com.vaddya.schedule.core.utils.Time;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.memory.MemoryDatabase;
 import org.junit.Before;
@@ -38,16 +39,16 @@ public class ScheduleDateTest {
         StudyChanges changes = new StudyChanges(database.getChangeRepository());
         day = new ScheduleDay(of(2016, 12, 1), ODD, changes, lessons);
         lesson1 = new Lesson.Builder()
-                .startTime("12:00")
-                .endTime("13:30")
+                .startTime(Time.from("12:00"))
+                .endTime(Time.from("13:30"))
                 .subject("Programming")
                 .type(LessonType.LAB)
                 .place("Place")
                 .teacher("Teacher")
                 .build();
         lesson2 = new Lesson.Builder()
-                .startTime("14:00")
-                .endTime("15:30")
+                .startTime(Time.from("14:00"))
+                .endTime(Time.from("15:30"))
                 .subject("High math")
                 .type(LessonType.LECTURE)
                 .place("Place")

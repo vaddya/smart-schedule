@@ -20,7 +20,7 @@ public class TimeSerializer implements JsonSerializer<Time>, JsonDeserializer<Ti
 
     @Override
     public Time deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return Time.of(json.getAsString());
+        return Time.from(json.getAsString());
     }
 
 }

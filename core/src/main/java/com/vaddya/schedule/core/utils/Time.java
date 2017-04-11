@@ -2,6 +2,7 @@ package com.vaddya.schedule.core.utils;
 
 import com.vaddya.schedule.core.exceptions.IllegalTimeFormatException;
 
+import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -15,12 +16,16 @@ public final class Time implements Comparable<Time> {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static Time of(String time) {
+    public static Time from(String time) {
         return new Time(time);
     }
 
-    public static Time of(int hours, int minutes) {
+    public static Time from(int hours, int minutes) {
         return new Time(hours, minutes);
+    }
+
+    public static Time from(LocalTime time) {
+        return new Time(FORMATTER.format(time));
     }
 
     private LocalTime time;
@@ -28,7 +33,7 @@ public final class Time implements Comparable<Time> {
     private Time(int hours, int minutes) {
         try {
             this.time = LocalTime.of(hours, minutes);
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeException e) {
             throw new IllegalTimeFormatException(hours + ":" + minutes);
         }
     }
@@ -82,4 +87,7 @@ public final class Time implements Comparable<Time> {
         return time.format(FORMATTER);
     }
 
+    public static Time now() {
+        return Time.from(LocalTime.now());
+    }
 }

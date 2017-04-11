@@ -64,7 +64,7 @@ public class WeeksController extends Controller {
             List<Lesson> lessons = schedule.getLessons().findAll(week).get(day);
             return getBodyResponse(OK, gson.toJson(lessons));
         } catch (IllegalArgumentException e) {
-            return getMessageResponse(BAD_REQUEST, "Week type or day of week is invalid");
+            return getMessageResponse(BAD_REQUEST, "Week type or day from week is invalid");
         }
     }
 
@@ -79,7 +79,7 @@ public class WeeksController extends Controller {
             schedule.getLessons().addLesson(week, day, lesson);
             return getResponseCreated(CREATED, "Lesson created", Paths.LESSONS, lesson.getId());
         } catch (IllegalArgumentException e) {
-            return getMessageResponse(BAD_REQUEST, "Week type or day of week is invalid");
+            return getMessageResponse(BAD_REQUEST, "Week type or day from week is invalid");
         } catch (DuplicateIdException e) {
             return getMessageResponse(CONFLICT, "Lesson with specified ID already exists");
         } catch (Throwable e) {

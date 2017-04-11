@@ -2,6 +2,7 @@ package com.vaddya.schedule.desktop.controllers;
 
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.LessonType;
+import com.vaddya.schedule.core.utils.Time;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.desktop.lessons.CreatedLesson;
 import javafx.event.ActionEvent;
@@ -103,8 +104,8 @@ public class EditLessonController implements Initializable {
         isSaved = true;
         Lesson lesson = new Lesson.Builder()
                 .id(id)
-                .startTime(timeStartField.getText())
-                .endTime(timeEndField.getText())
+                .startTime(Time.from(timeStartField.getText()))
+                .endTime(Time.from(timeEndField.getText()))
                 .subject(subjectField.getText())
                 .type(lessonTypeChoiceBox.getValue())
                 .place(placeField.getText())

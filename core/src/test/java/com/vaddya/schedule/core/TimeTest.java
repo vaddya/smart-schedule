@@ -17,13 +17,13 @@ public class TimeTest {
     @Test
     public void testParse() {
         String time = "08:00";
-        Time timer = Time.of(time);
+        Time timer = Time.from(time);
         assertEquals(8, timer.hours());
         assertEquals(0, timer.minutes());
         assertEquals(time, timer.toString());
 
         time = "16:30";
-        timer = Time.of(time);
+        timer = Time.from(time);
         assertEquals(16, timer.hours());
         assertEquals(30, timer.minutes());
         assertEquals(time, timer.toString());
@@ -31,9 +31,9 @@ public class TimeTest {
 
     @Test
     public void testIsAfter() throws Exception {
-        Time time1 = Time.of(16, 0);
-        Time time2 = Time.of(16, 30);
-        Time time3 = Time.of(16, 30);
+        Time time1 = Time.from(16, 0);
+        Time time2 = Time.from(16, 30);
+        Time time3 = Time.from(16, 30);
         assertTrue(time1.compareTo(time2) < 0);
         assertTrue(time2.compareTo(time1) > 0);
         assertTrue(time2.compareTo(time3) == 0);
@@ -42,8 +42,8 @@ public class TimeTest {
     @Test
     public void testEquals() throws Exception {
         String time = "10:00";
-        Time time1 = Time.of(time);
-        Time time2 = Time.of(10, 0);
+        Time time1 = Time.from(time);
+        Time time2 = Time.from(10, 0);
         assertEquals(time1, time2);
         assertEquals(time1.hashCode(), time2.hashCode());
     }
@@ -51,13 +51,18 @@ public class TimeTest {
     @Test(expected=IllegalTimeFormatException.class)
     public void testIllegalIllegalTimeFormat() {
         String time = "ItIsCertainlyNotTheTime";
-        Time.of(time);
+        Time.from(time);
     }
 
     @Test(expected=IllegalTimeFormatException.class)
     public void testAnotherIllegalTimeFormat() {
         String time = "05:61";
-        Time.of(time);
+        Time.from(time);
+    }
+
+    @Test(expected = IllegalTimeFormatException.class)
+    public void testAnotherYetIllegalTimeFormat() {
+        Time.from(5, 61);
     }
 
 }

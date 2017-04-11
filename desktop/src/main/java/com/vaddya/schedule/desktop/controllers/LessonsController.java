@@ -71,7 +71,7 @@ public class LessonsController {
         weekDatePicker.setConverter(new StringConverter<LocalDate>() {
             @Override
             public String toString(LocalDate object) {
-                LocalWeek week = LocalWeek.of(object);
+                LocalWeek week = LocalWeek.from(object);
                 return week.getDateOf(MONDAY).format(WEEK_FORMATTER) + " - " +
                         week.getDateOf(SUNDAY).format(WEEK_FORMATTER);
             }
@@ -133,7 +133,7 @@ public class LessonsController {
     }
 
     public void datePickerHandler(ActionEvent event) {
-        currentWeek = LocalWeek.of(weekDatePicker.getValue());
+        currentWeek = LocalWeek.from(weekDatePicker.getValue());
         refreshLessons();
     }
 

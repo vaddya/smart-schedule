@@ -62,7 +62,7 @@ public class SmartScheduleImpl implements SmartSchedule {
 
     @Override
     public ScheduleDay getDay(LocalDate date) {
-        ScheduleWeek week = getWeek(LocalWeek.of(date));
+        ScheduleWeek week = getWeek(LocalWeek.from(date));
         return week.getDay(date.getDayOfWeek());
     }
 
@@ -79,8 +79,8 @@ public class SmartScheduleImpl implements SmartSchedule {
     @Override
     public TypeOfWeek getTypeOfWeek(LocalWeek week) {
         return LocalWeek.between(LocalWeek.current(), week) % 2 != 0
-                ? TypeOfWeek.EVEN
-                : TypeOfWeek.ODD;
+                ? currentTypeOfWeek.opposite()
+                : currentTypeOfWeek;
     }
 
 }

@@ -22,9 +22,7 @@ public class Task {
     private boolean isComplete;
 
     private Task(Builder builder) {
-        this.id = builder.id != null
-                ? builder.id
-                : UUID.randomUUID();
+        setId(builder.id);
         setSubject(builder.subject);
         setType(builder.type);
         setDeadline(builder.deadline);
@@ -103,12 +101,12 @@ public class Task {
     }
 
     public static final class Builder {
-        private UUID id;
-        private String subject;
-        private LessonType type;
-        private LocalDate deadline;
-        private String textTask;
-        private boolean isComplete;
+        private UUID id = UUID.randomUUID();
+        private String subject = "";
+        private LessonType type = LessonType.ANOTHER;
+        private LocalDate deadline = LocalDate.now();
+        private String textTask = "";
+        private boolean isComplete = false;
 
         public Builder() {
         }

@@ -2,6 +2,7 @@ package com.vaddya.schedule.rest.seiralizers;
 
 import com.google.gson.*;
 import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.core.utils.Time;
 
 import java.lang.reflect.Type;
 
@@ -38,8 +39,8 @@ public class LessonSerializer implements JsonSerializer<Lesson>, JsonDeserialize
     public Lesson deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
         Lesson.Builder builder = new Lesson.Builder()
-                .startTime(object.get(START_TIME).getAsString())
-                .endTime(object.get(END_TIME).getAsString())
+                .startTime(Time.from(object.get(START_TIME).getAsString()))
+                .endTime(Time.from(object.get(END_TIME).getAsString()))
                 .subject(object.get(SUBJECT).getAsString())
                 .type(object.get(TYPE).getAsString())
                 .place(object.get(PLACE).getAsString())

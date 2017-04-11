@@ -38,7 +38,7 @@ public class ScheduleController extends Controller {
     public ResponseEntity<String> getWeek(@PathVariable String date) {
         try {
             LocalDate localDate = from(DATE_FORMAT.parse(date));
-            ScheduleWeek week = schedule.getWeek(LocalWeek.of(localDate));
+            ScheduleWeek week = schedule.getWeek(LocalWeek.from(localDate));
             return getBodyResponse(OK, gson.toJson(week));
         } catch (DateTimeException e) {
             return getMessageResponse(BAD_REQUEST, "Date format is invalid");
