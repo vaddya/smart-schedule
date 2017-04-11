@@ -12,7 +12,7 @@
                 <VBox.margin>
                     <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
                 </VBox.margin>
-                <Label labelFor="$typeOfWeekChoiceBox" text="%type_of_week" AnchorPane.leftAnchor="0.0"
+                <Label labelFor="$typeOfWeekChoiceBox" text="%lesson_type_of_week" AnchorPane.leftAnchor="0.0"
                        AnchorPane.rightAnchor="210.0"
                        AnchorPane.topAnchor="5.0"/>
                 <ChoiceBox fx:id="typeOfWeekChoiceBox" layoutX="43.0" prefWidth="220.0"
@@ -61,10 +61,10 @@
                 <VBox.margin>
                     <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                 </VBox.margin>
-                <Label labelFor="$typeChoiceBox" text="%lesson_type" AnchorPane.leftAnchor="0.0"
+                <Label labelFor="$lessonTypeChoiceBox" text="%lesson_type" AnchorPane.leftAnchor="0.0"
                        AnchorPane.rightAnchor="210.0"
                        AnchorPane.topAnchor="5.0"/>
-                <ChoiceBox fx:id="typeChoiceBox" layoutX="43.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
+                <ChoiceBox fx:id="lessonTypeChoiceBox" layoutX="43.0" prefWidth="220.0" AnchorPane.rightAnchor="0.0"/>
             </AnchorPane>
             <Separator prefWidth="200.0"/>
             <AnchorPane>

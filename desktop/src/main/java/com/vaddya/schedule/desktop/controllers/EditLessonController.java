@@ -1,10 +1,9 @@
 package com.vaddya.schedule.desktop.controllers;
 
 import com.vaddya.schedule.core.lessons.Lesson;
+import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
-import com.vaddya.schedule.desktop.Main;
 import com.vaddya.schedule.desktop.lessons.CreatedLesson;
-import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +21,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import static com.vaddya.schedule.desktop.util.TypeConverters.*;
+
 /**
  * Контроллер для диалога изменения занятий
  *
@@ -30,7 +31,9 @@ import java.util.UUID;
 public class EditLessonController implements Initializable {
 
     @FXML
-    private ChoiceBox<String> dayOfWeekChoiceBox;
+    private ChoiceBox<TypeOfWeek> typeOfWeekChoiceBox;
+    @FXML
+    private ChoiceBox<DayOfWeek> dayOfWeekChoiceBox;
     @FXML
     private TextField timeStartField;
     @FXML
@@ -38,13 +41,11 @@ public class EditLessonController implements Initializable {
     @FXML
     private TextField subjectField;
     @FXML
-    private ChoiceBox<String> typeChoiceBox;
+    private ChoiceBox<LessonType> lessonTypeChoiceBox;
     @FXML
     private TextField placeField;
     @FXML
     private TextField teacherField;
-    @FXML
-    private ChoiceBox<String> typeOfWeekChoiceBox;
     @FXML
     private RadioButton alwaysRadioButton;
     @FXML
@@ -60,9 +61,12 @@ public class EditLessonController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        typeChoiceBox.getItems().addAll(TypeFormatter.formatLessonTypes());
-        dayOfWeekChoiceBox.getItems().addAll(TypeFormatter.formatDaysOfWeek());
-        typeOfWeekChoiceBox.getItems().addAll(TypeFormatter.formatTypesOfWeek());
+        typeOfWeekChoiceBox.setConverter(getTypeOfWeekConverter());
+        typeOfWeekChoiceBox.getItems().addAll(TypeOfWeek.values());
+        dayOfWeekChoiceBox.setConverter(getDayOfWeekConverter());
+        dayOfWeekChoiceBox.getItems().addAll(DayOfWeek.values());
+        lessonTypeChoiceBox.setConverter(getLessonTypeConverter());
+        lessonTypeChoiceBox.getItems().addAll(LessonType.values());
         toggleGroup.selectToggle(alwaysRadioButton);
     }
 
@@ -70,26 +74,26 @@ public class EditLessonController implements Initializable {
         if (lesson == null) {
             isCreated = true;
             id = UUID.randomUUID();
-            dayOfWeekChoiceBox.setValue(Main.getString("day_of_week_monday"));
+            dayOfWeekChoiceBox.setValue(DayOfWeek.MONDAY);
             timeStartField.clear();
             timeEndField.clear();
             subjectField.clear();
-            typeChoiceBox.setValue(Main.getString("lesson_type_another"));
+            lessonTypeChoiceBox.setValue(LessonType.ANOTHER);
             placeField.clear();
             teacherField.clear();
-            typeOfWeekChoiceBox.setValue(Main.getString("type_of_week_both"));
+            typeOfWeekChoiceBox.setValue(TypeOfWeek.BOTH);
         } else {
             sourceDay = day;
             isCreated = false;
             id = lesson.getId();
-            dayOfWeekChoiceBox.setValue(TypeFormatter.format(day));
+            dayOfWeekChoiceBox.setValue(day);
             timeStartField.setText(lesson.getStartTime().toString());
             timeEndField.setText(lesson.getEndTime().toString());
             subjectField.setText(lesson.getSubject());
-            typeChoiceBox.setValue(TypeFormatter.format(lesson.getType()));
+            lessonTypeChoiceBox.setValue(lesson.getType());
             placeField.setText(lesson.getPlace());
             teacherField.setText(lesson.getTeacher());
-            typeOfWeekChoiceBox.setValue(TypeFormatter.format(week));
+            typeOfWeekChoiceBox.setValue(week);
         }
         isSaved = false;
         TextFields.bindAutoCompletion(subjectField, suggestions);
@@ -102,14 +106,12 @@ public class EditLessonController implements Initializable {
                 .startTime(timeStartField.getText())
                 .endTime(timeEndField.getText())
                 .subject(subjectField.getText())
-                .type(TypeFormatter.parseLessonType(typeChoiceBox.getValue()))
+                .type(lessonTypeChoiceBox.getValue())
                 .place(placeField.getText())
                 .teacher(teacherField.getText())
                 .build();
-        createdLesson = new CreatedLesson(lesson, onceRadioButton.isSelected(),
-                TypeFormatter.parseTypeOfWeek(typeOfWeekChoiceBox.getValue()),
-                sourceDay,
-                TypeFormatter.parseDayOfWeek(dayOfWeekChoiceBox.getValue()));
+        createdLesson = new CreatedLesson(lesson, onceRadioButton.isSelected(), typeOfWeekChoiceBox.getValue(),
+                sourceDay, dayOfWeekChoiceBox.getValue());
         actionClose(event);
     }
 

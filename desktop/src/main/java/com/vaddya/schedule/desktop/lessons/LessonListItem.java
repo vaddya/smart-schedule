@@ -1,7 +1,6 @@
 package com.vaddya.schedule.desktop.lessons;
 
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -9,6 +8,8 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
+
+import static com.vaddya.schedule.desktop.util.TypeConverters.getLessonTypeConverter;
 
 /**
  * Вид для отображения занятия в списке
@@ -49,7 +50,7 @@ public class LessonListItem extends AnchorPane {
     private void initComponents(Lesson lesson) {
         timeLabel.setText(lesson.getStartTime().toString() + " - " + lesson.getEndTime().toString());
         subjectLabel.setText(lesson.getSubject());
-        typeLabel.setText(TypeFormatter.format(lesson.getType()));
+        typeLabel.setText(getLessonTypeConverter().toString(lesson.getType()));
         placeLabel.setText(lesson.getPlace());
         teacherLabel.setText(lesson.getTeacher());
     }

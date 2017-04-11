@@ -3,7 +3,6 @@ package com.vaddya.schedule.desktop.controllers;
 import com.vaddya.schedule.core.lessons.LessonType;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.desktop.Main;
-import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,6 +22,7 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 import static com.vaddya.schedule.core.lessons.LessonType.ANOTHER;
+import static com.vaddya.schedule.desktop.util.TypeConverters.getLessonTypeConverter;
 
 /**
  * Контроллер для диалога изменения заданий
@@ -37,7 +37,7 @@ public class EditTaskController implements Initializable {
     @FXML
     private TextField subjectField;
     @FXML
-    private ChoiceBox<String> typeChoiceBox;
+    private ChoiceBox<LessonType> lessonTypeChoiceBox;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -52,9 +52,8 @@ public class EditTaskController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (LessonType type : LessonType.values()) {
-            typeChoiceBox.getItems().add(TypeFormatter.format(type));
-        }
+        lessonTypeChoiceBox.setConverter(getLessonTypeConverter());
+        lessonTypeChoiceBox.getItems().addAll(LessonType.values());
         datePicker.setOnShowing(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getLocale()));
         datePicker.setOnShown(event -> Locale.setDefault(Locale.Category.FORMAT, Main.getLocale()));
         datePicker.setConverter(new StringConverter<LocalDate>() {
@@ -75,7 +74,7 @@ public class EditTaskController implements Initializable {
             created = true;
             id = UUID.randomUUID();
             subjectField.clear();
-            typeChoiceBox.setValue(TypeFormatter.format(ANOTHER));
+            lessonTypeChoiceBox.setValue(ANOTHER);
             datePicker.setValue(LocalDate.now());
             textArea.clear();
             doneCheckBox.setSelected(false);
@@ -83,7 +82,7 @@ public class EditTaskController implements Initializable {
             created = false;
             id = task.getId();
             subjectField.setText(task.getSubject());
-            typeChoiceBox.setValue(TypeFormatter.format(task.getType()));
+            lessonTypeChoiceBox.setValue(task.getType());
             datePicker.setValue(task.getDeadline());
             textArea.setText(task.getTextTask());
             doneCheckBox.setSelected(task.isComplete());
@@ -103,7 +102,7 @@ public class EditTaskController implements Initializable {
         task = new Task.Builder()
                 .id(id)
                 .subject(subjectField.getText())
-                .type(TypeFormatter.parseLessonType(typeChoiceBox.getValue()))
+                .type(lessonTypeChoiceBox.getValue())
                 .deadline(datePicker.getValue())
                 .textTask(textArea.getText())
                 .isComplete(doneCheckBox.isSelected())

@@ -9,7 +9,6 @@ import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.desktop.Main;
 import com.vaddya.schedule.desktop.lessons.CreatedLesson;
 import com.vaddya.schedule.desktop.lessons.LessonListItem;
-import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +29,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import static com.vaddya.schedule.core.utils.TypeOfWeek.BOTH;
+import static com.vaddya.schedule.desktop.util.TypeConverters.getDayOfWeekConverter;
+import static com.vaddya.schedule.desktop.util.TypeConverters.getTypeOfWeekConverter;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 
@@ -174,7 +175,8 @@ public class LessonsController {
     }
 
     private void refreshLessons() {
-        String currWeek = TypeFormatter.format(schedule.getWeek(currentWeek).getTypeOfWeek());
+        TypeOfWeek typeOfWeek = schedule.getWeek(currentWeek).getTypeOfWeek();
+        String currWeek = getTypeOfWeekConverter().toString(typeOfWeek);
         currWeekLabel.setText(currWeek);
         currWeekLabel.setTextAlignment(TextAlignment.CENTER);
         lessonList.getItems().clear();
@@ -183,7 +185,7 @@ public class LessonsController {
             if (week.getDay(day).isEmpty()) {
                 continue;
             }
-            Label label = new Label(TypeFormatter.format(day) + " (" +
+            Label label = new Label(getDayOfWeekConverter().toString(day) + " (" +
                     Dates.FULL_DATE_FORMAT.format(currentWeek.getDateOf(day)) + ")");
             label.getStyleClass().add("title");
             if (currentWeek.getDateOf(day).equals(LocalDate.now())) {

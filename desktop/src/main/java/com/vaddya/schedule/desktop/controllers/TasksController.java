@@ -111,7 +111,7 @@ public class TasksController {
             Alert alert = new Alert(CONFIRMATION);
             alert.setTitle(Main.getString("task_remove"));
             alert.setHeaderText(null);
-            String content = String.format("%s: %n\"%s\"",
+            String content = String.format("%s%n\"%s\"",
                     Main.getString("task_remove_are_you_sure"),
                     task.getTask().getTextTask()
             );

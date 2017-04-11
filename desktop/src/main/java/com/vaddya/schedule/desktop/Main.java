@@ -20,7 +20,7 @@ public class Main extends Application {
 
     private static final Locale locale = new Locale("ru");
     private static final ResourceBundle bundle = ResourceBundle.getBundle("bundles/Locale", locale);
-    private static Image icon = new Image(Main.class.getClassLoader().getResourceAsStream("img/icon.png"));
+    private static final Image icon = new Image(Main.class.getClassLoader().getResourceAsStream("img/icon.png"));
 
     public static Locale getLocale() {
         return locale;

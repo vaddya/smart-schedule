@@ -2,6 +2,10 @@
     -fx-background-color: lightgreen;
 }
 
+.overdue .box {
+    -fx-background-color: lightcoral;
+}
+
 .complete .text {
     -fx-strikethrough: true;
 }

@@ -3,7 +3,6 @@ package com.vaddya.schedule.desktop.tasks;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.core.utils.Dates;
 import com.vaddya.schedule.desktop.controllers.TasksController;
-import com.vaddya.schedule.desktop.util.TypeFormatter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
@@ -14,6 +13,7 @@ import java.io.IOException;
 
 import static com.vaddya.schedule.core.utils.Dates.FULL_DATE_FORMAT;
 import static com.vaddya.schedule.desktop.Main.getString;
+import static com.vaddya.schedule.desktop.util.TypeConverters.getLessonTypeConverter;
 
 /**
  * Вид для отображения задания в списке
@@ -81,7 +81,7 @@ public class TaskListItem extends AnchorPane {
         subjectLabel.setText(task.getSubject());
         deadlineLabel.setText(FULL_DATE_FORMAT.format(task.getDeadline()));
         timeLeftLabel.setText("(" + timeLeft + ")");
-        typeLabel.setText(TypeFormatter.format(task.getType()));
+        typeLabel.setText(getLessonTypeConverter().toString(task.getType()));
     }
 
     public Task getTask() {

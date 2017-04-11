@@ -40,9 +40,7 @@ public class RemoveLessonController implements Initializable {
     }
 
     public void setSubject(String subject) {
-        String content = String.format("%s:%n\"%s\"",
-                Main.getString("lesson_remove_are_you_sure"),
-                subject);
+        String content = String.format("%s:%n\"%s\"", Main.getString("lesson_remove_are_you_sure"), subject);
         this.sureLabel.setText(content);
         this.isOnce = true;
         this.removed = false;

@@ -32,7 +32,7 @@
                     <Image url="@../img/lessons.png"/>
                 </ImageView>
             </graphic>
-            <fx:include source="lessons.fxml"/>
+            <fx:include fx:id="lessons" source="lessons.fxml"/>
         </Tab>
         <Tab text="%tasks">
             <graphic>
@@ -40,7 +40,7 @@
                     <Image url="@../img/tasks.png"/>
                 </ImageView>
             </graphic>
-            <fx:include source="tasks.fxml"/>
+            <fx:include fx:id="tasks" source="tasks.fxml"/>
         </Tab>
     </TabPane>
     <StatusBar fx:id="statusBar" text=""/>
