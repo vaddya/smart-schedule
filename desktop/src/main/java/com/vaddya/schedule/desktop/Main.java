@@ -45,7 +45,7 @@ public class Main extends Application {
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
 
         Parent root = fxmlLoader.load();
-        primaryStage.setTitle(fxmlLoader.getResources().getString("smart_schedule"));
+        primaryStage.setTitle(getString("smart_schedule"));
         primaryStage.getIcons().add(icon);
         primaryStage.setMinWidth(850);
         primaryStage.setMinHeight(600);
