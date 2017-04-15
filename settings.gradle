@@ -1,1 +1,1 @@
-include 'core', 'database', 'desktop', 'rest'
+include 'core', 'mongo', 'desktop', 'rest'

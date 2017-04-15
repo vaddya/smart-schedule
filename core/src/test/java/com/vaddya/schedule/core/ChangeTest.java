@@ -35,4 +35,5 @@ public class ChangeTest {
         assertEquals(change1, change2);
         assertEquals(change1.hashCode(), change2.hashCode());
     }
+
 }
