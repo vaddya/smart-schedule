@@ -23,7 +23,8 @@ import java.time.LocalDate;
  */
 public class MongoDatabase implements Database {
 
-    private static final String DB = "smart-schedule";
+//    private static final String DB = "smart-schedule";
+    private static final String DB = "heroku_j89l3x5c";
     private static final String TASKS = "tasks";
     private static final String LESSONS = "lessons";
     private static final String CHANGES = "changes";

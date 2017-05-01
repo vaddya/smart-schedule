@@ -3,6 +3,7 @@ package com.vaddya.schedule.rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.changes.Change;
@@ -33,7 +34,9 @@ public class Main {
 
     @Bean
     public SmartSchedule schedule() {
-        Database database = new MongoDatabase(new MongoClient());
+        MongoClientURI uri = new MongoClientURI(System.getenv("MONGODB_URI"));
+        MongoClient client = new MongoClient(uri);
+        Database database = new MongoDatabase(client);
         return new SmartScheduleImpl(database);
     }
 

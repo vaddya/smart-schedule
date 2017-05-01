@@ -1,6 +1,7 @@
 package com.vaddya.schedule.desktop.controllers;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.lessons.Lesson;
@@ -51,7 +52,8 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MongoClient client = new MongoClient();
+        MongoClientURI uri = new MongoClientURI(System.getenv("MONGODB_URI"));
+        MongoClient client = new MongoClient(uri);
         Database database = new MongoDatabase(client);
         schedule = new SmartScheduleImpl(database);
         lessonsController.init(this, schedule);
