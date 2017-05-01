@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar rest/build/libs/smart-schedule-rest-0.1.0
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar rest/build/libs/smart-schedule-rest-0.1.0.jar
