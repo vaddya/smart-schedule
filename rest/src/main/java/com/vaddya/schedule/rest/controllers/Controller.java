@@ -6,22 +6,22 @@ import com.vaddya.schedule.rest.responses.Response;
 import com.vaddya.schedule.rest.responses.ResponseCreated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
- * com.vaddya.schedule.rest.controllers at smart-schedule
+ * Класс, содержащий общие для контроллеров поля и методы
  *
  * @author vaddya
- * @since April 07, 2017
  */
 public class Controller {
 
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public static final String JSON = "application/json";
+    public static final String JSON = MediaType.APPLICATION_JSON_VALUE;
 
     @Autowired
     protected Gson gson;
@@ -46,4 +46,5 @@ public class Controller {
         ResponseCreated response = new ResponseCreated(status, message, baseUrl + "/" + id);
         return new ResponseEntity<>(gson.toJson(response), response.getStatus());
     }
+
 }

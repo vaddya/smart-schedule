@@ -3,29 +3,23 @@ package com.vaddya.schedule.rest.controllers;
 import com.google.gson.JsonSyntaxException;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
-import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
- * com.vaddya.schedule.rest.controllers at smart-schedule
+ * Контроллер для уроков
  *
  * @author vaddya
- * @since April 08, 2017
  */
 @RestController
 @RequestMapping(Paths.LESSONS)
 public class LessonsController extends Controller {
 
-    @RequestMapping(value = "{id}", method = GET, produces = JSON)
+    @GetMapping(value = "{id}", produces = JSON)
     public ResponseEntity<String> getLesson(@PathVariable String id) {
         try {
             UUID uuid = UUID.fromString(id);
@@ -38,7 +32,7 @@ public class LessonsController extends Controller {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = PUT, consumes = JSON, produces = JSON)
+    @PutMapping(value = "/{id}", consumes = JSON, produces = JSON)
     public ResponseEntity<String> updateTask(@PathVariable String id,
                                              @RequestBody String body) {
         try {
@@ -58,7 +52,7 @@ public class LessonsController extends Controller {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE, produces = JSON)
+    @DeleteMapping(value = "/{id}", produces = JSON)
     public ResponseEntity<String> deleteTask(@PathVariable String id) {
         try {
             UUID uuid = UUID.fromString(id);

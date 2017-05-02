@@ -2,18 +2,16 @@ package com.vaddya.schedule.rest.responses;
 
 import org.springframework.http.HttpStatus;
 
-//TODO старый путь к классу
 /**
- * com.vaddya.schedule.rest at smart-schedule
+ * Класс для представления HTTP ответа
  *
  * @author vaddya
- * @since April 06, 2017
  */
 public class Response {
 
-    private int code;
-    private HttpStatus status;
-    private String message;
+    private final int code;
+    private final HttpStatus status;
+    private final String message;
 
     public Response(HttpStatus status, String message) {
         this.code = status.value();

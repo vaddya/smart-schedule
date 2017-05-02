@@ -2,12 +2,10 @@ package com.vaddya.schedule.rest.responses;
 
 import org.springframework.http.HttpStatus;
 
-//TODO старый путь
 /**
- * com.vaddya.schedule.rest at smart-schedule
+ * Класс для представления HTTP ответа о созданном ресурсе
  *
  * @author vaddya
- * @since April 08, 2017
  */
 public class ResponseCreated extends Response {
 

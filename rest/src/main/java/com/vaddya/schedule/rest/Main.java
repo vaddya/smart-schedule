@@ -20,10 +20,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
- * com.vaddya.schedule.rest at smart-schedule
+ * Стартовый класс для Spring Boot
  *
  * @author vaddya
- * @since April 05, 2017
  */
 @SpringBootApplication
 public class Main {

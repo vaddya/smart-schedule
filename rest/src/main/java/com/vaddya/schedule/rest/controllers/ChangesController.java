@@ -4,7 +4,6 @@ import com.google.gson.JsonSyntaxException;
 import com.vaddya.schedule.core.changes.Change;
 import com.vaddya.schedule.core.exceptions.DuplicateIdException;
 import com.vaddya.schedule.core.exceptions.NoSuchChangeException;
-import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,19 +13,17 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
- * com.vaddya.schedule.rest.controllers at smart-schedule
+ * Контроллер для изменений
  *
  * @author vaddya
- * @since April 08, 2017
  */
 @RestController
 @RequestMapping(Paths.CHANGES)
 public class ChangesController extends Controller {
 
-    @RequestMapping(method = GET, produces = JSON)
+    @GetMapping(produces = JSON)
     public ResponseEntity<String> getAllChanges(@RequestParam(required = false) String date) {
         List<Change> changes;
         if (date != null) {
@@ -42,7 +39,7 @@ public class ChangesController extends Controller {
         return getBodyResponse(OK, gson.toJson(changes));
     }
 
-    @RequestMapping(method = POST, consumes = JSON, produces = JSON)
+    @PostMapping(consumes = JSON, produces = JSON)
     public ResponseEntity<String> createChange(@RequestBody String body) {
         try {
             Change change = gson.fromJson(body, Change.class);
@@ -55,13 +52,13 @@ public class ChangesController extends Controller {
         }
     }
 
-    @RequestMapping(method = DELETE)
+    @DeleteMapping
     public ResponseEntity<String> deleteAllChanges() {
         schedule.getChanges().removeAllChanges();
         return getResponse(NO_CONTENT);
     }
 
-    @RequestMapping(value = "/{id}", method = GET, produces = JSON)
+    @GetMapping(value = "/{id}", produces = JSON)
     public ResponseEntity<String> getChange(@PathVariable String id) {
         try {
             UUID uuid = UUID.fromString(id);
@@ -74,7 +71,7 @@ public class ChangesController extends Controller {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = PUT, consumes = JSON, produces = JSON)
+    @PutMapping(value = "/{id}", consumes = JSON, produces = JSON)
     public ResponseEntity<String> updateChange(@PathVariable String id,
                                                @RequestBody String body) {
         try {
@@ -94,7 +91,7 @@ public class ChangesController extends Controller {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE, produces = JSON)
+    @DeleteMapping(value = "/{id}", produces = JSON)
     public ResponseEntity<String> deleteChange(@PathVariable String id) {
         try {
             UUID uuid = UUID.fromString(id);

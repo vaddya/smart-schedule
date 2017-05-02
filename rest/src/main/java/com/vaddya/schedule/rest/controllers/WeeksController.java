@@ -4,36 +4,30 @@ import com.vaddya.schedule.core.exceptions.DuplicateIdException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
-import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
- * com.vaddya.schedule.rest.controllers at smart-schedule
+ * Контроллер для учебных недель
  *
  * @author vaddya
- * @since April 08, 2017
  */
 @RestController
 @RequestMapping(Paths.WEEKS)
 public class WeeksController extends Controller {
 
-    @RequestMapping(value = "swap", method = POST, produces = JSON)
+    @PostMapping(value = "swap", produces = JSON)
     public ResponseEntity<String> swapSchedules() {
         schedule.swapTypesOfWeeks();
         return getResponse(NO_CONTENT);
     }
 
-    @RequestMapping(value = "{weekType}", method = GET, produces = JSON)
+    @GetMapping(value = "{weekType}", produces = JSON)
     public ResponseEntity<String> getWeek(@PathVariable String weekType) {
         try {
             TypeOfWeek week = TypeOfWeek.valueOf(weekType.toUpperCase());
@@ -44,7 +38,7 @@ public class WeeksController extends Controller {
         }
     }
 
-    @RequestMapping(value = "{weekType}", method = DELETE, produces = JSON)
+    @DeleteMapping(value = "{weekType}", produces = JSON)
     public ResponseEntity<String> deleteLessonsForWeek(@PathVariable String weekType) {
         try {
             TypeOfWeek week = TypeOfWeek.valueOf(weekType.toUpperCase());
@@ -55,7 +49,7 @@ public class WeeksController extends Controller {
         }
     }
 
-    @RequestMapping(value = "{weekType}/{dayOfWeek}", method = GET, produces = JSON)
+    @GetMapping(value = "{weekType}/{dayOfWeek}", produces = JSON)
     public ResponseEntity<String> getDay(@PathVariable String weekType,
                                          @PathVariable String dayOfWeek) {
         try {
@@ -68,7 +62,7 @@ public class WeeksController extends Controller {
         }
     }
 
-    @RequestMapping(value = "{weekType}/{dayOfWeek}", method = POST, consumes = JSON, produces = JSON)
+    @PostMapping(value = "{weekType}/{dayOfWeek}", consumes = JSON, produces = JSON)
     public ResponseEntity<String> getDay(@PathVariable String weekType,
                                          @PathVariable String dayOfWeek,
                                          @RequestBody String body) {
@@ -87,7 +81,7 @@ public class WeeksController extends Controller {
         }
     }
 
-    @RequestMapping(value = "{weekType}/{dayOfWeek}", method = DELETE, produces = JSON)
+    @DeleteMapping(value = "{weekType}/{dayOfWeek}", produces = JSON)
     public ResponseEntity<String> deleteLessonsForDay(@PathVariable String weekType,
                                                       @PathVariable String dayOfWeek) {
         try {
