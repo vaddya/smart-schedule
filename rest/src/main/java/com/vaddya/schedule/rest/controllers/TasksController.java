@@ -50,9 +50,6 @@ public class TasksController extends Controller {
                 return getMessageResponse(BAD_REQUEST, "Deadline format is invalid");
             }
         }
-        if (tasks.isEmpty()) {
-            return getResponse(NO_CONTENT);
-        }
         return getBodyResponse(OK, gson.toJson(tasks));
     }
 
