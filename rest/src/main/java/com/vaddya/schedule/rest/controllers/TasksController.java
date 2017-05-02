@@ -18,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+//TODO старый путь
 /**
  * com.vaddya.schedule.rest at smart-schedule
  *
@@ -27,11 +28,26 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 @RequestMapping(Paths.TASKS)
 public class TasksController extends Controller {
-
+    //TODO есть более новые аннотации GetMapping, PostMapping, PutMapping...,
+    //TODO которые позволяют не прописывать параметр method. Получается короче
     @RequestMapping(method = GET, produces = JSON)
     public ResponseEntity<String> getAllTasks(@RequestParam(defaultValue = "all") String filter,
                                               @RequestParam(required = false) String subject,
                                               @RequestParam(required = false) String deadline) {
+        //TODO понятно, что происходит. Длина метода на читаемости и понимаемости не отразилась.
+        //TODO но мне кажется, стоит разбить на несколько.
+        
+        //TODO может ли в случае, если есть все необходимые таски есть в БД, ответ быть с каким-то статусом, кроме ОК?
+        //TODO вроде нет. Другой статус может быть только, если что-то пойдет не так: не будет тасок, неверные параметры...
+        //TODO автор spring in action советует в таких случаях указывать аннотацией ResponseStatus, какой будет статус ответа.
+        //TODO а для остальных случаев просто бросать исключения. А ловить их и обрабатывть методами, которые аннотированы ExceptionHandler
+        //TODO если так сделать, то ResponseEntity окажется ненужным. Можно будет просто возвращать json. А статус в аннотации.
+        //
+        //TODO еще плюс такого подхода в том, что один метод - ExceptionHandler обрабатывает 1 исключение.
+        //TODO И не важно откуда оно будет выбрасываться. Не придется каждый JsonSyntaxException обрабатывать отдельно и одинаково
+        //
+        //TODO UPD: посмотрел другие контроллеры. там то же, что и здесь. 
+        //TODO Если использовать ExceptionHandler'ы, то будет в 1.5 раза меньше кода
         List<Task> tasks;
         switch (filter.toLowerCase()) {
             case "all":
@@ -69,9 +85,12 @@ public class TasksController extends Controller {
         }
         return getBodyResponse(OK, gson.toJson(tasks));
     }
-
+    
+    //TODO есть более новые аннотации GetMapping, PostMapping, PutMapping...,
+    //TODO которые позволяют не прописывать параметр method. Получается короче
     @RequestMapping(method = POST, consumes = JSON, produces = JSON)
     public ResponseEntity<String> createTask(@RequestBody String body) {
+        //TODO см выше
         try {
             Task task = gson.fromJson(body, Task.class);
             schedule.getTasks().addTask(task);
@@ -82,13 +101,17 @@ public class TasksController extends Controller {
             return getMessageResponse(CONFLICT, "Task with specified ID already exists");
         }
     }
-
+    
+    //TODO есть более новые аннотации GetMapping, PostMapping, PutMapping...,
+    //TODO которые позволяют не прописывать параметр method. Получается короче
     @RequestMapping(method = DELETE)
     public ResponseEntity<String> deleteAllTasks() {
         schedule.getTasks().removeAllTasks();
         return getResponse(NO_CONTENT);
     }
-
+    
+    //TODO есть более новые аннотации GetMapping, PostMapping, PutMapping...,
+    //TODO которые позволяют не прописывать параметр method. Получается короче
     @RequestMapping(value = "/{id}", method = GET, produces = JSON)
     public ResponseEntity<String> getTask(@PathVariable String id) {
         try {
@@ -101,7 +124,9 @@ public class TasksController extends Controller {
             return getMessageResponse(NOT_FOUND, "Task does not exist");
         }
     }
-
+    
+    //TODO есть более новые аннотации GetMapping, PostMapping, PutMapping...,
+    //TODO которые позволяют не прописывать параметр method. Получается короче
     @RequestMapping(value = "/{id}", method = PUT, consumes = JSON, produces = JSON)
     public ResponseEntity<String> updateTask(@PathVariable String id,
                                              @RequestBody String body) {
@@ -121,7 +146,9 @@ public class TasksController extends Controller {
             return getMessageResponse(NOT_FOUND, "Task does not exist");
         }
     }
-
+    
+    //TODO есть более новые аннотации GetMapping, PostMapping, PutMapping...,
+    //TODO которые позволяют не прописывать параметр method. Получается короче
     @RequestMapping(value = "/{id}", method = DELETE, produces = JSON)
     public ResponseEntity<String> deleteTask(@PathVariable String id) {
         try {
