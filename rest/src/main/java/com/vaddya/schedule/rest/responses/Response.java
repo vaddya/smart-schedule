@@ -2,6 +2,7 @@ package com.vaddya.schedule.rest.responses;
 
 import org.springframework.http.HttpStatus;
 
+//TODO старый путь к классу
 /**
  * com.vaddya.schedule.rest at smart-schedule
  *
