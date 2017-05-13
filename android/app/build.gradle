@@ -5,7 +5,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.vaddya.schedule.android"
+        applicationId "com.vaddya.schedule.app"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -34,5 +34,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 repositories {
-    mavenCentral()
+    jcenter()
 }
