@@ -1,0 +1,66 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CardView.Light"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:padding="@dimen/card_padding"
+    card_view:cardCornerRadius="@dimen/card_corner_radius"
+    card_view:cardElevation="@dimen/card_elevation"
+    tools:context=".activities.ScheduleActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/card_padding">
+
+        <TextView
+            android:id="@+id/fragment_lesson_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="10:00" />
+
+        <TextView
+            android:id="@+id/fragment_lesson_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_lesson_start_time"
+            tools:text="11:30" />
+
+        <TextView
+            android:id="@+id/fragment_lesson_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/fragment_lesson_start_time"
+            tools:text="Subject" />
+
+        <TextView
+            android:id="@+id/fragment_lesson_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fragment_lesson_subject"
+            android:layout_toRightOf="@id/fragment_lesson_end_time"
+            tools:text="Lesson type" />
+
+        <TextView
+            android:id="@+id/fragment_lesson_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fragment_lesson_subject"
+            android:layout_toRightOf="@id/fragment_lesson_type"
+            tools:text="Place" />
+
+        <TextView
+            android:id="@+id/fragment_lesson_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_lesson_type"
+            tools:text="Teacher" />
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

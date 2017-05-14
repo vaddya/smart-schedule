@@ -31,16 +31,16 @@ import java.util.Locale;
  */
 public class TaskListFragment extends Fragment {
 
-    public static final String TYPE = "TYPE";
+    public static final String ARG_TASKS_TYPE = "ARG_TASKS_TYPE";
 
     private RecyclerView recyclerView;
     private TaskAdapter adapter;
     private List<Task> tasks;
 
-    public static TaskListFragment newInstance(TasksType tasks) {
+    public static TaskListFragment newInstance(TasksType tasksType) {
         TaskListFragment fragment = new TaskListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(TYPE, tasks);
+        args.putSerializable(ARG_TASKS_TYPE, tasksType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,35 +58,19 @@ public class TaskListFragment extends Fragment {
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                
+
                 return false;
             }
         });
 
-        TasksType type = (TasksType) getArguments().getSerializable(TYPE);
+        TasksType type = (TasksType) getArguments().getSerializable(ARG_TASKS_TYPE);
         tasks = Storage.getTasks(type);
-        updateUi();
+        adapter = new TaskAdapter(tasks);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUi();
-    }
-
-    private void updateUi() {
-        if (adapter == null) {
-            adapter = new TaskAdapter(tasks);
-            recyclerView.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
     private class TaskHolder extends RecyclerView.ViewHolder {
-
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 
         private TextView subject;
         private EditText text;
@@ -106,7 +90,7 @@ public class TaskListFragment extends Fragment {
             subject.setText(task.getSubject() + " | " + task.getType());
             text.setText(task.getTextTask());
             text.setSelection(text.getText().length());
-            deadline.setText(format.format(task.getDeadline()));
+            deadline.setText(task.getDeadline().toString("dd MMMM yyyy", Locale.getDefault()));
             isComplete.setChecked(task.isComplete());
         }
 

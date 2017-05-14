@@ -40,11 +40,13 @@ public class TaskListActivity extends NavigationDrawerActivity
 
         setupDrawer(toolbar, R.id.nav_task_list);
 
-        viewPager = (ViewPager) findViewById(R.id.task_list_viewpager);
+
+        viewPager = (ViewPager) findViewById(R.id.content_task_list_viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.task_list_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
 
     }
 
@@ -57,8 +59,8 @@ public class TaskListActivity extends NavigationDrawerActivity
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -66,22 +68,22 @@ public class TaskListActivity extends NavigationDrawerActivity
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            return fragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return fragmentList.size();
         }
 
         public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            fragmentList.add(fragment);
+            fragmentTitleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return fragmentTitleList.get(position);
         }
     }
 

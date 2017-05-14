@@ -1,7 +1,8 @@
 package com.vaddya.schedule.android.model
 
-import java.util.Date
-import java.util.UUID
+import org.joda.time.DateTime
+import org.joda.time.LocalDate
+import java.util.*
 
 /**
  * com.vaddya.schedule.android.model at android
@@ -11,6 +12,6 @@ import java.util.UUID
 class Task(var id: UUID,
            var subject: String,
            var type: LessonType,
-           var deadline: Date,
+           var deadline: LocalDate,
            var textTask: String,
            var isComplete: Boolean)

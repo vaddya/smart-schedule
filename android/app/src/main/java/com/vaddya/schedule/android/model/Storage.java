@@ -2,6 +2,9 @@ package com.vaddya.schedule.android.model;
 
 import com.android.internal.util.Predicate;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +18,8 @@ import java.util.UUID;
 public class Storage {
 
     private static List<Task> tasks = new ArrayList<>();
+    private static List<Lesson> lessons = new ArrayList<>();
+
 
     static {
         // TODO: 5/4/2017 stub
@@ -22,10 +27,21 @@ public class Storage {
             Task task = new Task(UUID.randomUUID(),
                     "Subject " + i,
                     LessonType.values()[i % LessonType.values().length],
-                    new Date(),
+                    new LocalDate().plusDays(i),
                     "Text " + i,
                     i % 2 == 0);
             tasks.add(task);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            Lesson lesson = new Lesson(UUID.randomUUID(),
+                    "10:00",
+                    "11:30",
+                    "Subject " + i,
+                    LessonType.values()[i % LessonType.values().length],
+                    "Place " + i,
+                    "Teacher " + i);
+            lessons.add(lesson);
         }
     }
 
@@ -69,4 +85,7 @@ public class Storage {
         return list;
     }
 
+    public static List<Lesson> getLessons(LocalDate date) {
+        return lessons;
+    }
 }

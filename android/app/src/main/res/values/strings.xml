@@ -13,4 +13,7 @@
     <string name="all">All</string>
     <string name="active">Active</string>
     <string name="completed">Completed</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
