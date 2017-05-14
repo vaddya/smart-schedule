@@ -1,4 +1,4 @@
-package com.vaddya.schedule.app;
+package com.vaddya.schedule.android;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

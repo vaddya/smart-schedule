@@ -1,4 +1,4 @@
-package com.vaddya.schedule.app.model
+package com.vaddya.schedule.android.model
 
 import java.util.UUID
 

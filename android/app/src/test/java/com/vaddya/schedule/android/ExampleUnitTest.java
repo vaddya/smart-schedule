@@ -1,4 +1,4 @@
-package com.vaddya.schedule.app;
+package com.vaddya.schedule.android;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.vaddya.schedule.app.fragments;
+package com.vaddya.schedule.android.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,10 +15,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.vaddya.schedule.app.R;
-import com.vaddya.schedule.app.model.Storage;
-import com.vaddya.schedule.app.model.Task;
-import com.vaddya.schedule.app.model.TasksType;
+import com.vaddya.schedule.android.R;
+import com.vaddya.schedule.android.model.Storage;
+import com.vaddya.schedule.android.model.Task;
+import com.vaddya.schedule.android.model.TasksType;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

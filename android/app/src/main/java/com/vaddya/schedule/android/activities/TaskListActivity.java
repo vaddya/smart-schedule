@@ -1,4 +1,4 @@
-package com.vaddya.schedule.app.activities;
+package com.vaddya.schedule.android.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,14 +9,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.vaddya.schedule.app.R;
-import com.vaddya.schedule.app.fragments.TaskListFragment;
+import com.vaddya.schedule.android.R;
+import com.vaddya.schedule.android.fragments.TaskListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.vaddya.schedule.app.model.TasksType.ACTIVE;
-import static com.vaddya.schedule.app.model.TasksType.COMPLETED;
+import static com.vaddya.schedule.android.model.TasksType.ACTIVE;
+import static com.vaddya.schedule.android.model.TasksType.COMPLETED;
 
 /**
  * com.vaddya.schedule.android.activities at android
