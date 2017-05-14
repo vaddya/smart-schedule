@@ -13,7 +13,7 @@ public class ScheduleActivity extends NavigationDrawerActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.schedule_toolbar);
         toolbar.setTitle(getString(R.string.schedule));
         setSupportActionBar(toolbar);
 

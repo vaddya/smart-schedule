@@ -34,16 +34,16 @@ public class TaskListActivity extends NavigationDrawerActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_task_list_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.task_list_toolbar);
         toolbar.setTitle(getString(R.string.task_list));
         setSupportActionBar(toolbar);
 
         setupDrawer(toolbar, R.id.nav_task_list);
 
-        viewPager = (ViewPager) findViewById(R.id.activity_task_list_viewpager);
+        viewPager = (ViewPager) findViewById(R.id.task_list_viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.activity_task_list_tabs);
+        tabLayout = (TabLayout) findViewById(R.id.task_list_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
     }

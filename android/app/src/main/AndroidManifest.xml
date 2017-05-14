@@ -9,20 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.TaskListActivity">
 
-        </activity>
+        <activity
+            android:name=".activities.TaskListActivity"
+            android:label="@string/task_list"
+            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activities.ScheduleActivity"
-            android:label="@string/title_activity_schedule"
+            android:label="@string/schedule"
             android:theme="@style/AppTheme">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>

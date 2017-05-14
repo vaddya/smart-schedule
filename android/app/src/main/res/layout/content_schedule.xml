@@ -8,17 +8,11 @@
     tools:context="com.vaddya.schedule.android.activities.ScheduleActivity"
     tools:showIn="@layout/app_bar_schedule">
 
-    <LinearLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/content_schedule_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include layout="@layout/fragment_task" />
-
-        <include layout="@layout/fragment_task" />
-
-        <include layout="@layout/fragment_task" />
-
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" />
 
 </android.support.constraint.ConstraintLayout>
