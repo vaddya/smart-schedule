@@ -1,5 +1,7 @@
 package com.vaddya.schedule.android.model;
 
+import com.android.internal.util.Predicate;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,35 +33,36 @@ public class Storage {
         tasks.add(task);
     }
 
-    public static void addTasks(List<Task> newTasks) {
-        tasks.addAll(newTasks);
-    }
-
     public static List<Task> getTasks(TasksType type) {
         switch (type) {
             case ACTIVE:
-                return getActiveTasks();
+                return getTasks(new Predicate<Task>() {
+                    @Override
+                    public boolean apply(Task task) {
+                        return !task.isComplete();
+                    }
+                });
             case COMPLETED:
-                return getCompletedTasks();
+                return getTasks(new Predicate<Task>() {
+                    @Override
+                    public boolean apply(Task task) {
+                        return task.isComplete();
+                    }
+                });
             default:
-                return tasks;
+                return getTasks(new Predicate<Task>() {
+                    @Override
+                    public boolean apply(Task task) {
+                        return true;
+                    }
+                });
         }
     }
 
-    private static List<Task> getActiveTasks() {
+    private static List<Task> getTasks(Predicate<Task> predicate) {
         List<Task> list = new ArrayList<>();
         for (Task task : tasks) {
-            if (!task.isComplete()) {
-                list.add(task);
-            }
-        }
-        return list;
-    }
-
-    private static List<Task> getCompletedTasks() {
-        List<Task> list = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.isComplete()) {
+            if (predicate.apply(task)) {
                 list.add(task);
             }
         }

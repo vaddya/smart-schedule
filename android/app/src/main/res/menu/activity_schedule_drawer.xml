@@ -7,9 +7,9 @@
             android:icon="@drawable/ic_calendar"
             android:title="@string/schedule" />
         <item
-            android:id="@+id/nav_tasks"
+            android:id="@+id/nav_task_list"
             android:icon="@drawable/ic_tasks"
-            android:title="@string/tasks" />
+            android:title="@string/task_list" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"

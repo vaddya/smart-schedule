@@ -5,8 +5,13 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <!--Menu-->
     <string name="schedule">Schedule</string>
-    <string name="tasks">Tasks</string>
+    <string name="task_list">Tasks</string>
     <string name="settings">Settings</string>
+
+    <!--Tasks-->
+    <string name="all">All</string>
+    <string name="active">Active</string>
+    <string name="completed">Completed</string>
 </resources>

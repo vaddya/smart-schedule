@@ -1,5 +1,7 @@
 package com.vaddya.schedule.android.model;
 
+import com.vaddya.schedule.android.R;
+
 /**
  * com.vaddya.schedule.app.model at android
  *
@@ -7,8 +9,18 @@ package com.vaddya.schedule.android.model;
  */
 public enum TasksType {
 
-    ALL,
-    ACTIVE,
-    COMPLETED,
+    ALL(R.string.all),
+    ACTIVE(R.string.active),
+    COMPLETED(R.string.completed);
+
+    private int id;
+
+    TasksType(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
 }
