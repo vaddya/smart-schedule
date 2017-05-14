@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.vaddya.schedule.android.R;
 import com.vaddya.schedule.android.fragments.TaskListFragment;
@@ -35,8 +37,8 @@ public class TaskListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_list);
 
         toolbar = (Toolbar) findViewById(R.id.activity_task_list_toolbar);
+        toolbar.setTitle("Tasks");
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.activity_task_list_viewpager);
@@ -45,6 +47,16 @@ public class TaskListActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.activity_task_list_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -82,5 +94,7 @@ public class TaskListActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
+
 
 }

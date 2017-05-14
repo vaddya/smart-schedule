@@ -58,7 +58,7 @@ public class TaskListFragment extends Fragment {
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
+                
                 return false;
             }
         });
