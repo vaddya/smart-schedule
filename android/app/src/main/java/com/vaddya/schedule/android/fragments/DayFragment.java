@@ -1,7 +1,5 @@
 package com.vaddya.schedule.android.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +15,6 @@ import com.vaddya.schedule.android.model.Storage;
 
 import org.joda.time.LocalDate;
 
-import java.util.Date;
 import java.util.List;
 
 public class DayFragment extends Fragment {
