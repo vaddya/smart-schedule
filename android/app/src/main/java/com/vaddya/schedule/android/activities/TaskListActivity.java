@@ -1,6 +1,8 @@
 package com.vaddya.schedule.android.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,6 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Toast;
 
 import com.vaddya.schedule.android.R;
 import com.vaddya.schedule.android.fragments.TaskListFragment;
@@ -29,6 +33,7 @@ public class TaskListActivity extends NavigationDrawerActivity
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private FloatingActionButton fab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,13 @@ public class TaskListActivity extends NavigationDrawerActivity
         tabLayout = (TabLayout) findViewById(R.id.task_list_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        fab = (FloatingActionButton) findViewById(R.id.task_list_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(TaskListActivity.this, "Create task", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

@@ -3,6 +3,7 @@ package com.vaddya.schedule.android.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -67,6 +68,17 @@ public class TaskListFragment extends Fragment {
         tasks = Storage.getTasks(type);
         adapter = new TaskAdapter(tasks);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private FloatingActionButton fab = ((FloatingActionButton) getActivity().findViewById(R.id.task_list_fab));
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0)
+                    fab.hide();
+                else if (dy < 0)
+                    fab.show();
+            }
+        });
         return view;
     }
 
