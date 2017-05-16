@@ -8,53 +8,59 @@
     tools:context="com.vaddya.schedule.android.activities.ScheduleActivity"
     tools:showIn="@layout/app_bar_schedule">
 
-    <LinearLayout
-        android:id="@+id/schedule_buttons"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/schedule_button_previous"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="4dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:src="@drawable/ic_left_arrow" />
+        <LinearLayout
+            android:id="@+id/schedule_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/schedule_button_calendar"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_margin="4dp"
-            android:clickable="true"
-            android:drawableLeft="@drawable/ic_calendar_white"
-            android:drawablePadding="4dp"
-            android:enabled="true"
-            tools:text="23 мая - 30 мая" />
+            <ImageButton
+                android:id="@+id/schedule_button_previous"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:enabled="true"
+                android:src="@drawable/ic_left_arrow" />
 
-        <ImageButton
-            android:id="@+id/schedule_button_next"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="4dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:src="@drawable/ic_right_arrow" />
+            <Button
+                android:id="@+id/schedule_button_calendar"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_calendar_white"
+                android:drawablePadding="4dp"
+                android:enabled="true"
+                tools:text="23 мая - 30 мая" />
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/schedule_button_next"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:enabled="true"
+                android:src="@drawable/ic_right_arrow" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/content_schedule_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/schedule_buttons" />
+        </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/content_schedule_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/schedule_buttons"
+            android:orientation="vertical" />
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

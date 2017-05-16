@@ -16,13 +16,17 @@ import android.widget.Toast;
 import com.vaddya.schedule.android.R;
 import com.vaddya.schedule.android.Utils;
 import com.vaddya.schedule.android.fragments.DayFragment;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class ScheduleActivity extends NavigationDrawerActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("E, d MMM");
     private static final DateTimeFormatter SHORT_FORMATTER = DateTimeFormat.forPattern("d MMM");
@@ -68,6 +72,7 @@ public class ScheduleActivity extends NavigationDrawerActivity
                 currentDate = currentDate.minusDays(7);
                 updateDates(currentDate);
                 updateCurrentWeek();
+                viewPager.getAdapter().notifyDataSetChanged();
             }
         });
         nextButton = (ImageButton) findViewById(R.id.schedule_button_next);
@@ -78,9 +83,23 @@ public class ScheduleActivity extends NavigationDrawerActivity
                 currentDate = currentDate.plusDays(7);
                 updateDates(currentDate);
                 updateCurrentWeek();
+                viewPager.getAdapter().notifyDataSetChanged();
             }
         });
         calendarButton = (Button) findViewById(R.id.schedule_button_calendar);
+        calendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        ScheduleActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "Datepickerdialog");
+            }
+        });
 
         fab = (FloatingActionButton) findViewById(R.id.schedule_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,14 +110,24 @@ public class ScheduleActivity extends NavigationDrawerActivity
         });
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        currentDate = new LocalDate(year, monthOfYear, dayOfMonth);
+        int index = currentDate.getDayOfWeek() - 1;
+        monday = currentDate.minusDays(index);
+        updateDates(currentDate);
+        updateCurrentWeek();
+        viewPager.getAdapter().notifyDataSetChanged();
+    }
+
     private void initViewPager(final int initIndex) {
         viewPager = (ViewPager) findViewById(R.id.content_schedule_viewpager);
-        viewPager.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setCurrentItem(initIndex);
-            }
-        }, 0);
+//        viewPager.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                viewPager.setCurrentItem(initIndex);
+//            }
+//        }, 0);
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -127,6 +156,7 @@ public class ScheduleActivity extends NavigationDrawerActivity
 
             }
         });
+        viewPager.setCurrentItem(initIndex);
     }
 
     private void updateDates(LocalDate date) {
@@ -138,5 +168,4 @@ public class ScheduleActivity extends NavigationDrawerActivity
         String week = SHORT_FORMATTER.print(monday) + " - " + SHORT_FORMATTER.print(monday.plusDays(7));
         calendarButton.setText(week);
     }
-
 }

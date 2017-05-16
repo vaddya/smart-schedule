@@ -10,8 +10,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        android:layout_gravity="center_horizontal|top">
 
     </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
 
@@ -20,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="-10dp"
         android:clipToPadding="false" />
 
 </LinearLayout>

@@ -34,6 +34,7 @@ dependencies {
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'joda-time:joda-time:2.9.9'
+    compile 'com.wdullaer:materialdatetimepicker:3.2.1'
     testCompile 'junit:junit:4.12'
 }
 repositories {
