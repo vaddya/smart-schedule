@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,14 +17,34 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.vaddya.schedule.android.R;
 import com.vaddya.schedule.android.model.Storage;
 import com.vaddya.schedule.android.model.Task;
 import com.vaddya.schedule.android.model.TasksType;
+import com.vaddya.schedule.android.rest.LocalDateSerializer;
+import com.vaddya.schedule.android.rest.TaskService;
 
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * com.vaddya.schedule.android.fragments at android
@@ -33,6 +54,8 @@ import java.util.Locale;
 public class TaskListFragment extends Fragment {
 
     public static final String ARG_TASKS_TYPE = "ARG_TASKS_TYPE";
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd MMMM yyyy");
 
     private RecyclerView recyclerView;
     private TaskAdapter adapter;
@@ -64,9 +87,25 @@ public class TaskListFragment extends Fragment {
             }
         });
 
-        TasksType type = (TasksType) getArguments().getSerializable(ARG_TASKS_TYPE);
-        tasks = Storage.getTasks(type);
-        adapter = new TaskAdapter(tasks);
+        // TODO: 5/22/2017
+        TasksType tasksType = (TasksType) getArguments().getSerializable(ARG_TASKS_TYPE);
+
+        Storage.callTasks(tasksType, new Callback<List<Task>>() {
+            @Override
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                tasks = response.body();
+                adapter.setTasks(tasks);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                Log.e(TaskListFragment.class.getSimpleName(), t.getMessage());
+            }
+        });
+
+        adapter = new TaskAdapter(new ArrayList<Task>());
+
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private FloatingActionButton fab = ((FloatingActionButton) getActivity().findViewById(R.id.task_list_fab));
@@ -102,7 +141,7 @@ public class TaskListFragment extends Fragment {
             subject.setText(task.getSubject() + " | " + task.getType());
             text.setText(task.getTextTask());
             text.setSelection(text.getText().length());
-            deadline.setText(task.getDeadline().toString("dd MMMM yyyy", Locale.getDefault()));
+            deadline.setText(DATE_FORMAT.print(task.getDeadline()));
             isComplete.setChecked(task.isComplete());
         }
 
@@ -113,6 +152,10 @@ public class TaskListFragment extends Fragment {
         private List<Task> tasks;
 
         public TaskAdapter(List<Task> tasks) {
+            this.tasks = tasks;
+        }
+
+        public void setTasks(List<Task> tasks) {
             this.tasks = tasks;
         }
 

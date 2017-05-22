@@ -4,18 +4,25 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vaddya.schedule.android.R;
+import com.vaddya.schedule.android.model.Day;
 import com.vaddya.schedule.android.model.Lesson;
 import com.vaddya.schedule.android.model.Storage;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DayFragment extends Fragment {
 
@@ -52,11 +59,22 @@ public class DayFragment extends Fragment {
 
     private void updateUi() {
         if (adapter == null) {
-            adapter = new LessonAdapter(Storage.getLessons(date));
+            adapter = new LessonAdapter(new ArrayList<Lesson>());
             recyclerView.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
         }
+
+        Storage.callLessons(date, new Callback<Day>() {
+            @Override
+            public void onResponse(Call<Day> call, Response<Day> response) {
+                adapter.setLessons(response.body().getLessons());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Day> call, Throwable t) {
+                Log.e(DayFragment.class.getSimpleName(), t.getMessage());
+            }
+        });
     }
 
     private class LessonHolder extends RecyclerView.ViewHolder {
@@ -95,6 +113,10 @@ public class DayFragment extends Fragment {
         private List<Lesson> lessons;
 
         public LessonAdapter(List<Lesson> lessons) {
+            this.lessons = lessons;
+        }
+
+        public void setLessons(List<Lesson> lessons) {
             this.lessons = lessons;
         }
 
