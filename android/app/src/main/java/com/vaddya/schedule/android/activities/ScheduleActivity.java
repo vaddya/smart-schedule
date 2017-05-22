@@ -110,7 +110,7 @@ public class ScheduleActivity extends NavigationDrawerActivity
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        currentDate = new LocalDate(year, monthOfYear, dayOfMonth);
+        currentDate = new LocalDate(year, monthOfYear + 1, dayOfMonth);
         int index = currentDate.getDayOfWeek() - 1;
         monday = currentDate.minusDays(index);
         onDateUpdate();

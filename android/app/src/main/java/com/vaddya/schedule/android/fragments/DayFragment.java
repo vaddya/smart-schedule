@@ -1,6 +1,7 @@
 package com.vaddya.schedule.android.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,13 +66,13 @@ public class DayFragment extends Fragment {
 
         Storage.callLessons(date, new Callback<Day>() {
             @Override
-            public void onResponse(Call<Day> call, Response<Day> response) {
+            public void onResponse(@NonNull Call<Day> call, @NonNull Response<Day> response) {
                 adapter.setLessons(response.body().getLessons());
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<Day> call, Throwable t) {
+            public void onFailure(@NonNull Call<Day> call, @NonNull Throwable t) {
                 Log.e(DayFragment.class.getSimpleName(), t.getMessage());
             }
         });

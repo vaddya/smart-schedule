@@ -7,6 +7,13 @@
     tools:context="com.vaddya.schedule.android.activities.ScheduleActivity"
     tools:showIn="@layout/app_bar_task_list">
 
+    <!--Prevent focusing ViewPager-->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/content_task_list_viewpager"
         android:layout_width="match_parent"

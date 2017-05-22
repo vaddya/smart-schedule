@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,10 +60,10 @@ public class Storage {
 //                    i % 2 == 0);
 //            tasks.add(task);
 //        }
-
+//
 //        for (int i = 0; i < 3; i++) {
 //            Lesson lesson = new Lesson(UUID.randomUUID(),
-//                    "10:00",
+//                    "" + (i+9) + ":00",
 //                    "11:30",
 //                    "Subject " + i,
 //                    LessonType.values()[i % LessonType.values().length],
@@ -77,6 +78,7 @@ public class Storage {
     }
 
     public static void callTasks(final TasksType type, final Callback<List<Task>> callback) {
+//        callback.onResponse(null, Response.success(getTasks(type)));
         taskService.getTasks().enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
@@ -128,6 +130,7 @@ public class Storage {
     }
 
     public static void callLessons(final LocalDate date, final Callback<Day> callback) {
+//        callback.onResponse(null, Response.success(new Day(date, DayOfWeek.MONDAY, lessons)));
         scheduleService.getDay(DATE_FORMAT.print(date)).enqueue(callback);
     }
 

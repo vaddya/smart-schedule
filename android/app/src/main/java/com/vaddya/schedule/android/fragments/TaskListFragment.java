@@ -87,8 +87,9 @@ public class TaskListFragment extends Fragment {
             }
         });
 
-        // TODO: 5/22/2017
         TasksType tasksType = (TasksType) getArguments().getSerializable(ARG_TASKS_TYPE);
+
+        adapter = new TaskAdapter(new ArrayList<Task>());
 
         Storage.callTasks(tasksType, new Callback<List<Task>>() {
             @Override
@@ -103,8 +104,6 @@ public class TaskListFragment extends Fragment {
                 Log.e(TaskListFragment.class.getSimpleName(), t.getMessage());
             }
         });
-
-        adapter = new TaskAdapter(new ArrayList<Task>());
 
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

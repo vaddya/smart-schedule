@@ -1,11 +1,11 @@
-package com.vaddya.schedule.android.model;
+package com.vaddya.schedule.android.model
 
 /**
  * com.vaddya.schedule.android.model at android
- *
+
  * @author vaddya
  */
-public enum LessonType {
+enum class LessonType {
 
     LECTURE,
     PRACTICE,
@@ -14,6 +14,6 @@ public enum LessonType {
     TEST,
     CONSULTATION,
     EXAM,
-    ANOTHER,
+    ANOTHER
 
 }

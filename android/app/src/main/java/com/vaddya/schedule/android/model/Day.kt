@@ -3,7 +3,7 @@ package com.vaddya.schedule.android.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.jetbrains.annotations.NotNull
-import java.util.UUID
+import org.joda.time.LocalDate
 
 /**
  * com.vaddya.schedule.android.model at android
@@ -12,16 +12,14 @@ import java.util.UUID
  */
 class Day(@SerializedName("id")
           @Expose
-          @NotNull
-          var date: String,
+          var date: LocalDate,
 
           @SerializedName("dayOfWeek")
           @Expose
-          @NotNull
           var dayOfWeek: DayOfWeek,
 
+          @NotNull
           @SerializedName("lessons")
           @Expose
-          @NotNull
           var lessons: List<Lesson>
 )
