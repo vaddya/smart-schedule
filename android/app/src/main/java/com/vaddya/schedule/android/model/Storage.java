@@ -30,6 +30,7 @@ public class Storage {
 
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd-MM-YYYY");
 
+    private static final String TAG = Storage.class.getName();
 
     private static List<Task> tasks = new ArrayList<>();
     private static List<Lesson> lessons = new ArrayList<>();

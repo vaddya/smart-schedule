@@ -56,17 +56,11 @@ public class TaskListActivity extends NavigationDrawerActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Dialog normalDialog = new Dialog(TaskListActivity.this, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
-//                normalDialog.setContentView(R.layout.dialog_create_task);
-//                normalDialog.show();
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 CreateTaskDialog newFragment = new CreateTaskDialog();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(R.id.drawer_layout, newFragment).addToBackStack(null).commit();
-
-//                Toast.makeText(TaskListActivity.this, "Create task", Toast.LENGTH_SHORT).show();
             }
         });
 

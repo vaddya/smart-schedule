@@ -53,8 +53,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class TaskListFragment extends Fragment {
 
-    public static final String ARG_TASKS_TYPE = "ARG_TASKS_TYPE";
-
+    private static final String ARG_TASKS_TYPE = "ARG_TASKS_TYPE";
+    private static final String TAG = TaskListFragment.class.getName();
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd MMMM yyyy");
 
     private RecyclerView recyclerView;
@@ -94,6 +94,7 @@ public class TaskListFragment extends Fragment {
         Storage.callTasks(tasksType, new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                Log.i(TAG, "Response received: Code " + response.code());
                 tasks = response.body();
                 adapter.setTasks(tasks);
                 adapter.notifyDataSetChanged();
@@ -101,7 +102,7 @@ public class TaskListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-                Log.e(TaskListFragment.class.getSimpleName(), t.getMessage());
+                Log.e(TAG, "Response failed: " + t.getMessage());
             }
         });
 

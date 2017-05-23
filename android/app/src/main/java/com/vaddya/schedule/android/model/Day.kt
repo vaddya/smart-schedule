@@ -18,8 +18,6 @@ class Day(@SerializedName("id")
           @Expose
           var dayOfWeek: DayOfWeek,
 
-          @NotNull
           @SerializedName("lessons")
           @Expose
-          var lessons: List<Lesson>
-)
+          var lessons: List<Lesson>)

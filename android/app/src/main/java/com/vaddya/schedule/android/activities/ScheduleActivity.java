@@ -5,7 +5,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 
 import com.vaddya.schedule.android.R;
 import com.vaddya.schedule.android.Utils;
+import com.vaddya.schedule.android.fragments.CreateLessonDialog;
+import com.vaddya.schedule.android.fragments.CreateTaskDialog;
 import com.vaddya.schedule.android.fragments.DayFragment;
 import com.vaddya.schedule.android.fragments.TaskListFragment;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -103,7 +107,11 @@ public class ScheduleActivity extends NavigationDrawerActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ScheduleActivity.this, "Add lesson", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                CreateLessonDialog newFragment = new CreateLessonDialog();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(R.id.drawer_layout, newFragment).addToBackStack(null).commit();
             }
         });
     }

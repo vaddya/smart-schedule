@@ -17,15 +17,15 @@ import com.vaddya.schedule.android.R;
  *
  * @author vaddya
  */
-public class CreateTaskDialog extends CreateDialog {
+public class CreateLessonDialog extends CreateDialog {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.dialog_create_task, container, false);
+        final View view = inflater.inflate(R.layout.dialog_create_lesson, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Create task");
+        toolbar.setTitle("Create lesson");
         initToolbar(toolbar);
 
         return view;
@@ -40,7 +40,7 @@ public class CreateTaskDialog extends CreateDialog {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.dialog_create_task_save) {
+        if (id == R.id.dialog_create_lesson_save) {
             // TODO: 5/22/2017
             dismiss();
             return true;
