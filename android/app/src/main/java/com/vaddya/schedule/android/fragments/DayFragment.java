@@ -3,12 +3,14 @@ package com.vaddya.schedule.android.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vaddya.schedule.android.R;
@@ -33,6 +35,10 @@ public class DayFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private LessonAdapter adapter;
+    private CardView headerCard;
+    private ProgressBar progressBar;
+
+    private List<Lesson> lessons;
 
     public static DayFragment newInstance(LocalDate date) {
         DayFragment fragment = new DayFragment();
@@ -52,8 +58,12 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_day_recyclerview);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_day_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        headerCard = (CardView) view.findViewById(R.id.fragment_day_header_card);
+        headerCard.setVisibility(View.GONE);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
         updateUi();
         return view;
     }
@@ -67,8 +77,17 @@ public class DayFragment extends Fragment {
         Storage.callLessons(date, new Callback<Day>() {
             @Override
             public void onResponse(@NonNull Call<Day> call, @NonNull Response<Day> response) {
-                adapter.setLessons(response.body().getLessons());
+                progressBar.setVisibility(View.GONE);
+
+                lessons = response.body().getLessons();
+                adapter.setLessons(lessons);
                 adapter.notifyDataSetChanged();
+
+                if (lessons.size() == 0) {
+                    headerCard.setVisibility(View.VISIBLE);
+                } else {
+                    headerCard.setVisibility(View.GONE);
+                }
             }
 
             @Override

@@ -17,5 +17,6 @@
 
     <!-- Task Dialog -->
     <string name="save">Save</string>
+    <string name="no_lessons_text">You can relax today!</string>
 
 </resources>

@@ -53,7 +53,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_task_list) {
             startActivity(new Intent(this, TaskListActivity.class));
         } else if (id == R.id.nav_settings) {
-            // TODO: 5/14/2017
+            startActivity(new Intent(this, SettingsActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
