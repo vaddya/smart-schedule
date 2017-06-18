@@ -4,3 +4,10 @@ build/
 out/
 /gradle.properties
 /local.properties
+*.aux
+*.log
+*.synctex.gz
+*.tdo
+*.toc
+*.pdf
+*.out

@@ -144,8 +144,4 @@ public class Storage {
         scheduleService.getDay(DATE_FORMAT.print(date)).enqueue(callback);
     }
 
-    public static List<Lesson> getLessons(LocalDate date) {
-        return lessons;
-    }
-
 }
