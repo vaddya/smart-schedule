@@ -24,24 +24,4 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <fr.ganfra.materialspinner.MaterialSpinner
-        android:id="@+id/spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        app:ms_multiline="false"
-        app:ms_hint="hint"
-        app:ms_enableFloatingLabel="false"
-        app:ms_enableErrorLabel="false"
-        app:ms_floatingLabelText="floating label"
-        app:ms_baseColor="@color/white"
-        app:ms_highlightColor="@color/colorPrimary"
-        app:ms_errorColor="@color/card_title"
-        app:ms_thickness="2dp"
-        app:ms_hintColor="@color/card_title"
-        app:ms_arrowColor="@color/white"
-        app:ms_arrowSize="16dp"
-        app:ms_alignLabels="false"
-        app:ms_floatingLabelColor="@color/colorPrimary"/>
-
-
 </LinearLayout>

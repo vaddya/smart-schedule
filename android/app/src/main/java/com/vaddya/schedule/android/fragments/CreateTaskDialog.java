@@ -9,11 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.vaddya.schedule.android.R;
-
-import fr.ganfra.materialspinner.MaterialSpinner;
 
 /**
  * com.vaddya.schedule.android.fragments at android
@@ -26,12 +23,6 @@ public class CreateTaskDialog extends CreateDialog {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.dialog_create_task, container, false);
-
-        String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, , ITEMS);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        MaterialSpinner spinner = (MaterialSpinner) view.findViewById(R.id.spinner);
-        spinner.setAdapter(adapter);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle("Create task");
