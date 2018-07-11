@@ -1,28 +1,63 @@
 package com.vaddya.schedule.dynamo;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.database.LessonRepository;
+import com.vaddya.schedule.dynamo.serializers.LessonSerializer;
+import com.vaddya.schedule.dynamo.serializers.TaskSerializer;
 
 import java.time.DayOfWeek;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DynamoLessonRepository implements LessonRepository {
+
+    private static final String TABLE = "lessons";
+
+    private static final String TYPE_OF_WEEK = "typeOfWeek";
+
+    private static final String DAY_OF_WEEK = "dayOfWeek";
+
+    private final AmazonDynamoDB client;
+
+    private final LessonSerializer serializer;
+
+    public DynamoLessonRepository(AmazonDynamoDB client) {
+        this.client = client;
+        this.serializer = new LessonSerializer();
+    }
+
+    private Map<String, AttributeValue> getKey(UUID id) {
+        return new HashMap<String, AttributeValue>() {{
+            put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
+        }};
+    }
+
     @Override
     public Optional<Lesson> findById(UUID id) {
-        return Optional.empty();
+        GetItemResult res = client.getItem(TABLE, getKey(id));
+        return Optional.ofNullable(serializer.deserialize(res.getItem()));
     }
 
     @Override
     public List<Lesson> findAll() {
-        return null;
+        return client.scan(TABLE, new HashMap<>())
+                .getItems()
+                .stream()
+                .map(serializer::deserialize)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Lesson> findAll(TypeOfWeek week, DayOfWeek day) {
-        return null;
+        return client.scan(TABLE, new HashMap<>())
+                .getItems()
+                .stream()
+                .map(serializer::deserialize)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -37,12 +72,15 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public void insert(TypeOfWeek week, DayOfWeek day, Lesson lesson) {
-
+        Map<String, AttributeValue> attr = serializer.serialize(lesson);
+        attr.put(TYPE_OF_WEEK, new AttributeValue().withS(week.toString()));
+        attr.put(DAY_OF_WEEK, new AttributeValue().withS(day.toString()));
+        client.putItem(TABLE, attr);
     }
 
     @Override
     public void save(Lesson lesson) {
-
+//        client.updateItem(TABLE, getKey(lesson.getId()), serializer.serialize(lesson));
     }
 
     @Override

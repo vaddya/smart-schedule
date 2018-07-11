@@ -1,61 +1,79 @@
 package com.vaddya.schedule.dynamo;
 
-import com.amazonaws.services.dynamodbv2.document.ScanFilter;
-import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.TaskRepository;
+import com.vaddya.schedule.dynamo.serializers.TaskSerializer;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DynamoTaskRepository implements TaskRepository {
 
-    private final Table table;
+    private static final String TABLE = "tasks";
 
-    public DynamoTaskRepository(Table table) {
-        this.table = table;
+    private final AmazonDynamoDB client;
+
+    private final TaskSerializer serializer;
+
+    public DynamoTaskRepository(AmazonDynamoDB client) {
+        this.client = client;
+        this.serializer = new TaskSerializer();
+    }
+
+    private Map<String, AttributeValue> getKey(UUID id) {
+        return new HashMap<String, AttributeValue>() {{
+           put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
+        }};
     }
 
     @Override
     public Optional<Task> findById(UUID id) {
-        return Optional.empty();
+        GetItemResult res = client.getItem(TABLE, getKey(id));
+        return Optional.ofNullable(serializer.deserialize(res.getItem()));
     }
 
     @Override
     public List<Task> findAll() {
-        table.scan();
-        return null;
+        return client.scan(TABLE, new HashMap<>())
+                .getItems()
+                .stream()
+                .map(serializer::deserialize)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void insert(Task task) {
-
+        client.putItem(TABLE, serializer.serialize(task));
     }
 
     @Override
     public void save(Task task) {
-
+        insert(task); // overwrite
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size() > 0L;
     }
 
     @Override
     public long size() {
-        return 0;
+        return client.describeTable(TABLE).getTable().getItemCount();
     }
 
     @Override
     public void delete(Task task) {
-
+        client.deleteItem(TABLE, getKey(task.getId()));
     }
 
     @Override
     public void deleteAll() {
-
+        client.deleteTable(TABLE);
     }
 
 }

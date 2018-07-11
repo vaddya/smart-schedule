@@ -1,5 +1,6 @@
 package com.vaddya.schedule.dynamo;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.vaddya.schedule.core.changes.Change;
 import com.vaddya.schedule.database.ChangeRepository;
 
@@ -9,6 +10,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class DynamoChangeRepository implements ChangeRepository {
+
+    private static final String TABLE = "changes";
+
+    private final AmazonDynamoDB client;
+
+    public DynamoChangeRepository(AmazonDynamoDB client) {
+        this.client = client;
+    }
 
     @Override
     public Optional<Change> findById(UUID id) {
