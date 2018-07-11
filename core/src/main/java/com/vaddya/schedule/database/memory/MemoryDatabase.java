@@ -1,9 +1,9 @@
 package com.vaddya.schedule.database.memory;
 
-import com.vaddya.schedule.database.ChangeRepository;
 import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.LessonRepository;
 import com.vaddya.schedule.database.TaskRepository;
+import com.vaddya.schedule.database.ChangeRepository;
 
 /**
  * База данных, хранящаяся в памяти
