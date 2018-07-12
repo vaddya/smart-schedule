@@ -23,6 +23,7 @@ jar {
 dependencies {
     compile project(':core')
     compile project(':mongo')
+    compile project(':dynamo')
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.springframework.boot:spring-boot-starter-web'
     testCompile 'org.springframework.boot:spring-boot-starter-test'

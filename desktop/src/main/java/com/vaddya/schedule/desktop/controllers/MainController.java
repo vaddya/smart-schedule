@@ -66,11 +66,7 @@ public class MainController implements Initializable {
 //        Database database = new MemoryDatabase();
 
         /*  DynamoDB */
-        Database database = new DynamoDatabase(
-                AmazonDynamoDBClientBuilder.standard()
-                        .withRegion(Regions.EU_CENTRAL_1)
-                        .build()
-        );
+        Database database = new DynamoDatabase();
 
         schedule = new SmartScheduleImpl(database);
         lessonsController.init(this, schedule);

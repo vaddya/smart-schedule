@@ -2,8 +2,6 @@ package com.vaddya.schedule.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.vaddya.schedule.core.SmartSchedule;
 import com.vaddya.schedule.core.SmartScheduleImpl;
 import com.vaddya.schedule.core.changes.Change;
@@ -13,7 +11,7 @@ import com.vaddya.schedule.core.schedule.ScheduleDay;
 import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.Database;
-import com.vaddya.schedule.database.mongo.MongoDatabase;
+import com.vaddya.schedule.dynamo.DynamoDatabase;
 import com.vaddya.schedule.rest.seiralizers.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,9 +32,13 @@ public class Main {
 
     @Bean
     public SmartSchedule schedule() {
-        MongoClientURI uri = new MongoClientURI(System.getenv("MONGODB_URI"));
-        MongoClient client = new MongoClient(uri);
-        Database database = new MongoDatabase(client);
+        /* MongoDB */
+//        MongoClientURI uri = new MongoClientURI(System.getenv("MONGODB_URI"));
+//        MongoClient client = new MongoClient(uri);
+//        Database database = new MongoDatabase(client);
+
+        /* DynamoDB */
+        Database database = new DynamoDatabase();
         return new SmartScheduleImpl(database);
     }
 

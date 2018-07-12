@@ -1,6 +1,8 @@
 package com.vaddya.schedule.dynamo;
 
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.vaddya.schedule.database.ChangeRepository;
@@ -11,6 +13,12 @@ import com.vaddya.schedule.database.TaskRepository;
 public class DynamoDatabase implements Database {
 
     private final AmazonDynamoDB client;
+
+    public DynamoDatabase() {
+        this.client = AmazonDynamoDBClientBuilder.standard()
+                .withRegion(Regions.EU_CENTRAL_1)
+                .build();
+    }
 
     public DynamoDatabase(AmazonDynamoDB client) {
         this.client = client;
