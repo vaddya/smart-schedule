@@ -3,8 +3,6 @@ package com.vaddya.schedule.dynamo;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.TaskRepository;
 import com.vaddya.schedule.dynamo.serializers.TaskSerializer;
@@ -12,23 +10,20 @@ import com.vaddya.schedule.dynamo.serializers.TaskSerializer;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.vaddya.schedule.dynamo.DynamoDatabase.*;
+
 public class DynamoTaskRepository implements TaskRepository {
 
-    private static final String TABLE = "tasks";
+    public static final String TABLE = "tasks";
 
     private final AmazonDynamoDB client;
 
     private final TaskSerializer serializer;
 
     public DynamoTaskRepository(AmazonDynamoDB client) {
+        createTableIfNotExists(client, TABLE, TaskSerializer.ID);
         this.client = client;
         this.serializer = new TaskSerializer();
-    }
-
-    private Map<String, AttributeValue> getKey(UUID id) {
-        return new HashMap<String, AttributeValue>() {{
-           put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
-        }};
     }
 
     @Override
@@ -58,7 +53,7 @@ public class DynamoTaskRepository implements TaskRepository {
 
     @Override
     public boolean isEmpty() {
-        return size() > 0L;
+        return size() == 0L;
     }
 
     @Override
@@ -73,7 +68,14 @@ public class DynamoTaskRepository implements TaskRepository {
 
     @Override
     public void deleteAll() {
-        client.deleteTable(TABLE);
+        deleteTableIfExists(client, TABLE);
+        createTableIfNotExists(client, TABLE, TaskSerializer.ID);
+    }
+
+    private Map<String, AttributeValue> getKey(UUID id) {
+        return new HashMap<String, AttributeValue>() {{
+            put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
+        }};
     }
 
 }

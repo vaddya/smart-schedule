@@ -1,5 +1,8 @@
 package com.vaddya.schedule.desktop.controllers;
 
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.vaddya.schedule.core.SmartSchedule;
@@ -9,6 +12,7 @@ import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.memory.MemoryDatabase;
 import com.vaddya.schedule.database.mongo.MongoDatabase;
 import com.vaddya.schedule.desktop.Main;
+import com.vaddya.schedule.dynamo.DynamoDatabase;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,11 +57,20 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /* MongoDB */
 //        MongoClientURI uri = new MongoClientURI(System.getenv("MONGODB_URI"));
 //        MongoClient client = new MongoClient(uri);
 //        Database database = new MongoDatabase(client);
 
-        Database database = new MemoryDatabase();
+        /* Memory */
+//        Database database = new MemoryDatabase();
+
+        /*  DynamoDB */
+        Database database = new DynamoDatabase(
+                AmazonDynamoDBClientBuilder.standard()
+                        .withRegion(Regions.EU_CENTRAL_1)
+                        .build()
+        );
 
         schedule = new SmartScheduleImpl(database);
         lessonsController.init(this, schedule);

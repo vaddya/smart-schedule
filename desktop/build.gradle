@@ -3,6 +3,7 @@ apply plugin: 'java'
 dependencies {
     compile project(':core')
     compile project(':mongo')
+    compile project(':dynamo')
     compile 'org.controlsfx:controlsfx:8.40.12'
 }
 

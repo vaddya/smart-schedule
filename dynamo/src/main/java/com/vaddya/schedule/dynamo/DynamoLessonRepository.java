@@ -1,8 +1,11 @@
 package com.vaddya.schedule.dynamo;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.model.AttributeAction;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.database.LessonRepository;
@@ -13,9 +16,11 @@ import java.time.DayOfWeek;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.vaddya.schedule.dynamo.DynamoDatabase.createTableIfNotExists;
+
 public class DynamoLessonRepository implements LessonRepository {
 
-    private static final String TABLE = "lessons";
+    public static final String TABLE = "lessons";
 
     private static final String TYPE_OF_WEEK = "typeOfWeek";
 
@@ -26,14 +31,9 @@ public class DynamoLessonRepository implements LessonRepository {
     private final LessonSerializer serializer;
 
     public DynamoLessonRepository(AmazonDynamoDB client) {
+        createTableIfNotExists(client, TABLE, LessonSerializer.ID);
         this.client = client;
         this.serializer = new LessonSerializer();
-    }
-
-    private Map<String, AttributeValue> getKey(UUID id) {
-        return new HashMap<String, AttributeValue>() {{
-            put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
-        }};
     }
 
     @Override
@@ -53,6 +53,7 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public List<Lesson> findAll(TypeOfWeek week, DayOfWeek day) {
+        // TODO: querys
         return client.scan(TABLE, new HashMap<>())
                 .getItems()
                 .stream()
@@ -80,12 +81,18 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public void save(Lesson lesson) {
-//        client.updateItem(TABLE, getKey(lesson.getId()), serializer.serialize(lesson));
+        UUID id = lesson.getId();
+        TypeOfWeek type = findTypeOfWeek(id).orElseThrow(() -> new NoSuchLessonException(id));
+        DayOfWeek day = findDayOfWeek(id).orElseThrow(() -> new NoSuchLessonException(id));
+        insert(type, day, lesson);
     }
 
     @Override
     public void saveTypeOfWeek(Lesson lesson, TypeOfWeek week) {
-
+        AttributeValueUpdate update = new AttributeValueUpdate(new AttributeValue(LessonSerializer.TYPE), AttributeAction.PUT);
+        client.updateItem(TABLE, getKey(lesson.getId()), new HashMap<String, AttributeValueUpdate>() {{
+            put(LessonSerializer.TYPE, update);
+        }});
     }
 
     @Override
@@ -100,7 +107,7 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public void delete(UUID id) {
-
+        client.deleteItem(TABLE, getKey(id));
     }
 
     @Override
@@ -111,5 +118,11 @@ public class DynamoLessonRepository implements LessonRepository {
     @Override
     public void deleteAll(TypeOfWeek week, DayOfWeek day) {
 
+    }
+
+    private Map<String, AttributeValue> getKey(UUID id) {
+        return new HashMap<String, AttributeValue>() {{
+            put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
+        }};
     }
 }
