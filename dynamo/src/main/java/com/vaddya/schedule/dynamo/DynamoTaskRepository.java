@@ -2,6 +2,7 @@ package com.vaddya.schedule.dynamo;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.vaddya.schedule.core.tasks.Task;
 import com.vaddya.schedule.database.TaskRepository;
@@ -10,11 +11,12 @@ import com.vaddya.schedule.dynamo.serializers.TaskSerializer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.vaddya.schedule.dynamo.DynamoDatabase.*;
+import static com.vaddya.schedule.dynamo.DynamoDatabase.createTableIfNotExists;
+import static com.vaddya.schedule.dynamo.DynamoDatabase.deleteTableIfExists;
 
 public class DynamoTaskRepository implements TaskRepository {
 
-    public static final String TABLE = "tasks";
+    private static final String TABLE = "tasks";
 
     private final AmazonDynamoDB client;
 
@@ -48,7 +50,7 @@ public class DynamoTaskRepository implements TaskRepository {
 
     @Override
     public void save(Task task) {
-        insert(task); // overwrite
+        insert(task);
     }
 
     @Override

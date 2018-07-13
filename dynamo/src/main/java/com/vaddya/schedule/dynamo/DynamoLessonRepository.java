@@ -1,16 +1,12 @@
 package com.vaddya.schedule.dynamo;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.AttributeAction;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
-import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.amazonaws.services.dynamodbv2.model.*;
 import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.database.LessonRepository;
 import com.vaddya.schedule.dynamo.serializers.LessonSerializer;
-import com.vaddya.schedule.dynamo.serializers.TaskSerializer;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -20,11 +16,15 @@ import static com.vaddya.schedule.dynamo.DynamoDatabase.createTableIfNotExists;
 
 public class DynamoLessonRepository implements LessonRepository {
 
-    public static final String TABLE = "lessons";
+    private static final String TABLE = "lessons";
 
     private static final String TYPE_OF_WEEK = "typeOfWeek";
+    private static final String TYPE_OF_WEEK_PARAM = String.format(":%sParam", TYPE_OF_WEEK);
 
     private static final String DAY_OF_WEEK = "dayOfWeek";
+    private static final String DAY_OF_WEEK_PARAM = String.format(":%sParam", DAY_OF_WEEK);
+
+    private static final String BOTH_WEEK_PARAM = String.format(":%sParam", TypeOfWeek.BOTH);
 
     private final AmazonDynamoDB client;
 
@@ -53,8 +53,15 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public List<Lesson> findAll(TypeOfWeek week, DayOfWeek day) {
-        // TODO: querys
-        return client.scan(TABLE, new HashMap<>())
+        return client.scan(new ScanRequest()
+                .withTableName(TABLE)
+                .withFilterExpression(String.format("%s IN (%s, %s) AND %s = %s",
+                        TYPE_OF_WEEK, TYPE_OF_WEEK_PARAM, BOTH_WEEK_PARAM, DAY_OF_WEEK, DAY_OF_WEEK_PARAM))
+                .withExpressionAttributeValues(new HashMap<String, AttributeValue>() {{
+                    put(TYPE_OF_WEEK_PARAM, new AttributeValue().withS(week.toString()));
+                    put(BOTH_WEEK_PARAM, new AttributeValue().withS(TypeOfWeek.BOTH.toString()));
+                    put(DAY_OF_WEEK_PARAM, new AttributeValue().withS(day.toString()));
+                }}))
                 .getItems()
                 .stream()
                 .map(serializer::deserialize)
@@ -63,12 +70,20 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public Optional<TypeOfWeek> findTypeOfWeek(UUID id) {
-        return Optional.empty();
+        try {
+            return Optional.of(TypeOfWeek.valueOf(client.getItem(TABLE, getKey(id)).getItem().get(TYPE_OF_WEEK).getS()));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Optional<DayOfWeek> findDayOfWeek(UUID id) {
-        return Optional.empty();
+        try {
+            return Optional.of(DayOfWeek.valueOf(client.getItem(TABLE, getKey(id)).getItem().get(DAY_OF_WEEK).getS()));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -89,20 +104,26 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public void saveTypeOfWeek(Lesson lesson, TypeOfWeek week) {
-        AttributeValueUpdate update = new AttributeValueUpdate(new AttributeValue(LessonSerializer.TYPE), AttributeAction.PUT);
-        client.updateItem(TABLE, getKey(lesson.getId()), new HashMap<String, AttributeValueUpdate>() {{
-            put(LessonSerializer.TYPE, update);
-        }});
+        client.updateItem(new UpdateItemRequest()
+                .withTableName(TABLE)
+                .withKey(getKey(lesson.getId()))
+                .withUpdateExpression(String.format("set %s = %s", TYPE_OF_WEEK, TYPE_OF_WEEK_PARAM))
+                .withExpressionAttributeValues(new HashMap<String, AttributeValue>() {{
+                    put(TYPE_OF_WEEK_PARAM, new AttributeValue().withS(week.toString()));
+                }})
+        );
     }
 
     @Override
     public void saveDayOfWeek(Lesson lesson, DayOfWeek day) {
-
+        client.updateItem(TABLE, getKey(lesson.getId()), new HashMap<String, AttributeValueUpdate>() {{
+            put(DAY_OF_WEEK, new AttributeValueUpdate(new AttributeValue(DAY_OF_WEEK), AttributeAction.PUT));
+        }});
     }
 
     @Override
     public void swapWeeks() {
-
+        // TODO
     }
 
     @Override
@@ -112,17 +133,31 @@ public class DynamoLessonRepository implements LessonRepository {
 
     @Override
     public void deleteAll(TypeOfWeek week) {
-
+        client.deleteItem(new DeleteItemRequest()
+                .withTableName(TABLE)
+                .withConditionExpression(String.format("%s = %s", TYPE_OF_WEEK, TYPE_OF_WEEK_PARAM))
+                .withExpressionAttributeValues(new HashMap<String, AttributeValue>() {{
+                    put(TYPE_OF_WEEK_PARAM, new AttributeValue().withS(week.toString()));
+                }})
+        );
     }
 
     @Override
     public void deleteAll(TypeOfWeek week, DayOfWeek day) {
-
+        client.deleteItem(new DeleteItemRequest()
+                .withTableName(TABLE)
+                .withConditionExpression(String.format("%s = %s AND %s = %s",
+                        TYPE_OF_WEEK, TYPE_OF_WEEK_PARAM, DAY_OF_WEEK, DAY_OF_WEEK_PARAM))
+                .withExpressionAttributeValues(new HashMap<String, AttributeValue>() {{
+                    put(TYPE_OF_WEEK_PARAM, new AttributeValue().withS(week.toString()));
+                    put(DAY_OF_WEEK_PARAM, new AttributeValue().withS(day.toString()));
+                }})
+        );
     }
 
     private Map<String, AttributeValue> getKey(UUID id) {
         return new HashMap<String, AttributeValue>() {{
-            put(TaskSerializer.ID, new AttributeValue().withS(id.toString()));
+            put(LessonSerializer.ID, new AttributeValue().withS(id.toString()));
         }};
     }
 }

@@ -10,6 +10,8 @@ import com.vaddya.schedule.database.Database;
 import com.vaddya.schedule.database.LessonRepository;
 import com.vaddya.schedule.database.TaskRepository;
 
+import java.util.ArrayList;
+
 public class DynamoDatabase implements Database {
 
     private final AmazonDynamoDB client;
@@ -40,10 +42,15 @@ public class DynamoDatabase implements Database {
     }
 
     static void createTableIfNotExists(AmazonDynamoDB client, String table, String key) {
+
         TableUtils.createTableIfNotExists(client, new CreateTableRequest(
-                Utils.listOf(new AttributeDefinition(key, ScalarAttributeType.S)),
+                new ArrayList<AttributeDefinition>() {{
+                    add(new AttributeDefinition(key, ScalarAttributeType.S));
+                }},
                 table,
-                Utils.listOf(new KeySchemaElement(key, KeyType.HASH)),
+                new ArrayList<KeySchemaElement>() {{
+                    add(new KeySchemaElement(key, KeyType.HASH));
+                }},
                 new ProvisionedThroughput(5L, 5L)
         ));
     }
