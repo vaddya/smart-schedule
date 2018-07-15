@@ -6,10 +6,7 @@ import com.vaddya.schedule.core.lessons.StudyWeek;
 import com.vaddya.schedule.core.utils.TypeOfWeek;
 import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.util.List;
@@ -25,6 +22,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @RestController
 @RequestMapping(Paths.WEEKS)
+@CrossOrigin(origins = "*")
 public class WeeksController extends Controller {
 
     @RequestMapping(value = "swap", method = POST, produces = JSON)

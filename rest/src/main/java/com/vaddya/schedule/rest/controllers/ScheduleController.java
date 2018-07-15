@@ -7,10 +7,7 @@ import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.utils.LocalWeek;
 import com.vaddya.schedule.rest.Paths;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -27,6 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @RestController
 @RequestMapping(Paths.SCHEDULE)
+@CrossOrigin(origins = "*")
 public class ScheduleController extends Controller {
 
     @RequestMapping(method = GET, produces = JSON)

@@ -24,6 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @RestController
 @RequestMapping(Paths.CHANGES)
+@CrossOrigin(origins = "*")
 public class ChangesController extends Controller {
 
     @RequestMapping(method = GET, produces = JSON)

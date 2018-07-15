@@ -26,6 +26,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @RestController
 @RequestMapping(Paths.TASKS)
+@CrossOrigin(origins = "*")
 public class TasksController extends Controller {
 
     @RequestMapping(method = GET, produces = JSON)
