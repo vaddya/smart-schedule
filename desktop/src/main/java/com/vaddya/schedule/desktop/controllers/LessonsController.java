@@ -1,6 +1,7 @@
 package com.vaddya.schedule.desktop.controllers;
 
 import com.vaddya.schedule.core.SmartSchedule;
+import com.vaddya.schedule.core.exceptions.NoSuchLessonException;
 import com.vaddya.schedule.core.lessons.Lesson;
 import com.vaddya.schedule.core.schedule.ScheduleWeek;
 import com.vaddya.schedule.core.utils.Dates;
@@ -117,7 +118,12 @@ public class LessonsController {
                     LessonListItem item = (LessonListItem) lessonList.getSelectionModel().getSelectedItem();
                     Lesson lesson = item.getLesson();
                     DayOfWeek day = item.getDay();
-                    TypeOfWeek week = schedule.getLessons().getWeekType(lesson.getId());
+                    TypeOfWeek week;
+                    try {
+                        week = schedule.getLessons().getWeekType(lesson.getId());
+                    } catch (NoSuchLessonException e) {
+                        week = schedule.getCurrentTypeOfWeek();
+                    }
                     editLessonController.setActiveLesson(lesson, week, day, mainController.getSubjectSuggestions());
                     editLessonDialogStage = mainController.showDialog(lessonList.getScene().getWindow(),
                             editLessonDialogStage,
@@ -216,7 +222,7 @@ public class LessonsController {
             CreatedLesson lesson = editLessonController.getCreatedLesson();
             if (editLessonController.isCreated()) {
                 if (lesson.isOnce()) {
-                    schedule.getWeek(currentWeek).getDay(lesson.getSourceDay())
+                    schedule.getWeek(currentWeek).getDay(lesson.getTargetDay())
                             .addLesson(lesson.getLesson());
                 } else {
                     schedule.getLessons().addLesson(lesson.getTypeOfWeek(),

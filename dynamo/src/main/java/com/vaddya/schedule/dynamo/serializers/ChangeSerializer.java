@@ -12,7 +12,7 @@ public class ChangeSerializer implements DynamoSerializer<Change> {
 
     public static final String ID = "id";
     public static final String TYPE = "type";
-    public static final String DATE = "date";
+    public static final String DATE = "changeDate";
     public static final String LESSON = "lesson";
 
     private final LessonSerializer lessonSerializer = new LessonSerializer();
